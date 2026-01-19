@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Summary - Otten CDP Platform</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --accent: #C8A882;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --cdp: #1565C0;
+            --sales: #2E7D32;
+            --cs: #7B1FA2;
+            --marketing: #E65100;
+            --aftersales: #00796B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .hero-meta {
+            text-align: right;
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+        }
+
+        .hero-badge.cdp { background: var(--cdp); }
+        .hero-badge.sales { background: var(--sales); }
+        .hero-badge.cs { background: var(--cs); }
+        .hero-badge.marketing { background: var(--marketing); }
+
+        /* Section Cards */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header.cdp { background: var(--cdp); }
+        .section-header.sales { background: var(--sales); }
+        .section-header.cs { background: var(--cs); }
+        .section-header.marketing { background: var(--marketing); }
+
+        .section-header h2 {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header h2 .num {
+            opacity: 0.7;
+            font-weight: normal;
+        }
+
+        .section-content {
+            padding: 1.25rem;
+        }
+
+        /* Subsection */
+        .subsection {
+            margin-bottom: 1.5rem;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection-title .num {
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        /* Cards Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .card-grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .card ul {
+            list-style: none;
+            font-size: 0.8rem;
+        }
+
+        .card li {
+            padding: 0.15rem 0;
+            color: var(--text-muted);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .card li::before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+        }
+
+        .card.blue { border-left-color: var(--cdp); }
+        .card.blue h4 { color: var(--cdp); }
+        .card.green { border-left-color: var(--sales); }
+        .card.green h4 { color: var(--sales); }
+        .card.purple { border-left-color: var(--cs); }
+        .card.purple h4 { color: var(--cs); }
+        .card.orange { border-left-color: var(--marketing); }
+        .card.orange h4 { color: var(--marketing); }
+        .card.red { border-left-color: #D32F2F; }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-card.cdp { background: linear-gradient(135deg, var(--cdp), #0D47A1); }
+        .metric-card.sales { background: linear-gradient(135deg, var(--sales), #1B5E20); }
+        .metric-card.cs { background: linear-gradient(135deg, var(--cs), #4A148C); }
+        .metric-card.marketing { background: linear-gradient(135deg, var(--marketing), #BF360C); }
+
+        .metric-value { font-size: 1.5rem; font-weight: bold; }
+        .metric-label { font-size: 0.7rem; opacity: 0.9; margin-top: 0.25rem; }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box.warning {
+            background: #FFF3E0;
+            border-left-color: var(--warning);
+        }
+
+        .info-box.success {
+            background: #E8F5E9;
+            border-left-color: var(--success);
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: #FAFAFA;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .arch-box.source { background: #E8EAF6; color: #3F51B5; border: 1px solid #C5CAE9; }
+        .arch-box.cdp { background: #E3F2FD; color: var(--cdp); border: 2px solid var(--cdp); }
+        .arch-box.crm { background: #E8F5E9; color: var(--crm); border: 1px solid #A5D6A7; }
+        .arch-box.marketing { background: #FFF3E0; color: var(--marketing); border: 1px solid #FFCC80; }
+        .arch-box.channel { background: #FCE4EC; color: #C2185B; border: 1px solid #F8BBD9; }
+
+        .arch-arrow {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            margin: 0.5rem 0;
+        }
+
+        .arch-label {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Four Pillars */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .pillars-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .pillar {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .pillar-header {
+            padding: 0.75rem 1rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pillar-header.cdp { background: var(--cdp); }
+        .pillar-header.sales { background: var(--sales); }
+        .pillar-header.cs { background: var(--cs); }
+        .pillar-header.marketing { background: var(--marketing); }
+
+        .pillar-body {
+            padding: 1rem;
+        }
+
+        .pillar-body ul {
+            list-style: none;
+            font-size: 0.8rem;
+        }
+
+        .pillar-body li {
+            padding: 0.25rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .pillar-body li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin: 0.75rem 0;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .badge.b2b { background: #E8EAF6; color: #3F51B5; }
+        .badge.b2c { background: #FFF3E0; color: #E65100; }
+        .badge.both { background: #E8F5E9; color: #2E7D32; }
+
+        .card-grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 992px) {
+            .pillars { grid-template-columns: repeat(2, 1fr); }
+            .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .hero-top { flex-direction: column; gap: 1rem; }
+            .hero-meta { text-align: left; }
+            .pillars { grid-template-columns: 1fr; }
+            .card-grid-3 { grid-template-columns: 1fr; }
+            .card-grid-4 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 1. EXECUTIVE SUMMARY -->
+        <section class="section" id="executive-summary">
+            <div class="section-header">
+                <h2><span class="num">1.</span> Executive Summary</h2>
+            </div>
+            <div class="section-content">
+                <!-- 1.1 Background & Vision -->
+                <div class="subsection" id="background">
+                    <h3 class="subsection-title"><span class="num">1.1</span> Background & Vision</h3>
+
+                    <p style="margin-bottom: 1rem;">
+                        Otten Coffee saat ini memiliki multiple touchpoints (B2B App, E-commerce App, OTSAR, Customer Service) yang menghasilkan data customer tersebar di berbagai sistem.
+                        Untuk meningkatkan customer experience dan revenue, diperlukan <strong>Customer Data Platform (CDP)</strong> sebagai fondasi yang menyatukan semua data customer,
+                        dilengkapi dengan <strong>4 Fitur Utama</strong> untuk mendukung operasional bisnis:
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="background: linear-gradient(135deg, var(--sales), #1B5E20); color: white; padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.35rem;">1. Sales</div>
+                            <div style="font-size: 0.75rem; opacity: 0.95;">Pipeline management, Lead tracking, Visit planning, Deal & quotation</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, var(--cs), #4A148C); color: white; padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.35rem;">2. Customer Service</div>
+                            <div style="font-size: 0.75rem; opacity: 0.95;">Unified inbox, Ticketing, Complaint handling, Knowledge base</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, var(--aftersales), #004D40); color: white; padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.35rem;">3. After Sales</div>
+                            <div style="font-size: 0.75rem; opacity: 0.95;">Machine maintenance, Service scheduling, Warranty, Spare parts</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, var(--marketing), #BF360C); color: white; padding: 0.75rem; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.35rem;">4. Marketing</div>
+                            <div style="font-size: 0.75rem; opacity: 0.95;">Manual campaigns, Automation journeys, Broadcast, A/B testing</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Vision Statement:</strong> Membangun unified customer platform yang memungkinkan Otten Coffee untuk memahami setiap customer secara 360°, memberikan personalized experience, dan mengoptimalkan customer lifetime value melalui data-driven decisions.
+                    </div>
+
+                    <!-- Architecture Overview -->
+                    <h4 style="margin: 1.25rem 0 0.75rem; font-size: 0.85rem; color: var(--primary);">High-Level Architecture</h4>
+
+                    <div class="architecture-diagram">
+                        <!-- Combined Touchpoints + Data Sources -->
+                        <div style="display: grid; grid-template-columns: 0.8fr 1.4fr 1fr 0.8fr; gap: 0.5rem; margin-bottom: 1rem;">
+                            <!-- Column 1: B2B App -->
+                            <div style="background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
+                                <div style="background: #607D8B; color: white; padding: 0.4rem; text-align: center; font-size: 0.7rem; font-weight: 600;">Touchpoints</div>
+                                <div style="padding: 0.5rem; min-height: 60px; display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center; align-items: center;">
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Canvassing</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Offline Event</span>
+                                </div>
+                                <div style="text-align: center; color: #90A4AE; font-size: 0.9rem;">&#8595;</div>
+                                <div style="background: #E8EAF6; color: #3F51B5; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem; border-top: 1px solid #C5CAE9;">
+                                    B2B App
+                                </div>
+                            </div>
+
+                            <!-- Column 2: E-commerce App -->
+                            <div style="background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
+                                <div style="background: #607D8B; color: white; padding: 0.4rem; text-align: center; font-size: 0.7rem; font-weight: 600;">Touchpoints</div>
+                                <div style="padding: 0.5rem; min-height: 60px; display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center; align-items: center;">
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Ads</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Social</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Backlink</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">SEO</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Offline Event</span>
+                                </div>
+                                <div style="text-align: center; color: #90A4AE; font-size: 0.9rem;">&#8595;</div>
+                                <div style="background: #E8EAF6; color: #3F51B5; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem; border-top: 1px solid #C5CAE9;">
+                                    E-commerce App
+                                </div>
+                            </div>
+
+                            <!-- Column 3: OTSAR -->
+                            <div style="background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
+                                <div style="background: #607D8B; color: white; padding: 0.4rem; text-align: center; font-size: 0.7rem; font-weight: 600;">Touchpoints</div>
+                                <div style="padding: 0.5rem; min-height: 60px; display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center; align-items: center;">
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Marketplace</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">POS</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">B2B Offline</span>
+                                </div>
+                                <div style="text-align: center; color: #90A4AE; font-size: 0.9rem;">&#8595;</div>
+                                <div style="background: #E8EAF6; color: #3F51B5; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem; border-top: 1px solid #C5CAE9;">
+                                    OTSAR
+                                </div>
+                            </div>
+
+                            <!-- Column 4: Customer Service -->
+                            <div style="background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
+                                <div style="background: #607D8B; color: white; padding: 0.4rem; text-align: center; font-size: 0.7rem; font-weight: 600;">Touchpoints</div>
+                                <div style="padding: 0.5rem; min-height: 60px; display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center; align-items: center;">
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">WhatsApp</span>
+                                    <span style="background: #ECEFF1; color: #546E7A; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.6rem; border: 1px dashed #90A4AE;">Social DM</span>
+                                </div>
+                                <div style="text-align: center; color: #90A4AE; font-size: 0.9rem;">&#8595;</div>
+                                <div style="background: #E8EAF6; color: #3F51B5; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.75rem; border-top: 1px solid #C5CAE9;">
+                                    Customer Service
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; font-size: 0.65rem; color: #78909C; margin-bottom: 0.25rem;">Data Sources (Internal Systems)</div>
+                        <div class="arch-arrow">&#8595;</div>
+
+                        <div class="arch-label">Customer Data Platform (Core)</div>
+                        <div class="arch-row">
+                            <div class="arch-box cdp" style="min-width: 250px;">
+                                <strong>CDP</strong><br>
+                                Identity Resolution | Customer 360° | Segmentation | AI/ML
+                            </div>
+                        </div>
+
+                        <div class="arch-arrow">&#8595;</div>
+
+                        <div class="arch-label">4 Fitur Utama</div>
+                        <div class="arch-row">
+                            <div class="arch-box crm">Sales CRM<br><small>Pipeline & Deals</small></div>
+                            <div class="arch-box" style="background: #F3E5F5; color: var(--cs); border: 1px solid #CE93D8;">Customer Service<br><small>Support & Tickets</small></div>
+                            <div class="arch-box" style="background: #E0F2F1; color: var(--aftersales); border: 1px solid #80CBC4;">After Sales<br><small>Maintenance & Service</small></div>
+                            <div class="arch-box marketing">Marketing<br><small>Manual & Automation</small></div>
+                        </div>
+
+                        <div class="arch-arrow">&#8595;</div>
+
+                        <div class="arch-label">Destinations</div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                            <!-- Messaging -->
+                            <div style="background: #FCE4EC; border: 1px solid #F8BBD9; border-radius: 6px; padding: 0.5rem;">
+                                <div style="font-size: 0.65rem; font-weight: 600; color: #C2185B; margin-bottom: 0.4rem; text-align: center;">Messaging</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center;">
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">WA</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Email</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Push</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">SMS</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">In-App</span>
+                                </div>
+                            </div>
+                            <!-- Paid Media -->
+                            <div style="background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 6px; padding: 0.5rem;">
+                                <div style="font-size: 0.65rem; font-weight: 600; color: #1565C0; margin-bottom: 0.4rem; text-align: center;">Paid Media</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center;">
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Meta Ads</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Google Ads</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Bing Ads</span>
+                                </div>
+                            </div>
+                            <!-- Promo & Loyalty -->
+                            <div style="background: #FFF3E0; border: 1px solid #FFCC80; border-radius: 6px; padding: 0.5rem;">
+                                <div style="font-size: 0.65rem; font-weight: 600; color: #E65100; margin-bottom: 0.4rem; text-align: center;">Promo & Loyalty</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; justify-content: center;">
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;" title="Marketplace orders → Rewards (voucher + poin) → Redeem di E-commerce App">Printed QR Rewards</span>
+                                    <span class="arch-box channel" style="min-width: auto; padding: 0.3rem 0.5rem; font-size: 0.65rem;">Automated Rewards</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.2 Business Context -->
+                <div class="subsection" id="context">
+                    <h3 class="subsection-title"><span class="num">1.2</span> Business Context - B2B vs B2C</h3>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>B2B (Horeka & Office)</th>
+                                <th>B2C (Personal/Homebrewer)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Customer Entity</strong></td>
+                                <td>Legal Entity > Brand > Location</td>
+                                <td>Individual Customer</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sales Cycle</strong></td>
+                                <td>Long (weeks-months), relationship-based</td>
+                                <td>Short (minutes-days), transactional</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Primary Channel</strong></td>
+                                <td>WhatsApp, Sales Visit, Email</td>
+                                <td>Push Notification, In-App, Email</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Key Metrics</strong></td>
+                                <td>Monthly consumption (kg), Contract value</td>
+                                <td>Order frequency, AOV, CLV</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Automation Focus</strong></td>
+                                <td>Reorder reminder, Visit scheduling</td>
+                                <td>Cart abandonment, Recommendations</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 1.3 Platform Structure -->
+                <div class="subsection" id="pillars">
+                    <h3 class="subsection-title"><span class="num">1.3</span> Platform Structure: CDP + 4 Fitur Utama</h3>
+
+                    <div class="pillars">
+                        <div class="pillar">
+                            <div class="pillar-header cdp">
+                                <span>&#128202;</span> CDP (Foundation)
+                            </div>
+                            <div class="pillar-body">
+                                <ul>
+                                    <li>Identity Resolution</li>
+                                    <li>Customer 360° Profile</li>
+                                    <li>Real-time Event Streaming</li>
+                                    <li>Dynamic Segmentation</li>
+                                    <li>AI/ML Predictions</li>
+                                    <li>Consent Management</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pillar">
+                            <div class="pillar-header sales">
+                                <span>&#128188;</span> Sales CRM
+                            </div>
+                            <div class="pillar-body">
+                                <ul>
+                                    <li>Sales Pipeline (B2B)</li>
+                                    <li>Deal Management</li>
+                                    <li>Lead Scoring</li>
+                                    <li>Activity & Visit Tracking</li>
+                                    <li>Quotation & Contract</li>
+                                    <li>Territory Management</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pillar">
+                            <div class="pillar-header cs">
+                                <span>&#128172;</span> Customer Service
+                            </div>
+                            <div class="pillar-body">
+                                <ul>
+                                    <li>Unified Inbox (Multi-channel)</li>
+                                    <li>Ticketing System</li>
+                                    <li>Agent Workspace</li>
+                                    <li>AI Assist & Chatbot</li>
+                                    <li>Knowledge Base</li>
+                                    <li>SLA & Escalation</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pillar">
+                            <div class="pillar-header" style="background: var(--aftersales);">
+                                <span>&#128295;</span> After Sales
+                            </div>
+                            <div class="pillar-body">
+                                <ul>
+                                    <li>Machine Maintenance</li>
+                                    <li>Service Scheduling</li>
+                                    <li>Warranty Management</li>
+                                    <li>Spare Parts Tracking</li>
+                                    <li>Technician Assignment</li>
+                                    <li>Service History</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="pillar">
+                            <div class="pillar-header marketing">
+                                <span>&#128640;</span> Marketing
+                            </div>
+                            <div class="pillar-body">
+                                <p style="font-size: 0.7rem; color: var(--marketing); font-weight: 600; margin-bottom: 0.25rem;">Manual Campaign</p>
+                                <ul style="margin-bottom: 0.5rem;">
+                                    <li>Campaign Management</li>
+                                    <li>Broadcast & Promo</li>
+                                    <li>Audience Targeting</li>
+                                </ul>
+                                <p style="font-size: 0.7rem; color: var(--marketing); font-weight: 600; margin-bottom: 0.25rem;">Automation</p>
+                                <ul>
+                                    <li>Journey Orchestration</li>
+                                    <li>Triggered Messaging</li>
+                                    <li>A/B Testing</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>Key Point:</strong> CDP berfungsi sebagai <strong>single source of customer data</strong> yang digunakan oleh keempat fitur utama. Sales CRM, Customer Service, After Sales, dan Marketing tidak perlu membangun data customer masing-masing - semua mengakses Customer 360° dari CDP.
+                    </div>
+                </div>
+
+                <!-- 1.4 Scope & Success Metrics -->
+                <div class="subsection" id="scope-metrics">
+                    <h3 class="subsection-title"><span class="num">1.4</span> Success Metrics per Division</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin: 0.75rem 0;">
+                        <div class="card blue">
+                            <h4>&#128202; CDP Metrics</h4>
+                            <ul>
+                                <li>Identity match rate: >95%</li>
+                                <li>Profile completeness: >80%</li>
+                                <li>Data freshness: &lt;1 hour</li>
+                                <li>Segment accuracy: >90%</li>
+                            </ul>
+                        </div>
+                        <div class="card green">
+                            <h4>&#128188; Sales Metrics</h4>
+                            <ul>
+                                <li>Pipeline visibility: 100%</li>
+                                <li>Lead-to-deal conversion: +25%</li>
+                                <li>Sales cycle time: -20%</li>
+                                <li>B2B retention: >85%</li>
+                            </ul>
+                        </div>
+                        <div class="card purple">
+                            <h4>&#128172; CS Metrics</h4>
+                            <ul>
+                                <li>First response: &lt;1 hour</li>
+                                <li>Resolution time: &lt;24 hours</li>
+                                <li>CSAT score: >4.5/5</li>
+                                <li>Ticket backlog: &lt;50</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: var(--aftersales);">
+                            <h4 style="color: var(--aftersales);">&#128295; After Sales Metrics</h4>
+                            <ul>
+                                <li>Service response: &lt;24 hours</li>
+                                <li>First-time fix rate: >85%</li>
+                                <li>Machine uptime: >95%</li>
+                                <li>Warranty claim time: &lt;3 days</li>
+                            </ul>
+                        </div>
+                        <div class="card orange">
+                            <h4>&#128640; Marketing Metrics</h4>
+                            <p style="font-size: 0.65rem; color: var(--marketing); margin-bottom: 0.1rem;">Manual</p>
+                            <ul style="margin-bottom: 0.3rem;">
+                                <li>Campaign reach & conversion</li>
+                                <li>Promo redemption rate</li>
+                            </ul>
+                            <p style="font-size: 0.65rem; color: var(--marketing); margin-bottom: 0.1rem;">Automation</p>
+                            <ul>
+                                <li>Cart recovery: +20%</li>
+                                <li>Churn reduction: -25%</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid" style="margin-top: 1rem;">
+                        <div class="metric-card cdp">
+                            <div class="metric-value">360°</div>
+                            <div class="metric-label">Customer View</div>
+                        </div>
+                        <div class="metric-card sales">
+                            <div class="metric-value">+25%</div>
+                            <div class="metric-label">Sales Conversion</div>
+                        </div>
+                        <div class="metric-card cs">
+                            <div class="metric-value">&lt;1h</div>
+                            <div class="metric-label">CS Response Time</div>
+                        </div>
+                        <div class="metric-card" style="background: linear-gradient(135deg, var(--aftersales), #004D40);">
+                            <div class="metric-value">>85%</div>
+                            <div class="metric-label">First-time Fix Rate</div>
+                        </div>
+                        <div class="metric-card marketing">
+                            <div class="metric-value">+30%</div>
+                            <div class="metric-label">Campaign Conversion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.5 Integration with Existing Systems -->
+                <div class="subsection" id="integration">
+                    <h3 class="subsection-title"><span class="num">1.5</span> Integration with Existing Systems</h3>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">Existing System</th>
+                                <th style="width: 30%;">Data to CDP</th>
+                                <th style="width: 25%;">Data from CDP</th>
+                                <th style="width: 30%;">Notes / Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>B2B App</strong><br><span class="badge b2b">B2B</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Business profile</li>
+                                        <li>Canvassing leads</li>
+                                        <li>Activity management (visit, call, etc.)</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Customer segment</li>
+                                        <li>Recommendations</li>
+                                        <li>Alerts</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #388E3C;">&#10003;</span> App existing</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> API to CDP: develop</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Segment & Alerts: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>E-commerce App</strong><br><span style="font-size: 0.7rem; color: var(--text-muted);">(Web + Mobile App)</span><br><span class="badge both">B2B, B2C</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>User profile</li>
+                                        <li>Browsing behavior</li>
+                                        <li>Cart & Wishlist</li>
+                                        <li>Orders</li>
+                                        <li>Loyalty data</li>
+                                        <li>UTM/Attribution (Ads, Social, Backlink, SEO, Offline Event)</li>
+                                        <li>B2B PIC linked accounts</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Personalization</li>
+                                        <li>Recommendations</li>
+                                        <li>Push content</li>
+                                        <li>Loyalty points</li>
+                                        <li>Audience sync</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #388E3C;">&#10003;</span> E-commerce App existing</div>
+                                    <div><span style="color: #388E3C;">&#10003;</span> UTM tracking: existing</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Event tracking: develop</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Personalization API: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>OTSAR</strong><br><span class="badge both">B2B, B2C</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Orders (Marketplace)</li>
+                                        <li>Orders (POS)</li>
+                                        <li>Orders (B2B Offline)</li>
+                                        <li>Transactions</li>
+                                        <li>Inventory</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Customer lookup</li>
+                                        <li>Sync status</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #388E3C;">&#10003;</span> OTSAR existing</div>
+                                    <div><span style="color: #388E3C;">&#10003;</span> Marketplace sync: existing</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> CDP connector: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Customer Service</strong><br><span class="badge both">B2B, B2C</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Tickets</li>
+                                        <li>Chat logs (WhatsApp)</li>
+                                        <li>Chat logs (Social DM)</li>
+                                        <li>Complaints</li>
+                                        <li>CSAT scores</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Customer 360° sidebar</li>
+                                        <li>Interaction history</li>
+                                        <li>Segments</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #388E3C;">&#10003;</span> Current: Sleekflow + Meta Inbox</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Future: Twilio (WA + SMS)</div>
+                                    <div style="color: #78909C; font-size: 0.65rem; margin-left: 1rem;">- Unlimited contacts</div>
+                                    <div style="color: #78909C; font-size: 0.65rem; margin-left: 1rem;">- Internal chat records</div>
+                                    <div><span style="color: #1565C0;">&#128279;</span> Ticketing: Zendesk</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sales CRM</strong><br><span class="badge b2b">B2B</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Pipeline stages</li>
+                                        <li>Deals & quotations</li>
+                                        <li>Activities (visit, call, meeting)</li>
+                                        <li>Win/Loss reasons</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Customer 360°</li>
+                                        <li>Segments</li>
+                                        <li>Lead scoring</li>
+                                        <li>Alerts & reminders</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #E65100;">&#9881;</span> New module: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>After Sales</strong><br><span class="badge b2b">B2B</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Machine registrations</li>
+                                        <li>Service requests</li>
+                                        <li>Maintenance logs</li>
+                                        <li>Warranty claims</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Customer 360°</li>
+                                        <li>Machine history</li>
+                                        <li>Service alerts</li>
+                                        <li>Warranty status</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #E65100;">&#9881;</span> New module: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Marketing</strong><br><span class="badge both">B2B, B2C</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Campaign logs</li>
+                                        <li>Message delivery status</li>
+                                        <li>Click/open responses</li>
+                                        <li>Unsubscribes</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Segments & audiences</li>
+                                        <li>Trigger events</li>
+                                        <li>Personalization data</li>
+                                        <li>Channel preferences</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #E65100;">&#9881;</span> New module: develop</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Existing Database</strong><br><span class="badge both">B2B, B2C</span></td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Historical orders</li>
+                                        <li>Customer master</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.75rem;">
+                                        <li>Enriched profiles</li>
+                                        <li>Computed metrics</li>
+                                    </ul>
+                                </td>
+                                <td style="font-size: 0.7rem;">
+                                    <div><span style="color: #388E3C;">&#10003;</span> Data existing</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Migration script: develop</div>
+                                    <div><span style="color: #E65100;">&#9881;</span> Identity resolution: develop</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box success">
+                        <strong>Key Principle:</strong> CDP sebagai <strong>Single Source of Truth</strong> untuk semua customer data. Sistem lain tetap menyimpan operational data, tapi untuk customer intelligence dan activation selalu refer ke CDP.
+                    </div>
+                </div>
+
+                <!-- 1.6 Key Stakeholders -->
+                <div class="subsection" id="stakeholders">
+                    <h3 class="subsection-title"><span class="num">1.6</span> Key Stakeholders & Ownership</h3>
+
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">Business Divisions (Users)</h4>
+                    <div class="card-grid card-grid-4" style="margin-bottom: 1.25rem;">
+                        <div class="card green">
+                            <h4>&#128188; Sales Division</h4>
+                            <ul>
+                                <li>B2B sales pipeline execution</li>
+                                <li>Lead qualification & follow-up</li>
+                                <li>Deal negotiation & closing</li>
+                                <li>Customer visit & relationship</li>
+                                <li>Revenue target achievement</li>
+                            </ul>
+                        </div>
+                        <div class="card purple">
+                            <h4>&#128172; Customer Service Division</h4>
+                            <ul>
+                                <li>Inbound inquiry handling</li>
+                                <li>Complaint resolution</li>
+                                <li>Order & delivery support</li>
+                                <li>Technical support</li>
+                                <li>Customer satisfaction</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: var(--aftersales);">
+                            <h4 style="color: var(--aftersales);">&#128295; After Sales Division</h4>
+                            <ul>
+                                <li>Machine installation</li>
+                                <li>Preventive maintenance</li>
+                                <li>Repair & troubleshooting</li>
+                                <li>Warranty management</li>
+                                <li>Spare parts fulfillment</li>
+                            </ul>
+                        </div>
+                        <div class="card orange">
+                            <h4>&#128640; Marketing Division</h4>
+                            <p style="font-size: 0.7rem; color: var(--marketing); font-weight: 600; margin-bottom: 0.15rem;">Manual</p>
+                            <ul style="margin-bottom: 0.4rem;">
+                                <li>Campaign planning & execution</li>
+                                <li>Promotional calendar & content</li>
+                                <li>Broadcast messaging</li>
+                            </ul>
+                            <p style="font-size: 0.7rem; color: var(--marketing); font-weight: 600; margin-bottom: 0.15rem;">Automation</p>
+                            <ul>
+                                <li>Journey & trigger setup</li>
+                                <li>A/B testing strategy</li>
+                                <li>Performance analytics</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">Platform & Technical Teams (Builders)</h4>
+                    <div class="card-grid card-grid-3">
+                        <div class="card blue">
+                            <h4>&#128187; Engineering</h4>
+                            <ul>
+                                <li>Platform architecture</li>
+                                <li>Data pipeline development</li>
+                                <li>API integrations</li>
+                                <li>Security & compliance</li>
+                            </ul>
+                        </div>
+                        <div class="card blue">
+                            <h4>&#128200; Data Team</h4>
+                            <ul>
+                                <li>Data modeling & CDP</li>
+                                <li>ML model development</li>
+                                <li>Analytics & reporting</li>
+                                <li>Data quality assurance</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: var(--text-muted);">
+                            <h4 style="color: var(--text-muted);">&#128203; Product</h4>
+                            <ul>
+                                <li>Requirements gathering</li>
+                                <li>Feature prioritization</li>
+                                <li>User journey design</li>
+                                <li>Success metrics definition</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1.7 Roadmap & Milestones -->
+                <div class="subsection" id="roadmap">
+                    <h3 class="subsection-title"><span class="num">1.7</span> Roadmap & Milestones</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin: 1rem 0;">
+                        <!-- Phase 1 -->
+                        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="background: var(--cdp); color: white; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.8rem;">
+                                Phase 1: CDP Foundation
+                            </div>
+                            <div style="padding: 0.75rem; font-size: 0.75rem;">
+                                <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                                    <li>Data architecture setup</li>
+                                    <li>Identity resolution</li>
+                                    <li>Customer 360° profile</li>
+                                    <li>Data connectors (E-commerce App, OTSAR, B2B App)</li>
+                                    <li>Basic segmentation</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="background: var(--sales); color: white; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.8rem;">
+                                Phase 2: Sales CRM
+                            </div>
+                            <div style="padding: 0.75rem; font-size: 0.75rem;">
+                                <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                                    <li>Pipeline management</li>
+                                    <li>Deal & quotation</li>
+                                    <li>Activity tracking</li>
+                                    <li>B2B App integration</li>
+                                    <li>Sales dashboard</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="background: var(--cs); color: white; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.8rem;">
+                                Phase 3: Customer Service
+                            </div>
+                            <div style="padding: 0.75rem; font-size: 0.75rem;">
+                                <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                                    <li>Twilio integration (WA + SMS)</li>
+                                    <li>Zendesk ticketing</li>
+                                    <li>Unified inbox</li>
+                                    <li>Customer 360° sidebar</li>
+                                    <li>CS dashboard</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Phase 4 -->
+                        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="background: var(--aftersales); color: white; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.8rem;">
+                                Phase 4: After Sales
+                            </div>
+                            <div style="padding: 0.75rem; font-size: 0.75rem;">
+                                <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                                    <li>Machine registration</li>
+                                    <li>Service scheduling</li>
+                                    <li>Warranty tracking</li>
+                                    <li>Technician assignment</li>
+                                    <li>After Sales dashboard</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Phase 5 -->
+                        <div style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="background: var(--marketing); color: white; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.8rem;">
+                                Phase 5: Marketing
+                            </div>
+                            <div style="padding: 0.75rem; font-size: 0.75rem;">
+                                <ul style="margin: 0; padding-left: 1.2rem; color: var(--text-muted);">
+                                    <li>Campaign management</li>
+                                    <li>Broadcast messaging</li>
+                                    <li>Journey automation</li>
+                                    <li>A/B testing</li>
+                                    <li>Marketing analytics</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box warning">
+                        <strong>Note:</strong> Roadmap ini adalah high-level overview. Detail timeline dan sprint planning akan didokumentasikan terpisah setelah requirement finalization.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

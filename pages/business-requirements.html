@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Requirements - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header h2 .num { opacity: 0.7; font-weight: normal; }
+
+        .section-content { padding: 1.25rem; }
+
+        .subsection { margin-bottom: 1.5rem; }
+        .subsection:last-child { margin-bottom: 0; }
+
+        .subsection-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection-title .num { color: var(--text-muted); font-weight: normal; }
+
+        /* Cards Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .card ul { list-style: none; font-size: 0.8rem; }
+        .card li { padding: 0.15rem 0; color: var(--text-muted); padding-left: 1rem; position: relative; }
+        .card li::before { content: "•"; color: var(--primary); position: absolute; left: 0; }
+
+        .card.red { border-left-color: #D32F2F; }
+        .card.orange { border-left-color: #F57C00; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 0.35rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        .tag.success { background: #E8F5E9; border-color: #4CAF50; color: #2E7D32; }
+
+        /* Role Grid */
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .role-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .role-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid var(--secondary);
+            font-size: 0.8rem;
+        }
+
+        .role-card ul { list-style: none; text-align: left; }
+        .role-card li { padding: 0.25rem 0; color: var(--text-muted); font-size: 0.75rem; }
+
+        /* Scope Grid */
+        .scope-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .scope-card { border-radius: 8px; padding: 1rem; }
+        .scope-card.in-scope { background: #E8F5E9; border: 1px solid #4CAF50; }
+        .scope-card.out-scope { background: #FFEBEE; border: 1px solid #f44336; }
+        .scope-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .scope-card ul { list-style: none; font-size: 0.8rem; }
+        .scope-card li { padding: 0.2rem 0; padding-left: 1.25rem; position: relative; }
+        .scope-card.in-scope li::before { content: "✓"; color: #4CAF50; position: absolute; left: 0; }
+        .scope-card.out-scope li::before { content: "✗"; color: #f44336; position: absolute; left: 0; }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .scope-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="section" id="business-requirements">
+            <div class="section-header">
+                <h2><span class="num">2.</span> Business Requirements</h2>
+            </div>
+            <div class="section-content">
+                <!-- 2.1 Problem Statement -->
+                <div class="subsection" id="problem">
+                    <h3 class="subsection-title"><span class="num">2.1</span> Problem Statement</h3>
+
+                    <div class="card-grid">
+                        <div class="card red">
+                            <h4>&#9888; Current Pain Points</h4>
+                            <ul>
+                                <li>Data customer tersebar di multiple systems</li>
+                                <li>Tidak ada visibility pipeline real-time</li>
+                                <li>Manual follow-up & tracking</li>
+                                <li>Inconsistent customer experience</li>
+                                <li>No unified messaging platform</li>
+                            </ul>
+                        </div>
+                        <div class="card orange">
+                            <h4>&#128202; Business Impact</h4>
+                            <ul>
+                                <li>Lost leads due to slow response</li>
+                                <li>Missed upsell opportunities</li>
+                                <li>Inefficient sales process</li>
+                                <li>Poor customer retention</li>
+                                <li>No accurate forecasting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.2 Business Goals -->
+                <div class="subsection" id="goals">
+                    <h3 class="subsection-title"><span class="num">2.2</span> Business Goals</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Description</th>
+                                <th>Target</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Pipeline Visibility</strong></td>
+                                <td>Real-time tracking semua deals B2B & B2C</td>
+                                <td><span class="tag success">100%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lead Response</strong></td>
+                                <td>Reduce time to first contact</td>
+                                <td><span class="tag success">&lt;24 hours</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Conversion Rate</strong></td>
+                                <td>Improve lead-to-customer conversion</td>
+                                <td><span class="tag success">+25%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Customer Retention</strong></td>
+                                <td>Reduce churn through proactive engagement</td>
+                                <td><span class="tag success">+40%</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Revenue Forecast</strong></td>
+                                <td>Accurate B2B revenue prediction</td>
+                                <td><span class="tag success">85% accuracy</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 2.3 Stakeholders -->
+                <div class="subsection" id="stakeholders">
+                    <h3 class="subsection-title"><span class="num">2.3</span> Stakeholders</h3>
+
+                    <div class="role-grid">
+                        <div class="role-card">
+                            <h4>&#127919; Product</h4>
+                            <ul>
+                                <li>Pipeline & rules definition</li>
+                                <li>Segment & field design</li>
+                                <li>Messaging templates</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <h4>&#128202; Data Team</h4>
+                            <ul>
+                                <li>ERD & data standards</li>
+                                <li>Funnel & conversion metrics</li>
+                                <li>Dashboard & attribution</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <h4>&#128187; Engineering</h4>
+                            <ul>
+                                <li>CRM backend & UI</li>
+                                <li>Messaging service</li>
+                                <li>Consent & audit log</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <h4>&#128176; Sales</h4>
+                            <ul>
+                                <li>Pipeline execution</li>
+                                <li>Discovery & negotiation</li>
+                                <li>Won/Lost recording</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <h4>&#128222; Customer Service</h4>
+                            <ul>
+                                <li>Inbound lead handling</li>
+                                <li>Post-sales support</li>
+                                <li>Retention & tickets</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <h4>&#128227; Marketing</h4>
+                            <ul>
+                                <li>Campaign management</li>
+                                <li>Lead nurturing flows</li>
+                                <li>Segment & targeting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.4 In Scope / Out of Scope -->
+                <div class="subsection" id="in-out-scope">
+                    <h3 class="subsection-title"><span class="num">2.4</span> In Scope / Out of Scope</h3>
+
+                    <div class="scope-grid">
+                        <div class="scope-card in-scope">
+                            <h4>&#9989; In Scope</h4>
+                            <ul>
+                                <li>Customer management (B2B & B2C)</li>
+                                <li>Sales pipeline & deal tracking</li>
+                                <li>Activity recording & history</li>
+                                <li>Multi-channel messaging (WA, Email, Push)</li>
+                                <li>AI automation triggers</li>
+                                <li>Basic reporting & dashboard</li>
+                                <li>Integration with existing apps</li>
+                            </ul>
+                        </div>
+                        <div class="scope-card out-scope">
+                            <h4>&#10060; Out of Scope</h4>
+                            <ul>
+                                <li>E-commerce functionality</li>
+                                <li>Inventory management</li>
+                                <li>Accounting & invoicing</li>
+                                <li>HR & payroll</li>
+                                <li>Advanced BI & data warehouse</li>
+                                <li>Mobile app development (use existing)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

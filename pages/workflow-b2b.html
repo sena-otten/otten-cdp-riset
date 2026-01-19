@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Workflow & Automation - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --b2b: #1565C0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--b2b) 0%, #0D47A1 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header-icon { font-size: 2.5rem; }
+        .page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .page-header p { opacity: 0.9; font-size: 0.9rem; }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--b2b);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .section-content { padding: 1.5rem; }
+
+        /* Journey Flow */
+        .journey-flow {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .journey-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .journey-title .tag {
+            background: var(--b2b);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: normal;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+        }
+
+        .flow-node {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            min-width: 110px;
+            position: relative;
+        }
+
+        .flow-node.trigger {
+            border-color: var(--warning);
+            background: #FFF8E1;
+        }
+
+        .flow-node.condition {
+            border-color: var(--info);
+            background: #E3F2FD;
+            transform: rotate(0deg);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-node.action {
+            border-color: var(--success);
+            background: #E8F5E9;
+        }
+
+        .flow-node.end {
+            border-color: var(--b2b);
+            background: #E3F2FD;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flow-node-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
+        .flow-node-label { font-size: 0.75rem; font-weight: 600; color: var(--text-dark); }
+        .flow-node-detail { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            padding: 0 0.25rem;
+        }
+
+        .flow-arrow.down {
+            transform: rotate(90deg);
+        }
+
+        /* Timeline Flow (Vertical) */
+        .timeline-flow {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1rem 0;
+        }
+
+        .timeline-flow::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--b2b);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--b2b);
+        }
+
+        .timeline-dot.trigger { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
+        .timeline-dot.action { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+        .timeline-dot.wait { background: var(--text-muted); box-shadow: 0 0 0 2px var(--text-muted); }
+
+        .timeline-content {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-header h4 { font-size: 0.85rem; color: var(--text-dark); }
+        .timeline-header .time { font-size: 0.7rem; color: var(--text-muted); margin-left: auto; }
+        .timeline-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Trigger Cards */
+        .trigger-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .trigger-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid var(--b2b);
+        }
+
+        .trigger-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .trigger-card-header .icon { font-size: 1.25rem; }
+        .trigger-card-header h4 { font-size: 0.9rem; color: var(--text-dark); }
+
+        .trigger-card-header .priority {
+            margin-left: auto;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .priority.high { background: #FFEBEE; color: #C62828; }
+        .priority.medium { background: #FFF3E0; color: #E65100; }
+        .priority.low { background: #E8F5E9; color: #2E7D32; }
+
+        .trigger-detail {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .trigger-detail dt { color: var(--text-muted); }
+        .trigger-detail dd { color: var(--text-dark); font-weight: 500; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.wa { background: #E8F5E9; color: #2E7D32; }
+        .tag.email { background: #E3F2FD; color: #1565C0; }
+        .tag.push { background: #FFF3E0; color: #E65100; }
+        .tag.telegram { background: #E3F2FD; color: #0088cc; }
+        .tag.internal { background: #F3E5F5; color: #7B1FA2; }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .page-header { flex-direction: column; text-align: center; }
+            .badge { margin: 0.5rem 0 0 0; }
+            .trigger-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-header-icon">&#128188;</div>
+            <div>
+                <h1>B2B Workflow & Automation</h1>
+                <p>Sales Pipeline, Follow-up & Retention Triggers</p>
+            </div>
+            <span class="badge">&#129302; AI-Powered</span>
+        </div>
+
+        <!-- Sales Pipeline Automation -->
+        <section class="section">
+            <div class="section-header">&#128200; Sales Pipeline Automation</div>
+            <div class="section-content">
+                <div class="journey-flow">
+                    <div class="journey-title">
+                        Lead-to-Won Journey Flow
+                        <span class="tag">AUTOMATED</span>
+                    </div>
+                    <div class="flow-container">
+                        <div class="flow-step">
+                            <div class="flow-node trigger">
+                                <div class="flow-node-icon">&#128229;</div>
+                                <div class="flow-node-label">New Lead</div>
+                                <div class="flow-node-detail">From any source</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#128100;</div>
+                                <div class="flow-node-label">Assign PIC</div>
+                                <div class="flow-node-detail">Auto by region</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#128172;</div>
+                                <div class="flow-node-label">Welcome WA</div>
+                                <div class="flow-node-detail">Within 1 hour</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">&#128222;</div>
+                                <div class="flow-node-label">First Call</div>
+                                <div class="flow-node-detail">Within 24h</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">&#128203;</div>
+                                <div class="flow-node-label">Qualify</div>
+                                <div class="flow-node-detail">Score lead</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">&#127891;</div>
+                                <div class="flow-node-label">Discovery</div>
+                                <div class="flow-node-detail">Visit/Meeting</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">&#128196;</div>
+                                <div class="flow-node-label">Proposal</div>
+                                <div class="flow-node-detail">Send offer</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node end">
+                                <div class="flow-node-icon">&#127942;</div>
+                                <div class="flow-node-label">Won</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <strong>&#128172; Channel Notifikasi Sales:</strong> Reminder ke sales staff dikirim via <strong>Push Notification (B2B App)</strong> atau <strong>Telegram</strong> ke nomor terdaftar masing-masing staff (sesuai preferensi).
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1rem 0 0.75rem;">Pipeline Stage Automation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>SLA</th>
+                            <th>Auto Action if Overdue</th>
+                            <th>Escalation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lead</strong></td>
+                            <td>24 hours</td>
+                            <td><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> Reminder to PIC</td>
+                            <td>Notify Manager</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Qualified</strong></td>
+                            <td>3 days</td>
+                            <td><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> Schedule discovery</td>
+                            <td>Reassign if 5 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Discovery</strong></td>
+                            <td>7 days</td>
+                            <td><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> + <span class="tag wa">WA</span> to customer</td>
+                            <td>Manager review</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Proposal</strong></td>
+                            <td>14 days</td>
+                            <td><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> + <span class="tag email">Email</span> to customer</td>
+                            <td>Discount approval</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Negotiation</strong></td>
+                            <td>21 days</td>
+                            <td><span class="tag internal">Internal</span> Deal review</td>
+                            <td>Director approval</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Real-time Sales Alerts -->
+        <section class="section">
+            <div class="section-header">&#128276; Real-time Sales Alerts</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Notifikasi instan yang dikirim segera saat event terjadi, tanpa delay.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128229;</span>
+                            <h4>New Lead Assigned</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>lead_created & pic_assigned = current_user</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Lead baru: [Company] - [Segment]"</dd>
+                            <dt>Action:</dt>
+                            <dd>Deep link ke detail lead di app</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128221;</span>
+                            <h4>Revision Requested</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>proposal_status = revision_requested</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] minta revisi proposal"</dd>
+                            <dt>Include:</dt>
+                            <dd>Catatan revisi dari customer/manager</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9989;</span>
+                            <h4>Proposal Approved</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>proposal_status = approved</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Proposal [Customer] disetujui!"</dd>
+                            <dt>Next:</dt>
+                            <dd>Auto-create task kirim ke customer</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#10060;</span>
+                            <h4>Proposal Rejected</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>proposal_status = rejected</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Proposal [Customer] ditolak"</dd>
+                            <dt>Include:</dt>
+                            <dd>Alasan rejection + saran perbaikan</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128172;</span>
+                            <h4>Customer Response</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>customer_replied = true (WA/Email)</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] membalas pesan"</dd>
+                            <dt>Action:</dt>
+                            <dd>Deep link ke conversation</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127942;</span>
+                            <h4>Deal Won</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>deal_status = won</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Selamat! Deal [Customer] WON - Rp [Value]"</dd>
+                            <dt>CC:</dt>
+                            <dd>Notify manager juga</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128176;</span>
+                            <h4>Discount Approval Needed</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>discount_request_submitted</dd>
+                            <dt>To:</dt>
+                            <dd>Manager/Approver</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Request diskon [X]% untuk [Customer]"</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128203;</span>
+                            <h4>Task Assigned</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>task_assigned_to = current_user</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Task baru: [Task Title]"</dd>
+                            <dt>Include:</dt>
+                            <dd>Due date, priority, linked deal</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Transaction Alerts -->
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">&#128722; Customer Transaction Alerts</h4>
+                <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">Notifikasi saat customer B2B melakukan transaksi (order via B2B App / POS / Manual Order).</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128722;</span>
+                            <h4>New Order Placed</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_created & customer.pic_sales = user</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] order Rp [Value]"</dd>
+                            <dt>Include:</dt>
+                            <dd>Order summary, items count</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128176;</span>
+                            <h4>Large Order Alert</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_value > threshold (e.g. > Rp 10jt)</dd>
+                            <dt>To:</dt>
+                            <dd>Sales PIC + Manager</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Order besar! [Customer] - Rp [Value]"</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127881;</span>
+                            <h4>First Order After Gap</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_created & last_order > 30 days</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] kembali order setelah [X] hari!"</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Follow-up thank you call</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Order Value Increase</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_value > avg_order_value * 1.5</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] order 50% lebih besar dari biasanya"</dd>
+                            <dt>Opportunity:</dt>
+                            <dd>Upsell / volume discount discussion</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128201;</span>
+                            <h4>Order Value Decrease</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_value < avg_order_value * 0.5</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] order 50% lebih kecil dari biasanya"</dd>
+                            <dt>Action:</dt>
+                            <dd>Investigate - satisfaction check</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9989;</span>
+                            <h4>Order Completed/Delivered</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_status = delivered</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> (optional)</dd>
+                            <dt>Content:</dt>
+                            <dd>"Order [Customer] sudah diterima"</dd>
+                            <dt>Next:</dt>
+                            <dd>Schedule satisfaction follow-up</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#9881; Transaction Alert Settings:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>notify_on_order:</strong> all / large_only / none</li>
+                        <li><strong>large_order_threshold:</strong> Rp 10.000.000 (configurable)</li>
+                        <li><strong>notify_manager:</strong> large_orders_only / all / none</li>
+                        <li>Settings bisa diatur per sales atau global policy</li>
+                    </ul>
+                </div>
+
+                <!-- Alert Timeline -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Proposal Approval Flow
+                        <span class="tag">INSTANT ALERTS</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128196; Sales Submit Proposal</h4>
+                                    <span class="time">Start</span>
+                                </div>
+                                <div class="timeline-desc">Sales mengirim proposal untuk approval internal</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Manager Gets Alert</h4>
+                                    <span class="time">Instant</span>
+                                </div>
+                                <div class="timeline-desc"><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> "Proposal baru perlu review"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128269; Manager Reviews</h4>
+                                    <span class="time">SLA: 24h</span>
+                                </div>
+                                <div class="timeline-desc">Review proposal, harga, terms</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9989; / &#128221; / &#10060; Decision</h4>
+                                    <span class="time">Instant</span>
+                                </div>
+                                <div class="timeline-desc"><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> ke Sales: Approved / Need Revision / Rejected</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128640; Next Action</h4>
+                                    <span class="time">Auto</span>
+                                </div>
+                                <div class="timeline-desc">If approved: auto-create task "Kirim proposal ke customer"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Follow-up Automation -->
+        <section class="section">
+            <div class="section-header">&#128337; Follow-up Automation Triggers</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9200;</span>
+                            <h4>Daily Follow-up Reminder</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>next_action_date = today</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push B2B App</span> atau <span class="tag telegram">Telegram</span></dd>
+                            <dt>Time:</dt>
+                            <dd>08:00 AM local time</dd>
+                            <dt>Fallback:</dt>
+                            <dd>Email jika tidak ada app/telegram</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128197;</span>
+                            <h4>Missed Follow-up Alert</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>next_action_date < today (overdue)</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> ke PIC + Manager</dd>
+                            <dt>Time:</dt>
+                            <dd>Immediately</dd>
+                            <dt>Repeat:</dt>
+                            <dd>Every 24h until resolved</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128172;</span>
+                            <h4>Post-Meeting Follow-up</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>activity_type = meeting, status = completed</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-create follow-up task + WA template</dd>
+                            <dt>Delay:</dt>
+                            <dd>+1 business day</dd>
+                            <dt>Content:</dt>
+                            <dd>Thank you + next steps summary</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128196;</span>
+                            <h4>Proposal Follow-up Sequence</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>proposal_sent = true, no response</dd>
+                            <dt>Sequence:</dt>
+                            <dd>Day 3: WA check-in</dd>
+                            <dt></dt>
+                            <dd>Day 7: Email detailed benefits</dd>
+                            <dt></dt>
+                            <dd>Day 10: Call scheduled by PIC</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Proposal Follow-up Journey -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Proposal Follow-up Journey
+                        <span class="tag">SEQUENCE</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128196; Proposal Sent</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">Sales rep sends proposal to PIC customer</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot wait"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9203; Waiting Period</h4>
+                                    <span class="time">Day 1-2</span>
+                                </div>
+                                <div class="timeline-desc">System monitors for customer response</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128172; WhatsApp Check-in</h4>
+                                    <span class="time">Day 3</span>
+                                </div>
+                                <div class="timeline-desc">Auto WA: "Hi [Name], sudah sempat review proposal kami?"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128231; Email Benefits</h4>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc">Detailed email with product benefits, testimonials, case study</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128222; Schedule Call</h4>
+                                    <span class="time">Day 10</span>
+                                </div>
+                                <div class="timeline-desc">Notify PIC to make personal call, offer meeting</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128200; Manager Review</h4>
+                                    <span class="time">Day 14</span>
+                                </div>
+                                <div class="timeline-desc">If no response: escalate to manager for special offer decision</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Retention & Reorder -->
+        <section class="section">
+            <div class="section-header">&#128260; Retention & Reorder Automation</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128230;</span>
+                            <h4>Reorder Reminder</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>last_order > 30 days & is_active = true</dd>
+                            <dt>Condition:</dt>
+                            <dd>monthly_coffee_kg > 0</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag wa">WA</span> to PIC Location + reorder link</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> for follow-up call</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9888;</span>
+                            <h4>Churn Risk Alert</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>no_activity > 60 days & deal_status = won</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> ke PIC + Manager</dd>
+                            <dt>Task:</dt>
+                            <dd>Auto-create "Win-back" task</dd>
+                            <dt>Deadline:</dt>
+                            <dd>3 business days</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128201;</span>
+                            <h4>Consumption Drop Alert</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>monthly_order < avg_monthly * 0.5</dd>
+                            <dt>Compare:</dt>
+                            <dd>Last 3 months average</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> alert to investigate</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Schedule satisfaction check call</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128221;</span>
+                            <h4>Contract Renewal</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>contract_end_date - 30 days</dd>
+                            <dt>Actions:</dt>
+                            <dd>Day 30: Email renewal notice</dd>
+                            <dt></dt>
+                            <dd>Day 14: Sales PIC notification</dd>
+                            <dt></dt>
+                            <dd>Day 7: Manager escalation</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128178;</span>
+                            <h4>Payment Overdue</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>invoice_due_date < today & status = unpaid</dd>
+                            <dt>Day 1:</dt>
+                            <dd>Email reminder to billing contact</dd>
+                            <dt>Day 7:</dt>
+                            <dd>WA + notify Finance & Sales</dd>
+                            <dt>Day 14:</dt>
+                            <dd>Escalate to management</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127881;</span>
+                            <h4>PIC Birthday Greeting</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>pic_birthday = today</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto WA birthday message</dd>
+                            <dt>Include:</dt>
+                            <dd>Special discount code (optional)</dd>
+                            <dt>CC:</dt>
+                            <dd>Notify Sales PIC</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Churn Prevention Journey -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Churn Prevention Journey
+                        <span class="tag">CRITICAL</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9888; Churn Risk Detected</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">System detects no activity for 60+ days</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Alert Sales PIC</h4>
+                                    <span class="time">Immediately</span>
+                                </div>
+                                <div class="timeline-desc">Push notification + email with customer details & history</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128222; Outreach Call</h4>
+                                    <span class="time">Within 24h</span>
+                                </div>
+                                <div class="timeline-desc">PIC calls customer to check satisfaction, gather feedback</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127873; Special Offer</h4>
+                                    <span class="time">If needed</span>
+                                </div>
+                                <div class="timeline-desc">Send personalized win-back offer based on purchase history</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128202; Manager Review</h4>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc">If not recovered: escalate for strategic decision</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upsell & Cross-sell -->
+        <section class="section">
+            <div class="section-header">&#128200; Upsell & Cross-sell Triggers</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127970;</span>
+                            <h4>New Location Detected</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>brand.total_locations increased</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> upsell opportunity</dd>
+                            <dt>Data:</dt>
+                            <dd>Include new location details</dd>
+                            <dt>Task:</dt>
+                            <dd>Create "New outlet onboarding" task</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Volume Growth Opportunity</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>monthly_order > previous_month * 1.2</dd>
+                            <dt>Condition:</dt>
+                            <dd>3 consecutive months growth</dd>
+                            <dt>Action:</dt>
+                            <dd>Suggest volume discount discussion</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> ke PIC + AM</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9749;</span>
+                            <h4>Product Cross-sell</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>only_buys = "coffee_beans"</dd>
+                            <dt>Condition:</dt>
+                            <dd>No machine or tools purchased</dd>
+                            <dt>Action:</dt>
+                            <dd>Email product recommendations</dd>
+                            <dt>Content:</dt>
+                            <dd>Grinder, machine maintenance</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127891;</span>
+                            <h4>Training Opportunity</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>customer_age > 6 months & no_training</dd>
+                            <dt>Condition:</dt>
+                            <dd>segment = cafe OR restaurant</dd>
+                            <dt>Action:</dt>
+                            <dd>Email barista training invitation</dd>
+                            <dt>Follow-up:</dt>
+                            <dd>Sales call in 7 days</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>&#128161; Smart Recommendations:</strong> AI akan menganalisis pola pembelian dan menyarankan produk yang relevan berdasarkan segment, lokasi, dan history pembelian customer.
+                </div>
+            </div>
+        </section>
+
+        <!-- Channel Configuration -->
+        <section class="section">
+            <div class="section-header">&#128172; Sales Staff Notification Channel</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Setiap sales staff dapat memilih channel notifikasi yang preferred:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Channel</th>
+                            <th>Requirement</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag push">Push B2B App</span></td>
+                            <td>B2B App installed + logged in</td>
+                            <td>Primary channel, real-time notification di mobile app</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag telegram">Telegram</span></td>
+                            <td>Nomor HP terdaftar + Telegram active</td>
+                            <td>Direct message ke personal Telegram, lebih personal</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag email">Email</span></td>
+                            <td>Email valid</td>
+                            <td>Fallback jika Push & Telegram tidak tersedia</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#9881; Staff Channel Preference:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>preferred_channel:</strong> push_app / telegram / email</li>
+                        <li><strong>telegram_phone:</strong> Nomor HP untuk Telegram (format: +62xxx)</li>
+                        <li><strong>fallback_enabled:</strong> true/false - kirim ke channel lain jika preferred gagal</li>
+                        <li>Setting diatur per staff di profile masing-masing</li>
+                    </ul>
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Notification Priority Flow</h4>
+                <div class="flow-container" style="background: var(--bg-light); padding: 1rem; border-radius: 8px;">
+                    <div class="flow-step">
+                        <div class="flow-node trigger">
+                            <div class="flow-node-icon">&#128276;</div>
+                            <div class="flow-node-label">Trigger</div>
+                            <div class="flow-node-detail">Event fired</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-step">
+                        <div class="flow-node">
+                            <div class="flow-node-icon">&#9881;</div>
+                            <div class="flow-node-label">Check Pref</div>
+                            <div class="flow-node-detail">Staff setting</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-step">
+                        <div class="flow-node action">
+                            <div class="flow-node-icon">&#128241;</div>
+                            <div class="flow-node-label">Push / TG</div>
+                            <div class="flow-node-detail">Preferred</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-step">
+                        <div class="flow-node">
+                            <div class="flow-node-icon">&#10004;</div>
+                            <div class="flow-node-label">Delivered?</div>
+                            <div class="flow-node-detail">Check status</div>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">&#8594;</div>
+                    <div class="flow-step">
+                        <div class="flow-node action">
+                            <div class="flow-node-icon">&#128231;</div>
+                            <div class="flow-node-label">Fallback</div>
+                            <div class="flow-node-detail">If failed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

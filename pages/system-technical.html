@@ -1,0 +1,3315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System & Technical Design - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header h2 .num { opacity: 0.7; font-weight: normal; }
+
+        .section-content { padding: 1.25rem; }
+
+        .subsection { margin-bottom: 1.5rem; }
+        .subsection:last-child { margin-bottom: 0; }
+
+        .subsection-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection-title .num { color: var(--text-muted); font-weight: normal; }
+
+        /* Architecture Diagram */
+        .arch-diagram {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .arch-layer {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-layer-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .arch-components { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+        .arch-component {
+            background: var(--bg-light);
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        .arch-arrow { text-align: center; color: var(--text-muted); font-size: 1rem; margin: 0.25rem 0; }
+
+        /* Entity Diagram */
+        .entity-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 1rem 0;
+        }
+
+        .entity-box {
+            background: var(--bg-light);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 220px;
+        }
+
+        .entity-box.legal { border-color: #1976D2; background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); }
+        .entity-box.brand { border-color: #388E3C; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); }
+        .entity-box.location { border-color: #F57C00; background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); }
+
+        .entity-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .entity-label { font-weight: bold; font-size: 0.9rem; }
+        .entity-example { font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
+        .entity-count { font-size: 0.65rem; background: var(--primary); color: white; padding: 0.15rem 0.5rem; border-radius: 8px; display: inline-block; margin-top: 0.35rem; }
+        .entity-connector { color: var(--text-muted); font-size: 0.75rem; }
+        .entity-connector span { font-size: 1.25rem; display: block; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 0.25rem; margin-bottom: 0.75rem; border-bottom: 2px solid var(--border); }
+        .tab { padding: 0.5rem 1rem; border: none; background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; }
+        .tab:hover { color: var(--primary); }
+        .tab.active { color: var(--primary); background: var(--bg-light); font-weight: 600; border-radius: 4px 4px 0 0; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Field List */
+        .field-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.4rem;
+            margin: 0.5rem 0;
+        }
+
+        .field-item {
+            background: var(--bg-light);
+            padding: 0.4rem 0.75rem;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Cards Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .card ul { list-style: none; font-size: 0.8rem; }
+        .card li { padding: 0.15rem 0; color: var(--text-muted); padding-left: 1rem; position: relative; }
+        .card li::before { content: "•"; color: var(--primary); position: absolute; left: 0; }
+
+        .card.blue { border-left-color: #1976D2; }
+        .card.green { border-left-color: #388E3C; }
+        .card.orange { border-left-color: #F57C00; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 0.35rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+        .tag.info { background: #E3F2FD; border-color: #2196F3; color: #1565C0; }
+        .tag.warning { background: #FFF3E0; border-color: #FF9800; color: #E65100; }
+        .tag.danger { background: #FFEBEE; border-color: #f44336; color: #C62828; }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box code {
+            background: rgba(0,0,0,0.08);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        /* ERD Diagram */
+        .erd-diagram {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .erd-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .erd-row.four-col {
+            justify-content: space-between;
+        }
+
+        .erd-row.two-col-left {
+            justify-content: flex-start;
+            gap: 1rem;
+            padding-left: 0;
+        }
+
+        .erd-row.two-col-left .erd-entity {
+            width: calc(25% - 0.5rem);
+        }
+
+        .erd-row.single-left {
+            justify-content: flex-start;
+        }
+
+        .erd-row.single-left .erd-entity {
+            width: calc(25% - 0.5rem);
+        }
+
+        .erd-entity {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            min-width: 140px;
+            overflow: hidden;
+            font-size: 0.75rem;
+        }
+
+        .erd-entity.core { border-color: var(--primary); }
+        .erd-entity.b2b { border-color: #1976D2; }
+        .erd-entity.b2c { border-color: #388E3C; }
+        .erd-entity.activity { border-color: #9C27B0; }
+        .erd-entity.messaging { border-color: #00796B; }
+
+        .erd-entity-header {
+            background: var(--bg-light);
+            padding: 0.4rem 0.6rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            font-family: 'Consolas', monospace;
+        }
+
+        .erd-entity.core .erd-entity-header { background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%); }
+        .erd-entity.b2b .erd-entity-header { background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); }
+        .erd-entity.b2c .erd-entity-header { background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); }
+        .erd-entity.activity .erd-entity-header { background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%); }
+        .erd-entity.messaging .erd-entity-header { background: linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%); }
+
+        .erd-entity-body {
+            padding: 0.4rem 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .erd-entity-body span {
+            color: var(--text-muted);
+            font-family: 'Consolas', monospace;
+            font-size: 0.7rem;
+        }
+
+        .erd-entity-body span.pk { color: #D32F2F; font-weight: 600; }
+        .erd-entity-body span.fk { color: #1976D2; }
+
+        .erd-connectors {
+            display: flex;
+            justify-content: space-around;
+            padding: 0.3rem 0;
+        }
+
+        .erd-connectors.small {
+            justify-content: flex-start;
+            gap: 1rem;
+            padding-left: calc(12.5% - 0.5rem);
+        }
+
+        .erd-connectors.small.single {
+            padding-left: calc(12.5% - 0.5rem);
+        }
+
+        .erd-connector-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .erd-line {
+            width: 2px;
+            height: 20px;
+            background: var(--border);
+        }
+
+        .erd-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .erd-section-label {
+            display: inline-block;
+            background: #FFF3E0;
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .erd-arrow {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            padding: 0 0.25rem;
+        }
+
+        /* Entity Detail */
+        .entity-detail {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .entity-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-light);
+            border-left: 4px solid var(--primary);
+        }
+
+        .entity-detail-header.blue { border-left-color: #1976D2; }
+        .entity-detail-header.green { border-left-color: #388E3C; }
+        .entity-detail-header.orange { border-left-color: #F57C00; }
+
+        .entity-detail-icon {
+            font-size: 1.5rem;
+        }
+
+        .entity-detail-header h4 {
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .entity-detail-header p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Entity Table */
+        .entity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .entity-table th {
+            background: var(--bg-light);
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .entity-table td {
+            padding: 0.4rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .entity-table td code {
+            font-family: 'Consolas', monospace;
+            font-size: 0.75rem;
+            background: var(--bg-light);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .entity-table tr:hover {
+            background: #FAFAFA;
+        }
+
+        .entity-table td:nth-child(2) {
+            font-family: 'Consolas', monospace;
+            font-size: 0.75rem;
+            color: #0277BD;
+        }
+
+        .entity-table td:nth-child(4) {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Constraints */
+        .constraint {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-right: 0.25rem;
+        }
+
+        .constraint.pk {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .constraint.fk {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .constraint.unique {
+            background: #F3E5F5;
+            color: #7B1FA2;
+        }
+
+        .constraint.required {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .constraint.default {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* Entity Indexes */
+        .entity-indexes {
+            padding: 0.75rem 1rem;
+            background: var(--bg-light);
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+        }
+
+        .entity-indexes code {
+            font-family: 'Consolas', monospace;
+            background: white;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-right: 0.25rem;
+            font-size: 0.7rem;
+            color: #5D4037;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .erd-row.four-col { flex-wrap: wrap; }
+            .erd-row.two-col-left .erd-entity { width: calc(50% - 0.5rem); }
+            .erd-row.single-left .erd-entity { width: 50%; }
+            .entity-table { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="section" id="system-technical">
+            <div class="section-header">
+                <h2><span class="num">4.</span> System & Technical Design</h2>
+            </div>
+            <div class="section-content">
+                <!-- 4.1 Architecture -->
+                <div class="subsection" id="architecture">
+                    <h3 class="subsection-title"><span class="num">4.1</span> High Level Architecture</h3>
+
+                    <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
+                        <strong>CDP-Centric Architecture:</strong> Customer Data Platform (CDP) sebagai central hub untuk semua data customer. CRM, Marketing Automation, dan sistem lain mengakses customer data via CDP.
+                    </div>
+
+                    <div class="arch-diagram">
+                        <!-- Data Sources -->
+                        <div class="arch-layer" style="background: #ECEFF1;">
+                            <div class="arch-layer-title">Data Sources</div>
+                            <div class="arch-components">
+                                <span class="arch-component">Retail App</span>
+                                <span class="arch-component">POS</span>
+                                <span class="arch-component">OTSAR (ERP)</span>
+                                <span class="arch-component">Website</span>
+                                <span class="arch-component">Social/Ads</span>
+                            </div>
+                        </div>
+                        <div class="arch-arrow">&#8595;</div>
+
+                        <!-- CDP Layer -->
+                        <div class="arch-layer" style="background: #E3F2FD; border: 2px solid #1976D2;">
+                            <div class="arch-layer-title" style="color: #1565C0;">CDP (Central Hub) - Source of Truth</div>
+                            <div class="arch-components">
+                                <span class="arch-component" style="background: #BBDEFB;">Identity Resolution</span>
+                                <span class="arch-component" style="background: #BBDEFB;">Unified Profile</span>
+                                <span class="arch-component" style="background: #BBDEFB;">B2B Hierarchy</span>
+                                <span class="arch-component" style="background: #BBDEFB;">Segment & Scoring</span>
+                                <span class="arch-component" style="background: #BBDEFB;">Consent</span>
+                            </div>
+                        </div>
+                        <div class="arch-arrow">&#8595; API / Events</div>
+
+                        <!-- Consumer Services -->
+                        <div class="arch-layer">
+                            <div class="arch-layer-title">Consumer Services</div>
+                            <div class="arch-components">
+                                <span class="arch-component" style="background: #C8E6C9;">CRM</span>
+                                <span class="arch-component" style="background: #FFE0B2;">Marketing Automation</span>
+                                <span class="arch-component" style="background: #B3E5FC;">Messaging Service</span>
+                                <span class="arch-component" style="background: #F3E5F5;">Loyalty Program</span>
+                                <span class="arch-component" style="background: #FFECB3;">Analytics/BI</span>
+                            </div>
+                        </div>
+                        <div class="arch-arrow">&#8595;</div>
+
+                        <!-- Frontend -->
+                        <div class="arch-layer">
+                            <div class="arch-layer-title">Frontend / Clients</div>
+                            <div class="arch-components">
+                                <span class="arch-component">CRM Web App</span>
+                                <span class="arch-component">B2B Mobile App</span>
+                                <span class="arch-component">Marketing Dashboard</span>
+                                <span class="arch-component">CS Dashboard</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Flow -->
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin: 1.25rem 0 0.75rem;">Event-Driven Integration</h4>
+                    <div class="card-grid">
+                        <div class="card" style="border-left-color: #1976D2;">
+                            <h4>CDP Publish</h4>
+                            <ul>
+                                <li>profile.updated</li>
+                                <li>segment.changed</li>
+                                <li>identity.merged</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: #388E3C;">
+                            <h4>CRM Publish</h4>
+                            <ul>
+                                <li>deal.stage.changed</li>
+                                <li>deal.won / deal.lost</li>
+                                <li>activity.created</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: #F57C00;">
+                            <h4>Marketing Publish</h4>
+                            <ul>
+                                <li>campaign.sent</li>
+                                <li>email.opened</li>
+                                <li>link.clicked</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.2 Data Model -->
+                <div class="subsection" id="data-model">
+                    <h3 class="subsection-title"><span class="num">4.2</span> Data Model & ERD</h3>
+
+                    <!-- Visual ERD Diagram -->
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem;">Entity Relationship Diagram</h4>
+
+                    <div class="erd-diagram" style="overflow-x: auto;">
+                        <!-- CDP Section -->
+                        <div style="background: #E3F2FD; border: 2px solid #1976D2; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #1565C0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: #1976D2; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">CDP</span>
+                                Customer Data Platform (Source of Truth)
+                            </div>
+
+                            <!-- Customer Profile -->
+                            <div class="erd-section">
+                                <div class="erd-section-label" style="background: #BBDEFB; color: #0D47A1;">Unified Customer Profile</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+                                    <div class="erd-entity" style="border-color: #1565C0; border-width: 2px;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%); color: white;">customer</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">customer_id (unified)</span>
+                                            <span>customer_type (B2B/B2C)</span>
+                                            <span>segment, scoring, ltv</span>
+                                            <span>lifecycle_stage</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">identity_mapping</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">mapping_id</span>
+                                            <span class="fk">customer_id (FK)</span>
+                                            <span>source_system</span>
+                                            <span>source_id (app, otsar, etc)</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">consent</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">consent_id</span>
+                                            <span class="fk">customer_id (FK)</span>
+                                            <span>channel, purpose</span>
+                                            <span>granted_at, revoked_at</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- B2B Hierarchy -->
+                            <div class="erd-section" style="margin-top: 0.75rem;">
+                                <div class="erd-section-label" style="background: #BBDEFB; color: #0D47A1;">B2B Hierarchy (1:N:N)</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem;">
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">legal_entity</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">legal_entity_id</span>
+                                            <span class="fk">customer_id (FK)</span>
+                                            <span>legal_name, tax_id</span>
+                                            <span>payment_term, credit_limit</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-arrow" style="color: #1565C0;">&rarr;</div>
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">brand</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">brand_id</span>
+                                            <span class="fk">legal_entity_id (FK)</span>
+                                            <span>brand_name, category</span>
+                                            <span>total_locations</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-arrow" style="color: #1565C0;">&rarr;</div>
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">location</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">location_id</span>
+                                            <span class="fk">brand_id (FK)</span>
+                                            <span>address, city, lat/lng</span>
+                                            <span>location_type</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact -->
+                            <div class="erd-section" style="margin-top: 0.75rem;">
+                                <div class="erd-section-label" style="background: #BBDEFB; color: #0D47A1;">Contact Persons</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem;">
+                                    <div class="erd-entity" style="border-color: #1565C0;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">contact</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">contact_id</span>
+                                            <span class="fk">customer_id (FK)</span>
+                                            <span class="fk">location_id (FK)</span>
+                                            <span>full_name, job_title</span>
+                                            <span>email, phone, whatsapp</span>
+                                            <span>is_primary, is_decision_maker</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CRM Section -->
+                        <div style="background: #E8F5E9; border: 2px solid #388E3C; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #2E7D32; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: #388E3C; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">CRM</span>
+                                Sales & Activity Management
+                            </div>
+
+                            <!-- Sales & Pipeline -->
+                            <div class="erd-section">
+                                <div class="erd-section-label" style="background: #C8E6C9; color: #1B5E20;">Sales & Pipeline</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem;">
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">deal</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">deal_id</span>
+                                            <span class="fk">customer_id (CDP)</span>
+                                            <span>pipeline_stage</span>
+                                            <span>deal_value, probability</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-arrow" style="color: #388E3C;">&rarr;</div>
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">deal_stage_history</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">history_id</span>
+                                            <span class="fk">deal_id (FK)</span>
+                                            <span>stage_from, stage_to</span>
+                                            <span>monthly_bean_consumption</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity & Visit -->
+                            <div class="erd-section" style="margin-top: 0.75rem;">
+                                <div class="erd-section-label" style="background: #C8E6C9; color: #1B5E20;">Activity & Visit</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">activity</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">activity_id</span>
+                                            <span class="fk">customer_id (CDP)</span>
+                                            <span>activity_type</span>
+                                            <span>outcome, next_action</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">visit_plan</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">visit_plan_id</span>
+                                            <span class="fk">staff_id (FK)</span>
+                                            <span>plan_date, status</span>
+                                            <span>total_stops</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-arrow" style="color: #388E3C;">&rarr;</div>
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">visit_plan_route</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">route_id</span>
+                                            <span class="fk">visit_plan_id (FK)</span>
+                                            <span>destination_name</span>
+                                            <span>check_in_lat/long</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Config & History -->
+                            <div class="erd-section" style="margin-top: 0.75rem;">
+                                <div class="erd-section-label" style="background: #C8E6C9; color: #1B5E20;">Config & History</div>
+                                <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">customer_assignment_history</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">transfer_id</span>
+                                            <span class="fk">customer_id (CDP)</span>
+                                            <span>from_staff, to_staff</span>
+                                            <span>transfer_reason</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">automation_rule</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">automation_id</span>
+                                            <span>trigger_event</span>
+                                            <span>conditions, actions</span>
+                                        </div>
+                                    </div>
+                                    <div class="erd-entity" style="border-color: #388E3C;">
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">tag</div>
+                                        <div class="erd-entity-body">
+                                            <span class="pk">tag_id</span>
+                                            <span>tag_name, tag_type</span>
+                                            <span>color</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- External Services -->
+                        <div style="background: #FAFAFA; border: 2px dashed #9E9E9E; border-radius: 8px; padding: 1rem;">
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #616161; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="background: #9E9E9E; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">EXT</span>
+                                External Services
+                            </div>
+                            <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+                                <div class="erd-entity" style="border-color: #9E9E9E; border-style: dashed;">
+                                    <div class="erd-entity-header" style="background: linear-gradient(135deg, #EEEEEE 0%, #E0E0E0 100%); color: #616161;">conversation *</div>
+                                    <div class="erd-entity-body" style="color: #757575;">
+                                        <span style="font-style: italic; font-size: 0.7rem;">Messaging Service</span>
+                                        <span class="fk">customer_id (CDP)</span>
+                                    </div>
+                                </div>
+                                <div class="erd-entity" style="border-color: #9E9E9E; border-style: dashed;">
+                                    <div class="erd-entity-header" style="background: linear-gradient(135deg, #EEEEEE 0%, #E0E0E0 100%); color: #616161;">message *</div>
+                                    <div class="erd-entity-body" style="color: #757575;">
+                                        <span style="font-style: italic; font-size: 0.7rem;">Messaging Service</span>
+                                    </div>
+                                </div>
+                                <div class="erd-entity" style="border-color: #9E9E9E; border-style: dashed;">
+                                    <div class="erd-entity-header" style="background: linear-gradient(135deg, #EEEEEE 0%, #E0E0E0 100%); color: #616161;">message_template *</div>
+                                    <div class="erd-entity-body" style="color: #757575;">
+                                        <span style="font-style: italic; font-size: 0.7rem;">Messaging Service</span>
+                                    </div>
+                                </div>
+                                <div class="erd-entity" style="border-color: #9E9E9E; border-style: dashed;">
+                                    <div class="erd-entity-header" style="background: linear-gradient(135deg, #EEEEEE 0%, #E0E0E0 100%); color: #616161;">campaign *</div>
+                                    <div class="erd-entity-body" style="color: #757575;">
+                                        <span style="font-style: italic; font-size: 0.7rem;">Marketing Automation</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box" style="margin: 1rem 0;">
+                        <strong>Integrasi:</strong> CRM menggunakan <code>customer_id</code> dari CDP sebagai foreign key. Semua data profile, hierarchy, dan contact diakses via CDP API. CRM publish events (deal.won, activity.created) ke CDP untuk update scoring & segment.
+                    </div>
+
+                    <div style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #1976D2; color: white; padding: 0.2rem 0.5rem; border-radius: 4px;">CDP</span>
+                            <span>Source of Truth (Profile, Hierarchy)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #388E3C; color: white; padding: 0.2rem 0.5rem; border-radius: 4px;">CRM</span>
+                            <span>Sales & Activity Data</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #9E9E9E; color: white; padding: 0.2rem 0.5rem; border-radius: 4px;">EXT</span>
+                            <span>External Services</span>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Entity Tabs -->
+                    <div class="tabs" style="margin-top: 1.5rem;">
+                        <button class="tab active" onclick="showTab('entity-customer')" style="background: #E3F2FD; border-color: #1976D2;">CDP: Customer</button>
+                        <button class="tab" onclick="showTab('entity-b2b')" style="background: #E3F2FD; border-color: #1976D2;">CDP: B2B</button>
+                        <button class="tab" onclick="showTab('entity-contact')" style="background: #E3F2FD; border-color: #1976D2;">CDP: Contact</button>
+                        <button class="tab" onclick="showTab('entity-deal')">CRM: Deal</button>
+                        <button class="tab" onclick="showTab('entity-activity')">CRM: Activity</button>
+                        <button class="tab" onclick="showTab('entity-visit')">CRM: Visit</button>
+                        <button class="tab" onclick="showTab('entity-messaging')">Messaging</button>
+                        <button class="tab" onclick="showTab('entity-segment')">CRM: Automation</button>
+                    </div>
+
+                    <!-- Customer Entity (CDP) -->
+                    <div id="entity-customer" class="tab-content active">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
+                            <strong><span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CDP</span> Customer Data Platform:</strong> Tabel <code>customer</code> adalah source of truth di CDP. CRM mengakses data via API dan menyimpan <code>customer_id</code> sebagai FK untuk relasi ke deals, activities, dll.
+                        </div>
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #1976D2;">
+                                <span class="entity-detail-icon">&#128100;</span>
+                                <div>
+                                    <h4>customer <span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CDP</span></h4>
+                                    <p>Unified customer profile (B2B & B2C) - Source of Truth</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Unified ID (master identifier lintas sistem)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_code</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Auto-generated code (B2B-0001, RET-0001)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_group</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>'B2B' | 'B2C'</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>segment</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>cafe, hotel, office, personal, home_brewer, etc.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Display name (brand name for B2B, full name for B2C)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>lifecycle_stage</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>lead, prospect, active, churned, dormant</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>source_channel</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>canvassing, referral, web, app, event, ads</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>source_detail</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Detail source (campaign name, referrer, etc.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>assigned_to</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id (sales rep owner)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>assigned_team</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Team/region assignment</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>priority_score</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>AI-calculated priority (0-100)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>health_score</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 50</span></td>
+                                        <td>Customer health indicator (0-100)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>churn_risk</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>low, medium, high (AI-calculated)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tags</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of tags/labels</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>custom_fields</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Dynamic custom fields</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>app_user_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>Retail App user ID (untuk auth/login)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>app_customer_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>Retail App customer ID (untuk relasi transaksi)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>otsar_customer_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>OTSAR customer ID (relasi ke sistem OTSAR)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>first_contact_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>First interaction date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>converted_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Date converted to active customer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>last_activity_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last activity timestamp</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>last_purchase_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last purchase timestamp (from external)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Internal notes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_active</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Soft delete flag</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_by</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_customer_group</code>,
+                                <code>idx_customer_segment</code>,
+                                <code>idx_customer_assigned</code>,
+                                <code>idx_customer_lifecycle</code>,
+                                <code>idx_customer_last_activity</code>,
+                                <code>idx_customer_app_user</code>,
+                                <code>idx_customer_app_customer</code>,
+                                <code>idx_customer_otsar</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- B2B Hierarchy (CDP) -->
+                    <div id="entity-b2b" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
+                            <strong><span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CDP</span> B2B Hierarchy:</strong> Struktur hierarki B2B (Legal Entity → Brand → Location) dikelola di CDP. CRM dan Marketing Automation mengakses data ini via CDP API untuk targeting dan account management.
+                        </div>
+                        <h4 style="font-size: 0.85rem; color: #1565C0; margin-bottom: 0.75rem;">B2B Entity Hierarchy <span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CDP</span></h4>
+                        <div class="entity-diagram">
+                            <div class="entity-box legal">
+                                <div class="entity-icon">&#127970;</div>
+                                <div class="entity-label">Legal Entity</div>
+                                <div class="entity-example">PT Fore Kopi Indonesia Tbk</div>
+                                <div class="entity-count">1 per company</div>
+                            </div>
+                            <div class="entity-connector">
+                                <span>&#8595;</span>
+                                has many
+                            </div>
+                            <div class="entity-box brand">
+                                <div class="entity-icon">&#127991;</div>
+                                <div class="entity-label">Brand / Business</div>
+                                <div class="entity-example">Fore Coffee</div>
+                                <div class="entity-count">N per legal entity</div>
+                            </div>
+                            <div class="entity-connector">
+                                <span>&#8595;</span>
+                                has many
+                            </div>
+                            <div class="entity-box location">
+                                <div class="entity-icon">&#128205;</div>
+                                <div class="entity-label">Location</div>
+                                <div class="entity-example">Sudirman, Kemang, +50 outlets</div>
+                                <div class="entity-count">N per brand</div>
+                            </div>
+                        </div>
+
+                        <!-- Legal Entity Table -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header blue">
+                                <span class="entity-detail-icon">&#127970;</span>
+                                <div>
+                                    <h4>legal_entity</h4>
+                                    <p>Entitas hukum / badan usaha untuk B2B</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>legal_entity_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint unique">UNIQUE</span></td>
+                                        <td>customer.customer_id (1:1 relation)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>legal_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Official legal name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>legal_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>PT, CV, UD, Perorangan, Yayasan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tax_id</code></td>
+                                        <td>VARCHAR(30)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>NPWP number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tax_status</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>PKP, Non-PKP</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>industry</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Industry classification</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>company_size</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>micro, small, medium, large, enterprise</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>employee_count</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Approximate employee count</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>billing_address</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Billing address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>billing_city</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Billing city</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>billing_postal</code></td>
+                                        <td>VARCHAR(10)</td>
+                                        <td></td>
+                                        <td>Postal code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>payment_term</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Payment term in days (0=COD, 14, 30, 45, 60)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>credit_limit</code></td>
+                                        <td>DECIMAL(15,2)</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Credit limit amount</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>credit_used</code></td>
+                                        <td>DECIMAL(15,2)</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Current credit usage</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>bank_name</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Bank name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>bank_account</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Bank account number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>bank_holder</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Account holder name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>documents</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of document URLs (SIUP, NIB, etc.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>verified_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Document verification date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Brand Table -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header green">
+                                <span class="entity-detail-icon">&#127991;</span>
+                                <div>
+                                    <h4>brand</h4>
+                                    <p>Brand/bisnis di bawah legal entity</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>brand_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>legal_entity_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>legal_entity.legal_entity_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>brand_code</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Brand identifier code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>brand_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Brand display name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>segment</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>cafe, hotel, restaurant, office, retail</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>sub_segment</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>specialty_cafe, chain_cafe, boutique_hotel, etc.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>business_scale</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>single, multi_outlet, franchise, chain</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_locations</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 1</span></td>
+                                        <td>Number of locations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>estimated_monthly_volume</code></td>
+                                        <td>DECIMAL(10,2)</td>
+                                        <td></td>
+                                        <td>Estimated monthly coffee consumption (kg)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>current_supplier</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Current coffee supplier (competitor info)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>product_interest</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of interested product categories</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>price_sensitivity</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>low, medium, high</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>quality_preference</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>commercial, premium, specialty</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>logo_url</code></td>
+                                        <td>VARCHAR(500)</td>
+                                        <td></td>
+                                        <td>Brand logo URL</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>website</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Brand website</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>social_media</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>{instagram, facebook, tiktok, twitter}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>instagram</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Instagram handle</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tiktok</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>TikTok handle</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>twitter</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Twitter/X handle</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_score</code></td>
+                                        <td>DECIMAL(3,2)</td>
+                                        <td></td>
+                                        <td>Average rating score (1.00-5.00)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>review_count</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Total reviews across locations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Internal notes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_active</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Active status</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Location Table -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header orange">
+                                <span class="entity-detail-icon">&#128205;</span>
+                                <div>
+                                    <h4>location</h4>
+                                    <p>Lokasi/outlet fisik dari brand</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>location_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>brand_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>brand.brand_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_code</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Location identifier code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Location display name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>outlet, warehouse, head_office, production</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_primary</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>Primary/HQ location flag</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>address</code></td>
+                                        <td>TEXT</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Full address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>district</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Kecamatan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>city</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Kota/Kabupaten</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>province</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Provinsi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>postal_code</code></td>
+                                        <td>VARCHAR(10)</td>
+                                        <td></td>
+                                        <td>Postal code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>province_id</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>Reference ke master provinsi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>city_id</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>Reference ke master kota/kabupaten</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>subdistrict_id</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>Reference ke master kecamatan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>latitude</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>GPS latitude</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>longitude</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>GPS longitude</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>geo_address</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Formatted address dari geocoding</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>place_url</code></td>
+                                        <td>VARCHAR(500)</td>
+                                        <td></td>
+                                        <td>Google Maps / Maps URL</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_score</code></td>
+                                        <td>DECIMAL(3,2)</td>
+                                        <td></td>
+                                        <td>Rating score (1.00-5.00)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>review_count</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Jumlah review dari Google/internal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pic_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>PIC name at location</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pic_role</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>PIC role (manager, owner, barista)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pic_phone</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td></td>
+                                        <td>PIC phone number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pic_email</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>PIC email</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>operating_hours</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>{mon: "08:00-22:00", tue: "08:00-22:00", ...}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>seating_capacity</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Number of seats (for cafe)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>daily_cups</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Estimated daily cups served</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>equipment</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of equipment (espresso machine, grinder)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>delivery_notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Delivery instructions</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>photos</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of photo URLs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>visit_notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Notes from last visit</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>last_visited_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last visit date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_active</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Active status</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_location_brand</code>,
+                                <code>idx_location_city</code>,
+                                <code>idx_location_geo</code> (lat, long)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deal/Pipeline Entity -->
+                    <!-- Deal Entity (CRM) -->
+                    <div id="entity-deal" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E8F5E9; border-left-color: #388E3C;">
+                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Sales Pipeline:</strong> Deal dan pipeline dikelola di CRM. Menggunakan <code>customer_id</code> dari CDP sebagai FK. Event <code>deal.won</code> dan <code>deal.lost</code> dipublish ke CDP untuk update scoring.
+                        </div>
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #388E3C;">
+                                <span class="entity-detail-icon">&#128176;</span>
+                                <div>
+                                    <h4>deal <span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CRM</span></h4>
+                                    <p>Sales pipeline/deal tracking untuk B2B</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>deal_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_code</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Auto-generated deal code (DEAL-2026-0001)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>customer.customer_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>brand_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>brand.brand_id (optional, for specific brand)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>location.location_id (optional, for specific location)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Deal title/description</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>new_business, upsell, renewal, expansion</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>pipeline_stage</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>lead, qualified, discovery, proposal, negotiation, won, lost</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>stage_entered_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>When current stage was entered</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>stage_sla_deadline</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>SLA deadline for current stage</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_value</code></td>
+                                        <td>DECIMAL(15,2)</td>
+                                        <td></td>
+                                        <td>Estimated deal value</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_value_monthly</code></td>
+                                        <td>DECIMAL(15,2)</td>
+                                        <td></td>
+                                        <td>Expected monthly recurring value</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>currency</code></td>
+                                        <td>VARCHAR(3)</td>
+                                        <td><span class="constraint default">DEFAULT 'IDR'</span></td>
+                                        <td>Currency code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>probability</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Win probability percentage (0-100)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>weighted_value</code></td>
+                                        <td>DECIMAL(15,2)</td>
+                                        <td></td>
+                                        <td>deal_value * probability / 100</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>product_interest</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of interested products/categories</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>expected_close_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Expected closing date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>actual_close_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Actual closing date (when won/lost)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>owner_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>user_account.user_id (deal owner)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>source_channel</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>How the deal originated</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>competitor</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Main competitor in this deal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>lost_reason</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Reason if deal was lost</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>lost_to_competitor</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Competitor who won (if lost)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>won_reason</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Key factor for winning</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Deal notes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>attachments</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of attachment URLs (proposals, contracts)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tags</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of tags</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>next_action</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Next action to take</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>next_action_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Next action due date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_by</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_deal_customer</code>,
+                                <code>idx_deal_stage</code>,
+                                <code>idx_deal_owner</code>,
+                                <code>idx_deal_close_date</code>
+                            </div>
+                        </div>
+
+                        <!-- Deal Activity/History -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header" style="border-left-color: #7B1FA2;">
+                                <span class="entity-detail-icon">&#128221;</span>
+                                <div>
+                                    <h4>deal_stage_history</h4>
+                                    <p>History perubahan stage pada deal</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>history_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>deal.deal_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>stage_from</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Previous stage</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>stage_to</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>New stage</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>changed_by</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>changed_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>When stage changed</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>duration_in_stage</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Time spent in previous stage (hours)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_branch</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Total cabang/outlet saat review</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>monthly_bean_consumption</code></td>
+                                        <td>DECIMAL(10,2)</td>
+                                        <td></td>
+                                        <td>Estimasi konsumsi kopi bulanan (kg)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>monthly_bean_allocation</code></td>
+                                        <td>DECIMAL(10,2)</td>
+                                        <td></td>
+                                        <td>Alokasi supply kopi bulanan (kg)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>coffee_notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Catatan terkait preferensi kopi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>roasting_profile</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Profil roasting preference (light, medium, dark)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_sample_available</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>Apakah sample sudah dikirim</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Notes on stage change</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>review_note</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Catatan reviewer/approver</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Contact Entity -->
+                    <!-- Contact (CDP) -->
+                    <div id="entity-contact" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
+                            <strong><span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CDP</span> Contact Persons:</strong> Data contact dikelola di CDP karena digunakan lintas sistem (CRM, Marketing, Support). CRM dapat menambah/update contact via CDP API.
+                        </div>
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #1976D2;">
+                                <span class="entity-detail-icon">&#128101;</span>
+                                <div>
+                                    <h4>contact <span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CDP</span></h4>
+                                    <p>Kontak person terkait customer (multiple contacts per customer)</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>contact_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>customer.customer_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>location.location_id (optional, specific location)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>contact_type</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>primary, secondary, billing, technical, decision_maker</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_primary</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>Primary contact flag</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>salutation</code></td>
+                                        <td>VARCHAR(10)</td>
+                                        <td></td>
+                                        <td>Bapak, Ibu, Mr., Mrs.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>first_name</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>First name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>last_name</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Last name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>full_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Computed full name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>nickname</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Preferred name to call</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>job_title</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Job title/position</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>department</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Department</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>email</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>phone_primary</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td></td>
+                                        <td>Primary phone (mobile)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>phone_secondary</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td></td>
+                                        <td>Secondary phone</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>whatsapp</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td></td>
+                                        <td>WhatsApp number</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>telegram_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Telegram username/ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>line_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>LINE ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>instagram</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Instagram handle</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>preferred_channel</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>whatsapp, phone, email, telegram</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>preferred_time</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Best time to contact (morning, afternoon, evening)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>birthday</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Birthday for personal touch</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Personal notes about contact</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>opt_in_email</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Email marketing consent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>opt_in_whatsapp</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>WhatsApp marketing consent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>opt_in_sms</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>SMS consent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>last_contacted_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last contact time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_active</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Active status</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_contact_customer</code>,
+                                <code>idx_contact_email</code>,
+                                <code>idx_contact_phone</code>,
+                                <code>idx_contact_whatsapp</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Entity -->
+                    <!-- Activity Entity (CRM) -->
+                    <div id="entity-activity" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E8F5E9; border-left-color: #388E3C;">
+                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Activity Tracking:</strong> Semua aktivitas sales direkam di CRM. Event <code>activity.created</code> dipublish ke CDP untuk enrichment customer profile dan scoring.
+                        </div>
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #388E3C;">
+                                <span class="entity-detail-icon">&#128203;</span>
+                                <div>
+                                    <h4>activity <span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CRM</span></h4>
+                                    <p>Log semua aktivitas terkait customer (calls, visits, emails, etc.)</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>activity_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>customer.customer_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>contact_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>contact.contact_id (specific contact)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>deal.deal_id (if related to specific deal)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>location.location_id (if at specific location)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>activity_type</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>call, visit, email, meeting, demo, follow_up, note, task</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>activity_subtype</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>cold_call, warm_call, site_visit, video_call, etc.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>activity_source</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>manual, automated, system, integration</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>direction</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>inbound, outbound (for calls/emails)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>subject</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Activity subject/title</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>description</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Activity description/notes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>outcome</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>completed, no_answer, busy, interested, not_interested, callback, voicemail</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>outcome_notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Notes about outcome</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>scheduled_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Scheduled time (for planned activities)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>started_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Activity start time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>completed_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Activity completion time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>duration_minutes</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Duration in minutes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>performed_by</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>user_account.user_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>assigned_to</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id (for tasks)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_task</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>Is this a task/to-do item</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>task_status</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>pending, in_progress, completed, cancelled</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>task_due_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Task due date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>task_priority</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>low, medium, high, urgent</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>next_action</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Recommended next action</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>next_action_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Next action date</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_in_lat</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>Check-in latitude (for visits)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_in_long</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>Check-in longitude</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_out_lat</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>Check-out latitude</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_out_long</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>Check-out longitude</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>attachments</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of attachment URLs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>photos</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of photo URLs (visit photos)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tags</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of tags</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>external_ref_type</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>External reference type (sales_order, ticket)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>external_ref_id</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>External reference ID (FK to external system)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_activity_customer</code>,
+                                <code>idx_activity_type</code>,
+                                <code>idx_activity_performed_by</code>,
+                                <code>idx_activity_scheduled</code>,
+                                <code>idx_activity_deal</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visit Plan Entity -->
+                    <!-- Visit Plan Entity (CRM) -->
+                    <div id="entity-visit" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E8F5E9; border-left-color: #388E3C;">
+                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Visit Planning:</strong> Fitur untuk merencanakan dan tracking kunjungan sales rep ke customer/prospek dengan GPS check-in/check-out. Location data diambil dari CDP.
+                        </div>
+
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #388E3C;">
+                                <span class="entity-detail-icon">&#128663;</span>
+                                <div>
+                                    <h4>visit_plan <span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CRM</span></h4>
+                                    <p>Rencana kunjungan harian/periodik untuk sales rep</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>visit_plan_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>plan_code</code></td>
+                                        <td>VARCHAR(20)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Auto-generated code (VP-2026-0001)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>staff_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>user_account.user_id (sales rep)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>plan_date</code></td>
+                                        <td>DATE</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Tanggal rencana kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>plan_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>daily, weekly, adhoc</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>origin_address</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Alamat titik awal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>origin_lat</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>Latitude titik awal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>origin_long</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>Longitude titik awal</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_stops</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Total lokasi yang akan dikunjungi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>visited_count</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Jumlah yang sudah dikunjungi</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>status</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>draft, planned, in_progress, completed, cancelled</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>started_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Waktu mulai kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>completed_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Waktu selesai semua kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>total_distance_km</code></td>
+                                        <td>DECIMAL(10,2)</td>
+                                        <td></td>
+                                        <td>Total jarak tempuh (km)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Catatan rencana</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_visit_plan_staff</code>,
+                                <code>idx_visit_plan_date</code>,
+                                <code>idx_visit_plan_status</code>
+                            </div>
+                        </div>
+
+                        <!-- Visit Plan Route -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header" style="border-left-color: #8D6E63;">
+                                <span class="entity-detail-icon">&#128205;</span>
+                                <div>
+                                    <h4>visit_plan_route</h4>
+                                    <p>Detail rute/lokasi dalam visit plan</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>route_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>visit_plan_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>visit_plan.visit_plan_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>customer.customer_id (jika existing customer)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>location_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>location.location_id (jika existing location)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>deal_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>deal.deal_id (jika terkait deal)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>display_order</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Urutan kunjungan (1, 2, 3...)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>destination_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Nama tempat tujuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>destination_address</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Alamat lengkap</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>destination_lat</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>Latitude tujuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>destination_long</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>Longitude tujuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>place_url</code></td>
+                                        <td>VARCHAR(500)</td>
+                                        <td></td>
+                                        <td>Google Maps URL</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>visit_purpose</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>canvassing, follow_up, delivery, meeting</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>scheduled_time</code></td>
+                                        <td>TIME</td>
+                                        <td></td>
+                                        <td>Jadwal waktu kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>status</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint default">DEFAULT 'pending'</span></td>
+                                        <td>pending, visited, skipped, rescheduled</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>visited_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Waktu aktual kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_in_lat</code></td>
+                                        <td>DECIMAL(10,8)</td>
+                                        <td></td>
+                                        <td>Latitude check-in</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_in_long</code></td>
+                                        <td>DECIMAL(11,8)</td>
+                                        <td></td>
+                                        <td>Longitude check-in</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>check_in_distance_m</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Jarak dari target saat check-in (meter)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>activity_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>activity.activity_id (linked activity)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Catatan kunjungan</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>photos</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of photo URLs</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_route_plan</code>,
+                                <code>idx_route_customer</code>,
+                                <code>idx_route_order</code>
+                            </div>
+                        </div>
+
+                        <!-- Customer Assignment History -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header" style="border-left-color: #455A64;">
+                                <span class="entity-detail-icon">&#128257;</span>
+                                <div>
+                                    <h4>customer_assignment_history</h4>
+                                    <p>History transfer ownership customer antar sales rep</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>transfer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>customer.customer_id</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>from_staff_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span></td>
+                                        <td>user_account.user_id (sebelumnya)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>to_staff_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>user_account.user_id (penerima baru)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>transfer_reason</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>territory_change, workload_balance, staff_resign, performance, request</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>transfer_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>permanent, temporary</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>transferred_by</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
+                                        <td>user_account.user_id (yang melakukan transfer)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>notes</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Catatan transfer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>effective_date</code></td>
+                                        <td>DATE</td>
+                                        <td></td>
+                                        <td>Tanggal efektif transfer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="entity-indexes">
+                                <strong>Indexes:</strong>
+                                <code>idx_transfer_customer</code>,
+                                <code>idx_transfer_from</code>,
+                                <code>idx_transfer_to</code>,
+                                <code>idx_transfer_date</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messaging Entity -->
+                    <div id="entity-messaging" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #2196F3;">
+                            <strong>Messaging Service (Eksternal):</strong> Semua tabel messaging dikelola di service terpisah. CRM mengakses data via API dengan <code>customer_id</code> sebagai identifier. Template juga dikelola di Messaging Service untuk integrasi langsung dengan provider (WhatsApp Business, SMTP, FCM).
+                        </div>
+
+                        <div class="card-grid" style="margin-bottom: 1rem;">
+                            <div class="card blue">
+                                <h4>&#128488; conversation</h4>
+                                <ul>
+                                    <li>conversation_id (PK)</li>
+                                    <li>customer_id (FK ke CRM)</li>
+                                    <li>channel (wa/email/telegram)</li>
+                                    <li>status, assigned_to</li>
+                                </ul>
+                            </div>
+                            <div class="card blue">
+                                <h4>&#128172; message</h4>
+                                <ul>
+                                    <li>message_id (PK)</li>
+                                    <li>conversation_id (FK)</li>
+                                    <li>direction (in/outbound)</li>
+                                    <li>content, status</li>
+                                </ul>
+                            </div>
+                            <div class="card blue">
+                                <h4>&#128196; message_template</h4>
+                                <ul>
+                                    <li>template_id (PK)</li>
+                                    <li>channel (wa/email/push)</li>
+                                    <li>content, variables</li>
+                                    <li>wa_template_status</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">* Skema lengkap ada di dokumentasi Messaging Service</p>
+                    </div>
+
+                    <!-- Segment Config -->
+                    <!-- Automation Entity (CRM) -->
+                    <div id="entity-segment" class="tab-content">
+                        <div class="info-box" style="margin-bottom: 1rem; background: #E8F5E9; border-left-color: #388E3C;">
+                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Automation Rules:</strong> CRM automation rules untuk trigger actions berdasarkan events. Segment data diambil dari CDP, automation actions dieksekusi oleh CRM atau dikirim ke Marketing Automation.
+                        </div>
+
+                        <!-- Automation Rule -->
+                        <div class="entity-detail">
+                            <div class="entity-detail-header" style="border-left-color: #388E3C;">
+                                <span class="entity-detail-icon">&#9889;</span>
+                                <div>
+                                    <h4>automation_rule <span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.65rem; margin-left: 0.5rem;">CRM</span></h4>
+                                    <p>Konfigurasi rule untuk trigger automation</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>automation_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>automation_code</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>Automation identifier</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>automation_name</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Automation display name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>description</code></td>
+                                        <td>TEXT</td>
+                                        <td></td>
+                                        <td>Automation description</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>customer_group</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>B2B, B2C, all</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>trigger_type</code></td>
+                                        <td>ENUM</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>event, schedule, condition</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>trigger_event</code></td>
+                                        <td>VARCHAR(100)</td>
+                                        <td></td>
+                                        <td>Event name (deal_stage_change, no_activity, etc.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>trigger_schedule</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td></td>
+                                        <td>Cron expression for scheduled triggers</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>conditions</code></td>
+                                        <td>JSONB</td>
+                                        <td></td>
+                                        <td>Array of conditions to match</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>actions</code></td>
+                                        <td>JSONB</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Array of actions to execute</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>delay_minutes</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Delay before executing actions</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>max_executions_per_customer</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Max times to run per customer</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>cooldown_hours</code></td>
+                                        <td>INTEGER</td>
+                                        <td></td>
+                                        <td>Cooldown period before re-trigger</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>priority</code></td>
+                                        <td>INTEGER</td>
+                                        <td><span class="constraint default">DEFAULT 0</span></td>
+                                        <td>Execution priority</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_active</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT true</span></td>
+                                        <td>Active status</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>updated_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td></td>
+                                        <td>Last update time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Tag -->
+                        <div class="entity-detail" style="margin-top: 1.5rem;">
+                            <div class="entity-detail-header" style="border-left-color: #00695C;">
+                                <span class="entity-detail-icon">&#127991;</span>
+                                <div>
+                                    <h4>tag</h4>
+                                    <p>Master tags/labels untuk customer, deal, activity</p>
+                                </div>
+                            </div>
+                            <table class="entity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Constraint</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>tag_id</code></td>
+                                        <td>UUID</td>
+                                        <td><span class="constraint pk">PK</span></td>
+                                        <td>Primary key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tag_name</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint required">NOT NULL</span></td>
+                                        <td>Tag name</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tag_slug</code></td>
+                                        <td>VARCHAR(50)</td>
+                                        <td><span class="constraint unique">UNIQUE</span></td>
+                                        <td>URL-safe slug</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>tag_type</code></td>
+                                        <td>ENUM</td>
+                                        <td></td>
+                                        <td>customer, deal, activity, contact</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>color</code></td>
+                                        <td>VARCHAR(7)</td>
+                                        <td></td>
+                                        <td>Hex color code</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>description</code></td>
+                                        <td>VARCHAR(255)</td>
+                                        <td></td>
+                                        <td>Tag description</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>is_system</code></td>
+                                        <td>BOOLEAN</td>
+                                        <td><span class="constraint default">DEFAULT false</span></td>
+                                        <td>System-generated tag (cannot delete)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>created_at</code></td>
+                                        <td>TIMESTAMP</td>
+                                        <td><span class="constraint default">DEFAULT NOW()</span></td>
+                                        <td>Record creation time</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.3 API & Integration -->
+                <div class="subsection" id="api">
+                    <h3 class="subsection-title"><span class="num">4.3</span> API & Integration</h3>
+
+                    <!-- CDP Integration -->
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem;">CDP API (Primary Integration)</h4>
+                    <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
+                        <strong>CRM &harr; CDP Integration:</strong> CRM consume customer data dari CDP dan publish events untuk update scoring/segment.
+                    </div>
+
+                    <table style="margin-bottom: 1.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Endpoint</th>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>/customers/{id}</code></td>
+                                <td><span class="tag info">GET</span></td>
+                                <td>Full profile + B2B hierarchy + contacts</td>
+                            </tr>
+                            <tr>
+                                <td><code>/customers/{id}/contacts</code></td>
+                                <td><span class="tag info">GET</span></td>
+                                <td>List contact persons</td>
+                            </tr>
+                            <tr>
+                                <td><code>/customers?segment={x}</code></td>
+                                <td><span class="tag info">GET</span></td>
+                                <td>List customers by segment</td>
+                            </tr>
+                            <tr>
+                                <td><code>/customers/{id}/events</code></td>
+                                <td><span class="tag success">POST</span></td>
+                                <td>Publish event ke CDP (deal.won, activity.created)</td>
+                            </tr>
+                            <tr>
+                                <td><code>/segments</code></td>
+                                <td><span class="tag info">GET</span></td>
+                                <td>Available segments</td>
+                            </tr>
+                            <tr>
+                                <td><code>/segments/{id}/customers</code></td>
+                                <td><span class="tag info">GET</span></td>
+                                <td>Customers in segment (for targeting)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Webhooks from CDP -->
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem;">Webhooks (CDP &rarr; CRM)</h4>
+                    <div class="card-grid" style="margin-bottom: 1.5rem;">
+                        <div class="card" style="border-left-color: #1976D2;">
+                            <h4>profile.updated</h4>
+                            <ul>
+                                <li>Customer profile changed</li>
+                                <li>Invalidate local cache</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: #1976D2;">
+                            <h4>segment.changed</h4>
+                            <ul>
+                                <li>Customer segment updated</li>
+                                <li>Trigger automation rules</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="border-left-color: #1976D2;">
+                            <h4>identity.merged</h4>
+                            <ul>
+                                <li>Two profiles merged</li>
+                                <li>Update FK references</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Other Integrations -->
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem;">Other Integrations</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Integration</th>
+                                <th>Type</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Messaging Service</strong></td>
+                                <td><span class="tag info">Internal</span></td>
+                                <td>Send messages, get conversations, templates</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Marketing Automation</strong></td>
+                                <td><span class="tag info">Internal</span></td>
+                                <td>Campaign triggers, journey status</td>
+                            </tr>
+                            <tr>
+                                <td><strong>B2B Mobile App</strong></td>
+                                <td><span class="tag info">Internal</span></td>
+                                <td>Activity recording, visit check-in, deal updates</td>
+                            </tr>
+                            <tr>
+                                <td><strong>OTSAR (ERP)</strong></td>
+                                <td><span class="tag warning">External</span></td>
+                                <td>Order sync, inventory check (via CDP events)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 4.4 Security & Access -->
+                <div class="subsection" id="security">
+                    <h3 class="subsection-title"><span class="num">4.4</span> Security & Access Control</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Access Level</th>
+                                <th>Permissions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Admin</strong></td>
+                                <td><span class="tag danger">Full</span></td>
+                                <td>All features, settings, user management</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sales Manager</strong></td>
+                                <td><span class="tag warning">Team</span></td>
+                                <td>Team pipeline, reports, assign leads</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sales Rep</strong></td>
+                                <td><span class="tag info">Own</span></td>
+                                <td>Own deals, activities, customers</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CS Agent</strong></td>
+                                <td><span class="tag info">Assigned</span></td>
+                                <td>View customers, create tickets, messaging</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Viewer</strong></td>
+                                <td><span class="tag">Read Only</span></td>
+                                <td>Dashboard, reports (no edit)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box">
+                        <strong>&#128274; Security Requirements:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                            <li>JWT-based authentication</li>
+                            <li>Role-based access control (RBAC)</li>
+                            <li>Audit log for all data changes</li>
+                            <li>Data encryption at rest & in transit</li>
+                            <li>Consent management for messaging</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            const tabContent = document.getElementById(tabId);
+            const tabContainer = tabContent.parentElement;
+
+            tabContainer.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            tabContainer.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            tabContent.classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

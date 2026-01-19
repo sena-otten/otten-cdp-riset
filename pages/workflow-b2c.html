@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2C Workflow & Automation - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --b2c: #E65100;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--b2c) 0%, #BF360C 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header-icon { font-size: 2.5rem; }
+        .page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .page-header p { opacity: 0.9; font-size: 0.9rem; }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--b2c);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .section-content { padding: 1.5rem; }
+
+        /* Journey Flow */
+        .journey-flow {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .journey-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .journey-title .tag {
+            background: var(--b2c);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: normal;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .flow-node {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            text-align: center;
+            min-width: 95px;
+        }
+
+        .flow-node.trigger { border-color: var(--warning); background: #FFF8E1; }
+        .flow-node.action { border-color: var(--success); background: #E8F5E9; }
+        .flow-node.decision { border-color: var(--info); background: #E3F2FD; }
+        .flow-node.end { border-color: var(--b2c); background: #FFF3E0; border-radius: 50%; width: 70px; height: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        .flow-node-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
+        .flow-node-label { font-size: 0.7rem; font-weight: 600; color: var(--text-dark); }
+        .flow-node-detail { font-size: 0.6rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+        .flow-arrow { display: flex; align-items: center; color: var(--text-muted); font-size: 1.25rem; padding: 0 0.15rem; }
+
+        /* Timeline Flow */
+        .timeline-flow {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1rem 0;
+        }
+
+        .timeline-flow::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item { position: relative; padding-bottom: 1.5rem; }
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -1.75rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--b2c);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--b2c);
+        }
+
+        .timeline-dot.trigger { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
+        .timeline-dot.action { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+        .timeline-dot.wait { background: var(--text-muted); box-shadow: 0 0 0 2px var(--text-muted); }
+
+        .timeline-content {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .timeline-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+        .timeline-header h4 { font-size: 0.85rem; color: var(--text-dark); }
+        .timeline-header .time { font-size: 0.7rem; color: var(--text-muted); margin-left: auto; }
+        .timeline-header .channel { font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 3px; }
+        .timeline-header .channel.push { background: #FFF3E0; color: #E65100; }
+        .timeline-header .channel.email { background: #E3F2FD; color: #1565C0; }
+        .timeline-header .channel.wa { background: #E8F5E9; color: #2E7D32; }
+        .timeline-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Trigger Cards */
+        .trigger-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .trigger-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid var(--b2c);
+        }
+
+        .trigger-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+        .trigger-card-header .icon { font-size: 1.25rem; }
+        .trigger-card-header h4 { font-size: 0.9rem; color: var(--text-dark); }
+
+        .trigger-card-header .priority {
+            margin-left: auto;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .priority.high { background: #FFEBEE; color: #C62828; }
+        .priority.medium { background: #FFF3E0; color: #E65100; }
+        .priority.low { background: #E8F5E9; color: #2E7D32; }
+
+        .trigger-detail {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .trigger-detail dt { color: var(--text-muted); }
+        .trigger-detail dd { color: var(--text-dark); font-weight: 500; }
+
+        /* Sequence Steps */
+        .sequence-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sequence-step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .sequence-step .step-num {
+            background: var(--b2c);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.push { background: #FFF3E0; color: #E65100; }
+        .tag.email { background: #E3F2FD; color: #1565C0; }
+        .tag.wa { background: #E8F5E9; color: #2E7D32; }
+
+        /* Info Box */
+        .info-box {
+            background: #FFF3E0;
+            border-left: 3px solid var(--b2c);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .page-header { flex-direction: column; text-align: center; }
+            .badge { margin: 0.5rem 0 0 0; }
+            .trigger-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-header-icon">&#128100;</div>
+            <div>
+                <h1>B2C Workflow & Automation</h1>
+                <p>Customer Lifecycle, Engagement & Retention Triggers</p>
+            </div>
+            <span class="badge">&#129302; AI-Powered</span>
+        </div>
+
+        <!-- Customer Lifecycle -->
+        <section class="section">
+            <div class="section-header">&#128100; Customer Lifecycle Journey</div>
+            <div class="section-content">
+                <div class="journey-flow">
+                    <div class="journey-title">
+                        New Customer Onboarding Flow
+                        <span class="tag">WELCOME SERIES</span>
+                    </div>
+                    <div class="flow-container">
+                        <div class="flow-step">
+                            <div class="flow-node trigger">
+                                <div class="flow-node-icon">&#128100;</div>
+                                <div class="flow-node-label">Register</div>
+                                <div class="flow-node-detail">New account</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#128231;</div>
+                                <div class="flow-node-label">Welcome Email</div>
+                                <div class="flow-node-detail">Immediate</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node">
+                                <div class="flow-node-icon">&#128722;</div>
+                                <div class="flow-node-label">First Order</div>
+                                <div class="flow-node-detail">With voucher</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#127881;</div>
+                                <div class="flow-node-label">Thank You</div>
+                                <div class="flow-node-detail">Push + Email</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#11088;</div>
+                                <div class="flow-node-label">Review Ask</div>
+                                <div class="flow-node-detail">+3 days</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#128218;</div>
+                                <div class="flow-node-label">Tips Content</div>
+                                <div class="flow-node-detail">+7 days</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node end">
+                                <div class="flow-node-icon">&#128260;</div>
+                                <div class="flow-node-label">Repeat</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Welcome Series Timeline -->
+                <div class="journey-flow" style="margin-top: 1rem;">
+                    <div class="journey-title">Welcome Series Sequence</div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128100; New Registration</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">Customer creates new account on Retail App</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128231; Welcome Email</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Immediate</span>
+                                </div>
+                                <div class="timeline-desc">Welcome message + 10% first order voucher + app features intro</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Push Reminder</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 1</span>
+                                </div>
+                                <div class="timeline-desc">If no order: "Jangan lupa gunakan voucher 10% kamu!"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9749; Product Recommendation</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Day 3</span>
+                                </div>
+                                <div class="timeline-desc">Based on browsing history: "Produk yang mungkin kamu suka"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128218; Coffee Tips</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc">Educational content: brewing tips, coffee guide based on preference</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127775; Loyalty Intro</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Day 14</span>
+                                </div>
+                                <div class="timeline-desc">Introduce loyalty program, benefits, how to earn points</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart & Purchase Triggers -->
+        <section class="section">
+            <div class="section-header">&#128722; Cart & Purchase Automation</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128722;</span>
+                            <h4>Cart Abandonment</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>cart_items > 0 & no_checkout > 1 hour</dd>
+                            <dt>Channels:</dt>
+                            <dd>Push (primary), Email (fallback)</dd>
+                        </dl>
+                        <div class="sequence-steps">
+                            <div class="sequence-step">
+                                <span class="step-num">1</span>
+                                <span>1h: Push reminder</span>
+                            </div>
+                            <div class="sequence-step">
+                                <span class="step-num">2</span>
+                                <span>24h: Email + items</span>
+                            </div>
+                            <div class="sequence-step">
+                                <span class="step-num">3</span>
+                                <span>48h: 5% discount</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128230;</span>
+                            <h4>Order Confirmation</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_status = confirmed</dd>
+                            <dt>Action:</dt>
+                            <dd>Push + Email confirmation</dd>
+                            <dt>Content:</dt>
+                            <dd>Order details, tracking link, ETA</dd>
+                            <dt>Points:</dt>
+                            <dd>Show earned loyalty points</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128666;</span>
+                            <h4>Shipping Updates</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>shipping_status changed</dd>
+                            <dt>Events:</dt>
+                            <dd>Shipped, Out for delivery, Delivered</dd>
+                            <dt>Channel:</dt>
+                            <dd>Push notification (real-time)</dd>
+                            <dt>Include:</dt>
+                            <dd>Tracking link, courier info</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#11088;</span>
+                            <h4>Review Request</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_delivered + 3 days</dd>
+                            <dt>Condition:</dt>
+                            <dd>No review submitted yet</dd>
+                            <dt>Action:</dt>
+                            <dd>Push to rate products</dd>
+                            <dt>Incentive:</dt>
+                            <dd>+50 points per review</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Cart Abandonment Journey -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Cart Abandonment Recovery Journey
+                        <span class="tag">HIGH PRIORITY</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128722; Cart Abandoned</h4>
+                                    <span class="time">Hour 0</span>
+                                </div>
+                                <div class="timeline-desc">Customer adds items to cart but doesn't checkout</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Gentle Reminder</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Hour 1</span>
+                                </div>
+                                <div class="timeline-desc">"Kamu lupa sesuatu! Item di keranjang menunggumu"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128231; Detail Email</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Hour 24</span>
+                                </div>
+                                <div class="timeline-desc">Email with cart items, images, prices, checkout button</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127873; Incentive Offer</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Hour 48</span>
+                                </div>
+                                <div class="timeline-desc">"Khusus untukmu: diskon 5% untuk checkout sekarang!" + promo code</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128203; Final Reminder</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Hour 72</span>
+                                </div>
+                                <div class="timeline-desc">Last chance email with urgency: "Stok terbatas!"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Retention & Re-engagement -->
+        <section class="section">
+            <div class="section-header">&#128260; Retention & Re-engagement</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128230;</span>
+                            <h4>Reorder Reminder</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>last_order > 14 days & has_consumable</dd>
+                            <dt>Condition:</dt>
+                            <dd>Previous order contains coffee beans</dd>
+                            <dt>Action:</dt>
+                            <dd>Push: "Waktunya restock kopi?"</dd>
+                            <dt>Smart:</dt>
+                            <dd>Predict based on consumption pattern</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128564;</span>
+                            <h4>Inactive Win-back</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>no_order > 30 days</dd>
+                            <dt>Condition:</dt>
+                            <dd>has_previous_orders = true</dd>
+                        </dl>
+                        <div class="sequence-steps">
+                            <div class="sequence-step">
+                                <span class="step-num">1</span>
+                                <span>Day 30: "We miss you" email</span>
+                            </div>
+                            <div class="sequence-step">
+                                <span class="step-num">2</span>
+                                <span>Day 45: 10% comeback offer</span>
+                            </div>
+                            <div class="sequence-step">
+                                <span class="step-num">3</span>
+                                <span>Day 60: Free shipping</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127881;</span>
+                            <h4>Birthday Promo</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>birthday = today OR birthday - 7 days</dd>
+                            <dt>Day -7:</dt>
+                            <dd>Email: Birthday month preview</dd>
+                            <dt>Day 0:</dt>
+                            <dd>Push + Email: Special voucher 20%</dd>
+                            <dt>Validity:</dt>
+                            <dd>7 days from birthday</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127942;</span>
+                            <h4>Membership Upgrade</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>total_spent > tier_threshold</dd>
+                            <dt>Tiers:</dt>
+                            <dd>Bronze → Silver → Gold → Platinum</dd>
+                            <dt>Action:</dt>
+                            <dd>Push + Email congratulations</dd>
+                            <dt>Include:</dt>
+                            <dd>New benefits, exclusive perks</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128176;</span>
+                            <h4>Points Expiry Warning</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>points_expiry_date - 14 days</dd>
+                            <dt>Condition:</dt>
+                            <dd>expiring_points > 100</dd>
+                            <dt>Action:</dt>
+                            <dd>Push + Email with points value</dd>
+                            <dt>CTA:</dt>
+                            <dd>Redeem now button</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128172;</span>
+                            <h4>NPS Survey</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_count >= 3 & last_survey > 90 days</dd>
+                            <dt>Action:</dt>
+                            <dd>Email NPS survey</dd>
+                            <dt>Incentive:</dt>
+                            <dd>+100 points for completion</dd>
+                            <dt>Follow-up:</dt>
+                            <dd>Low score → CS ticket created</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Win-back Journey -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Inactive Customer Win-back Journey
+                        <span class="tag">RE-ENGAGEMENT</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128564; Inactive Detected</h4>
+                                    <span class="time">Day 30</span>
+                                </div>
+                                <div class="timeline-desc">No orders for 30 days, customer flagged as inactive</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128140; We Miss You</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Day 30</span>
+                                </div>
+                                <div class="timeline-desc">"Sudah lama tidak mampir! Lihat produk baru kami"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127873; Comeback Offer</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 45</span>
+                                </div>
+                                <div class="timeline-desc">"Khusus untukmu: Diskon 10% untuk pembelian berikutnya!"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128666; Free Shipping</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Day 60</span>
+                                </div>
+                                <div class="timeline-desc">Last chance: Free ongkir untuk semua pembelian</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128683; Dormant Status</h4>
+                                    <span class="time">Day 90</span>
+                                </div>
+                                <div class="timeline-desc">If no response: mark as dormant, reduce email frequency</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stock & Wishlist -->
+        <section class="section">
+            <div class="section-header">&#128276; Stock & Wishlist Notifications</div>
+            <div class="section-content">
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128230;</span>
+                            <h4>Back in Stock</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>notify_stock_item.stock > 0</dd>
+                            <dt>Condition:</dt>
+                            <dd>Customer subscribed to notification</dd>
+                            <dt>Action:</dt>
+                            <dd>Push + Email immediately</dd>
+                            <dt>CTA:</dt>
+                            <dd>Direct add to cart link</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128181;</span>
+                            <h4>Wishlist Price Drop</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>wishlist_item.price decreased</dd>
+                            <dt>Threshold:</dt>
+                            <dd>Minimum 10% price drop</dd>
+                            <dt>Action:</dt>
+                            <dd>Push notification immediately</dd>
+                            <dt>Content:</dt>
+                            <dd>Old price, new price, % savings</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9888;</span>
+                            <h4>Low Stock Alert</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>wishlist_item.stock < 10</dd>
+                            <dt>Action:</dt>
+                            <dd>Push: "Item di wishlist hampir habis!"</dd>
+                            <dt>Urgency:</dt>
+                            <dd>Create FOMO effect</dd>
+                            <dt>CTA:</dt>
+                            <dd>Buy now before sold out</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127381;</span>
+                            <h4>New Arrival Match</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>new_product matches customer preference</dd>
+                            <dt>Match:</dt>
+                            <dd>Based on purchase history, categories</dd>
+                            <dt>Action:</dt>
+                            <dd>Push + Email personalized</dd>
+                            <dt>Timing:</dt>
+                            <dd>Within 24h of product launch</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>&#128161; Smart Personalization:</strong> AI menganalisis browsing behavior, purchase history, dan preferences untuk mengirim notifikasi yang relevan dan menghindari spam.
+                </div>
+            </div>
+        </section>
+
+        <!-- Channel Priority -->
+        <section class="section">
+            <div class="section-header">&#128172; Channel Priority & Fallback</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Trigger Type</th>
+                            <th>Primary</th>
+                            <th>Fallback 1</th>
+                            <th>Fallback 2</th>
+                            <th>Timing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Cart Abandonment</strong></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td><span class="tag wa">WA</span></td>
+                            <td>1h, 24h, 48h</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Order Updates</strong></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>-</td>
+                            <td>Real-time</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Promotions</strong></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>-</td>
+                            <td>Scheduled</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Birthday</strong></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td><span class="tag wa">WA</span></td>
+                            <td>08:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Win-back</strong></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td>-</td>
+                            <td>10:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stock Alert</strong></td>
+                            <td><span class="tag push">Push</span></td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>-</td>
+                            <td>Immediate</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#128274; Opt-in Rules:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                        <li><strong>Push:</strong> has_app = true AND push_token exists</li>
+                        <li><strong>Email:</strong> email valid AND email_opt_in = true</li>
+                        <li><strong>WhatsApp:</strong> phone valid AND whatsapp_opt_in = true</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

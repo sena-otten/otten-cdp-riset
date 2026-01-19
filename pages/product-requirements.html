@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Requirements - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1.25rem;
+        }
+
+        .section-header h2 {
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-header h2 .num { opacity: 0.7; font-weight: normal; }
+
+        .section-content { padding: 1.25rem; }
+
+        .subsection { margin-bottom: 1.5rem; }
+        .subsection:last-child { margin-bottom: 0; }
+
+        .subsection-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection-title .num { color: var(--text-muted); font-weight: normal; }
+
+        /* Persona Grid */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .persona-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-top: 3px solid var(--primary);
+        }
+
+        .persona-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .persona-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .persona-info h4 { font-size: 0.9rem; color: var(--primary); }
+        .persona-info p { font-size: 0.75rem; color: var(--text-muted); }
+
+        .persona-details { font-size: 0.8rem; }
+        .persona-details dt { font-weight: 600; color: var(--text-dark); margin-top: 0.5rem; }
+        .persona-details dd { color: var(--text-muted); margin-left: 0; }
+
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.75rem 0;
+            align-items: center;
+        }
+
+        .pipeline-stage {
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        .pipeline-stage.won { background: var(--success); color: white; }
+        .pipeline-stage.lost { background: var(--danger); color: white; }
+        .pipeline-arrow { color: var(--text-muted); font-size: 1rem; }
+
+        /* Cards Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .card h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .card ul { list-style: none; font-size: 0.8rem; }
+        .card li { padding: 0.15rem 0; color: var(--text-muted); padding-left: 1rem; position: relative; }
+        .card li::before { content: "•"; color: var(--primary); position: absolute; left: 0; }
+
+        .card.blue { border-left-color: #1976D2; }
+        .card.green { border-left-color: #388E3C; }
+        .card.orange { border-left-color: #F57C00; }
+        .card.purple { border-left-color: #7B1FA2; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        /* Warning Box */
+        .warning-box {
+            background: #FFF3E0;
+            border-left: 3px solid var(--warning);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .persona-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="section" id="product-requirements">
+            <div class="section-header">
+                <h2><span class="num">3.</span> Product Requirements (PRD)</h2>
+            </div>
+            <div class="section-content">
+                <!-- 3.1 Users & Personas -->
+                <div class="subsection" id="personas">
+                    <h3 class="subsection-title"><span class="num">3.1</span> Users & Personas</h3>
+
+                    <div class="persona-grid">
+                        <div class="persona-card" style="border-top-color: #1976D2;">
+                            <div class="persona-header">
+                                <div class="persona-avatar">&#128188;</div>
+                                <div class="persona-info">
+                                    <h4>B2B Sales Rep</h4>
+                                    <p>Field sales untuk cafe, hotel, office</p>
+                                </div>
+                            </div>
+                            <dl class="persona-details">
+                                <dt>Goals</dt>
+                                <dd>Close deals, meet quota, manage relationships</dd>
+                                <dt>Pain Points</dt>
+                                <dd>Manual tracking, no mobile access, lost follow-ups</dd>
+                                <dt>Needs</dt>
+                                <dd>Mobile CRM, automated reminders, pipeline view</dd>
+                            </dl>
+                        </div>
+
+                        <div class="persona-card" style="border-top-color: #388E3C;">
+                            <div class="persona-header">
+                                <div class="persona-avatar">&#128222;</div>
+                                <div class="persona-info">
+                                    <h4>CS Agent</h4>
+                                    <p>Handle inbound inquiries & support</p>
+                                </div>
+                            </div>
+                            <dl class="persona-details">
+                                <dt>Goals</dt>
+                                <dd>Quick resolution, customer satisfaction</dd>
+                                <dt>Pain Points</dt>
+                                <dd>No customer history, switching apps, manual tickets</dd>
+                                <dt>Needs</dt>
+                                <dd>360 customer view, quick replies, ticket system</dd>
+                            </dl>
+                        </div>
+
+                        <div class="persona-card" style="border-top-color: #F57C00;">
+                            <div class="persona-header">
+                                <div class="persona-avatar">&#128202;</div>
+                                <div class="persona-info">
+                                    <h4>Sales Manager</h4>
+                                    <p>Team lead & performance oversight</p>
+                                </div>
+                            </div>
+                            <dl class="persona-details">
+                                <dt>Goals</dt>
+                                <dd>Team performance, accurate forecasting</dd>
+                                <dt>Pain Points</dt>
+                                <dd>No real-time data, manual reports</dd>
+                                <dt>Needs</dt>
+                                <dd>Dashboard, pipeline reports, team activity</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.2 User Journey -->
+                <div class="subsection" id="journey">
+                    <h3 class="subsection-title"><span class="num">3.2</span> User Journey (High Level)</h3>
+
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin-bottom: 0.5rem;">B2B Pipeline Flow</h4>
+                    <div class="pipeline">
+                        <div class="pipeline-stage">Lead</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Qualified</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Discovery</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Proposal</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Negotiation</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage won">Won</div>
+                        <span class="pipeline-arrow">/</span>
+                        <div class="pipeline-stage lost">Lost</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Retention</div>
+                    </div>
+
+                    <h4 style="font-size: 0.85rem; color: var(--primary); margin: 1rem 0 0.5rem;">B2C Customer Journey</h4>
+                    <div class="pipeline">
+                        <div class="pipeline-stage">Register</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Browse</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Cart</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage won">Purchase</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Review</div>
+                        <span class="pipeline-arrow">&#8594;</span>
+                        <div class="pipeline-stage">Repeat</div>
+                    </div>
+                </div>
+
+                <!-- 3.3 Functional Requirements -->
+                <div class="subsection" id="functional">
+                    <h3 class="subsection-title"><span class="num">3.3</span> Functional Requirements</h3>
+
+                    <div class="card-grid">
+                        <div class="card blue">
+                            <h4>&#128101; Customer Management</h4>
+                            <ul>
+                                <li>B2B: Legal Entity - Brand - Location</li>
+                                <li>B2C: Personal profiles</li>
+                                <li>Segment-specific fields</li>
+                                <li>Contact & channel preferences</li>
+                                <li>Activity history timeline</li>
+                            </ul>
+                        </div>
+                        <div class="card green">
+                            <h4>&#128200; Pipeline & Deals</h4>
+                            <ul>
+                                <li>Stage management with SLA</li>
+                                <li>Deal value & forecasting</li>
+                                <li>Won/Lost with reason</li>
+                                <li>Product dimension tagging</li>
+                                <li>PIC assignment</li>
+                            </ul>
+                        </div>
+                        <div class="card orange">
+                            <h4>&#128221; Activity Recording</h4>
+                            <ul>
+                                <li>Call, visit, meeting logging</li>
+                                <li>Email & WhatsApp tracking</li>
+                                <li>Transaction linking</li>
+                                <li>Notes & attachments</li>
+                                <li>Next action scheduling</li>
+                            </ul>
+                        </div>
+                        <div class="card purple">
+                            <h4>&#128172; Messaging</h4>
+                            <ul>
+                                <li>WhatsApp integration</li>
+                                <li>Email campaigns</li>
+                                <li>Push notifications</li>
+                                <li>Template management</li>
+                                <li>Opt-in/out handling</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.4 Business Rules -->
+                <div class="subsection" id="business-rules">
+                    <h3 class="subsection-title"><span class="num">3.4</span> Business Rules</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Area</th>
+                                <th>Rule</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Customer Group</strong></td>
+                                <td>1 customer = 1 group (B2B or B2C). Semua deal mewarisi customer_group.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>B2B Entity</strong></td>
+                                <td>Legal Entity (1) - Brand (N) - Location (N). Invoice ke Legal Entity.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pipeline</strong></td>
+                                <td>Won/Lost wajib reason. Retention hanya untuk Won. Setiap stage ada PIC & SLA.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Messaging</strong></td>
+                                <td>Fallback: Push - WhatsApp - Email. Harus opt-in per channel.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Activity</strong></td>
+                                <td>Setiap activity harus punya next_action dan next_action_date.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 3.5 Non-Goals -->
+                <div class="subsection" id="non-goals">
+                    <h3 class="subsection-title"><span class="num">3.5</span> Non-Goals</h3>
+
+                    <div class="warning-box">
+                        <strong>&#9888; Explicitly Not Included:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                            <li>Full marketing automation suite</li>
+                            <li>Complete e-commerce platform rebuild</li>
+                            <li>Advanced predictive analytics / ML models</li>
+                            <li>Custom mobile app (use existing B2B & Retail apps)</li>
+                            <li>Third-party marketplace integrations (Tokopedia, Shopee)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Calendar - Otten Coffee CDP</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+
+            /* Activity Colors */
+            --visit: #4CAF50;
+            --call: #2196F3;
+            --meeting: #9C27B0;
+            --task: #FF9800;
+            --deal: #E91E63;
+            --followup: #00BCD4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .page-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Calendar Panel - Left */
+        .calendar-panel {
+            flex: 1;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .calendar-filters {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Calendar Navigation */
+        .calendar-nav {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-light);
+            color: var(--primary);
+        }
+
+        .today-btn {
+            padding: 0.4rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .today-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .current-month {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 0.4rem 0.75rem;
+            border: none;
+            background: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .view-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 1rem 1rem;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .day-cell {
+            min-height: 100px;
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .day-cell:hover {
+            background: var(--bg-light);
+        }
+
+        .day-cell.other-month {
+            background: #FAFAFA;
+        }
+
+        .day-cell.other-month .day-number {
+            color: #CCC;
+        }
+
+        .day-cell.today {
+            background: #FFF8E1;
+        }
+
+        .day-cell.today .day-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .day-cell.selected {
+            background: #E3F2FD;
+            border-color: var(--info);
+        }
+
+        .day-number {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 50%;
+            margin-bottom: 0.35rem;
+        }
+
+        .day-activities {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .activity-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .activity-badge.visit { background: var(--visit); }
+        .activity-badge.call { background: var(--call); }
+        .activity-badge.meeting { background: var(--meeting); }
+        .activity-badge.task { background: var(--task); }
+        .activity-badge.deal { background: var(--deal); }
+        .activity-badge.followup { background: var(--followup); }
+
+        .activity-count {
+            background: rgba(255,255,255,0.3);
+            padding: 0 0.3rem;
+            border-radius: 3px;
+            font-size: 0.6rem;
+        }
+
+        /* Activity Legend */
+        .activity-legend {
+            padding: 0.75rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        /* Detail Panel - Right */
+        .detail-panel {
+            width: 380px;
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .detail-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .detail-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .add-activity-btn {
+            padding: 0.4rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .add-activity-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Search & Filter */
+        .detail-search {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-tabs {
+            display: flex;
+            padding: 0.5rem 1.25rem;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .filter-tab {
+            padding: 0.35rem 0.75rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            background: var(--bg-light);
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Activity List */
+        .activity-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+        }
+
+        .activity-item {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--bg-light);
+        }
+
+        .activity-item.selected {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+        }
+
+        .activity-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.35rem;
+        }
+
+        .activity-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .activity-customer {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-description {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .activity-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Activity Detail View */
+        .activity-detail {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .activity-detail.active {
+            display: flex;
+        }
+
+        .detail-back {
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-customer-card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .customer-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .customer-info h4 {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .customer-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .detail-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .info-item {
+            background: var(--bg-light);
+            padding: 0.75rem;
+            border-radius: 6px;
+        }
+
+        .info-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-value {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .detail-notes {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Action Buttons */
+        .detail-actions {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--bg-light);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .action-btn.success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.85rem;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            background: var(--bg-light);
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Calendar Panel -->
+        <div class="calendar-panel">
+            <div class="calendar-header">
+                <div class="calendar-title">
+                    <span>&#128197;</span> Activity Calendar
+                </div>
+                <div class="calendar-filters">
+                    <select class="filter-select">
+                        <option>All Team Members</option>
+                        <option>Budi Santoso</option>
+                        <option>Dewi Putri</option>
+                        <option>Andi Rahman</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>All Activity Types</option>
+                        <option>Visit</option>
+                        <option>Call</option>
+                        <option>Meeting</option>
+                        <option>Task</option>
+                        <option>Follow-up</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="calendar-nav">
+                <div class="nav-controls">
+                    <button class="nav-btn">&#10094;</button>
+                    <button class="nav-btn">&#10095;</button>
+                    <button class="today-btn">Today</button>
+                </div>
+                <div class="current-month">January 2026</div>
+                <div class="view-toggle">
+                    <button class="view-btn active">Month</button>
+                    <button class="view-btn">Week</button>
+                    <button class="view-btn">Day</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="days-grid">
+                    <!-- Week 1 -->
+                    <div class="day-cell other-month"><div class="day-number">28</div></div>
+                    <div class="day-cell other-month"><div class="day-number">29</div></div>
+                    <div class="day-cell other-month"><div class="day-number">30</div></div>
+                    <div class="day-cell other-month"><div class="day-number">31</div></div>
+                    <div class="day-cell">
+                        <div class="day-number">1</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">2</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">3</div>
+                    </div>
+
+                    <!-- Week 2 -->
+                    <div class="day-cell">
+                        <div class="day-number">4</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">5</div>
+                        <div class="day-activities">
+                            <div class="activity-badge call">Call <span class="activity-count">3</span></div>
+                            <div class="activity-badge task">Task <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">6</div>
+                        <div class="day-activities">
+                            <div class="activity-badge meeting">Meeting <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">7</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">4</span></div>
+                            <div class="activity-badge followup">Follow-up <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">8</div>
+                        <div class="day-activities">
+                            <div class="activity-badge call">Call <span class="activity-count">5</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">9</div>
+                        <div class="day-activities">
+                            <div class="activity-badge deal">Deal <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">10</div>
+                    </div>
+
+                    <!-- Week 3 -->
+                    <div class="day-cell">
+                        <div class="day-number">11</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">12</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">3</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">13</div>
+                        <div class="day-activities">
+                            <div class="activity-badge call">Call <span class="activity-count">2</span></div>
+                            <div class="activity-badge meeting">Meeting <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell today selected">
+                        <div class="day-number">14</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">2</span></div>
+                            <div class="activity-badge call">Call <span class="activity-count">4</span></div>
+                            <div class="activity-badge task">Task <span class="activity-count">3</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">15</div>
+                        <div class="day-activities">
+                            <div class="activity-badge followup">Follow-up <span class="activity-count">3</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">16</div>
+                        <div class="day-activities">
+                            <div class="activity-badge deal">Deal <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">17</div>
+                    </div>
+
+                    <!-- Week 4 -->
+                    <div class="day-cell">
+                        <div class="day-number">18</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">19</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">5</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">20</div>
+                        <div class="day-activities">
+                            <div class="activity-badge call">Call <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">21</div>
+                        <div class="day-activities">
+                            <div class="activity-badge meeting">Meeting <span class="activity-count">1</span></div>
+                            <div class="activity-badge task">Task <span class="activity-count">2</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">22</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">23</div>
+                        <div class="day-activities">
+                            <div class="activity-badge followup">Follow-up <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">24</div>
+                    </div>
+
+                    <!-- Week 5 -->
+                    <div class="day-cell">
+                        <div class="day-number">25</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">26</div>
+                        <div class="day-activities">
+                            <div class="activity-badge visit">Visit <span class="activity-count">2</span></div>
+                            <div class="activity-badge call">Call <span class="activity-count">3</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">27</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">28</div>
+                        <div class="day-activities">
+                            <div class="activity-badge deal">Deal <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">29</div>
+                        <div class="day-activities">
+                            <div class="activity-badge task">Task <span class="activity-count">4</span></div>
+                        </div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">30</div>
+                    </div>
+                    <div class="day-cell">
+                        <div class="day-number">31</div>
+                        <div class="day-activities">
+                            <div class="activity-badge meeting">Meeting <span class="activity-count">1</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--visit);"></div>
+                    <span>Visit</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--call);"></div>
+                    <span>Call</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--meeting);"></div>
+                    <span>Meeting</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--task);"></div>
+                    <span>Task</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--deal);"></div>
+                    <span>Deal</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--followup);"></div>
+                    <span>Follow-up</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Panel -->
+        <div class="detail-panel">
+            <!-- Activity List View -->
+            <div class="activity-list-view">
+                <div class="detail-header">
+                    <div>
+                        <div class="detail-title">Daily Activities</div>
+                        <div class="detail-date">Tuesday, January 14, 2026</div>
+                    </div>
+                    <button class="add-activity-btn">
+                        <span>+</span> Add Activity
+                    </button>
+                </div>
+
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Total Activities</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+
+                <div class="detail-search">
+                    <input type="text" class="search-input" placeholder="Search activities...">
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="filter-tab active">All</button>
+                    <button class="filter-tab">Visit (2)</button>
+                    <button class="filter-tab">Call (4)</button>
+                    <button class="filter-tab">Task (3)</button>
+                </div>
+
+                <div class="activity-list">
+                    <!-- Activity Item 1 -->
+                    <div class="activity-item selected">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--visit);">&#128205; Visit</span>
+                            <span class="activity-time">09:00 - 10:00</span>
+                        </div>
+                        <div class="activity-customer">Kopi Kenangan - Sudirman</div>
+                        <div class="activity-description">Monthly review & restock discussion</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Budi Santoso</span>
+                            <span>&#128205; Jakarta Selatan</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 2 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                            <span class="activity-time">10:30</span>
+                        </div>
+                        <div class="activity-customer">Hotel Santika - Procurement</div>
+                        <div class="activity-description">Follow up quotation Q1 2026</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Dewi Putri</span>
+                            <span>&#9989; Completed</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 3 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                            <span class="activity-time">11:00</span>
+                        </div>
+                        <div class="activity-customer">PT Mitra Kopi Indonesia</div>
+                        <div class="activity-description">Contract renewal discussion</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Andi Rahman</span>
+                            <span>&#128337; Scheduled</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 4 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                            <span class="activity-time">13:00</span>
+                        </div>
+                        <div class="activity-customer">Prepare Proposal - Cafe XYZ</div>
+                        <div class="activity-description">Create quotation for 50kg monthly supply</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Budi Santoso</span>
+                            <span>&#9888; High Priority</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 5 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--visit);">&#128205; Visit</span>
+                            <span class="activity-time">14:00 - 15:30</span>
+                        </div>
+                        <div class="activity-customer">Starbucks Reserve - SCBD</div>
+                        <div class="activity-description">Machine maintenance check & training</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Dewi Putri</span>
+                            <span>&#128337; Scheduled</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 6 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                            <span class="activity-time">15:00</span>
+                        </div>
+                        <div class="activity-customer">Anomali Coffee - HQ</div>
+                        <div class="activity-description">New product introduction call</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Budi Santoso</span>
+                            <span>&#128337; Scheduled</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 7 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                            <span class="activity-time">16:00</span>
+                        </div>
+                        <div class="activity-customer">Update Pipeline Report</div>
+                        <div class="activity-description">Weekly sales pipeline update for management</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Andi Rahman</span>
+                            <span>&#9989; Completed</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 8 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                            <span class="activity-time">16:30</span>
+                        </div>
+                        <div class="activity-customer">Fore Coffee - Supply Chain</div>
+                        <div class="activity-description">Discuss delivery schedule optimization</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Dewi Putri</span>
+                            <span>&#9989; Completed</span>
+                        </div>
+                    </div>
+
+                    <!-- Activity Item 9 -->
+                    <div class="activity-item">
+                        <div class="activity-item-header">
+                            <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                            <span class="activity-time">17:00</span>
+                        </div>
+                        <div class="activity-customer">Send Product Catalog</div>
+                        <div class="activity-description">Email updated catalog to 5 leads from trade show</div>
+                        <div class="activity-meta">
+                            <span>&#128100; Andi Rahman</span>
+                            <span>&#128337; Scheduled</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Detail View (Hidden by default) -->
+            <div class="activity-detail" id="activityDetail">
+                <div class="detail-back">
+                    <button class="back-btn" onclick="showList()">
+                        <span>&#10094;</span> Back to list
+                    </button>
+                </div>
+
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <span class="activity-type-badge" style="background: var(--visit); font-size: 0.8rem; padding: 0.4rem 0.75rem;">&#128205; Visit</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">09:00 - 10:00</span>
+                        </div>
+                        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Monthly Review & Restock Discussion</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Schedule on January 14, 2026</p>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Customer</div>
+                        <div class="detail-customer-card">
+                            <div class="customer-avatar">KK</div>
+                            <div class="customer-info">
+                                <h4>Kopi Kenangan - Sudirman</h4>
+                                <p>Jl. Jend. Sudirman No. 52, Jakarta</p>
+                                <p>&#128222; +62 21 5555 1234</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Activity Details</div>
+                        <div class="detail-info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Assigned To</div>
+                                <div class="info-value">Budi Santoso</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Status</div>
+                                <div class="info-value" style="color: var(--warning);">&#128337; Scheduled</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Priority</div>
+                                <div class="info-value" style="color: var(--danger);">&#9888; High</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Related Deal</div>
+                                <div class="info-value">Q1 Restock (Rp 45M)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Notes</div>
+                        <div class="detail-notes">
+                            Discuss monthly consumption report and plan for Q1 2026 restock. Customer requested to review new single origin options from Aceh Gayo.
+                            <br><br>
+                            Prepare samples: Aceh Gayo, Toraja Sapan, Java Preanger.
+                            <br><br>
+                            Previous meeting notes: Customer interested in expanding to 3 new outlets.
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-section-title">Activity History</div>
+                        <div style="font-size: 0.8rem;">
+                            <div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                                <span style="color: var(--text-muted);">Jan 10, 2026</span> - Activity created by Budi Santoso
+                            </div>
+                            <div style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                                <span style="color: var(--text-muted);">Jan 12, 2026</span> - Reminder sent to customer
+                            </div>
+                            <div style="padding: 0.5rem 0;">
+                                <span style="color: var(--text-muted);">Jan 13, 2026</span> - Customer confirmed appointment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    <button class="action-btn">&#9998; Edit</button>
+                    <button class="action-btn">&#128337; Reschedule</button>
+                    <button class="action-btn success">&#9989; Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interaction demo
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.activity-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                // Show detail view
+                document.querySelector('.activity-list-view').style.display = 'none';
+                document.getElementById('activityDetail').classList.add('active');
+            });
+        });
+
+        function showList() {
+            document.querySelector('.activity-list-view').style.display = 'block';
+            document.getElementById('activityDetail').classList.remove('active');
+        }
+
+        document.querySelectorAll('.day-cell').forEach(cell => {
+            cell.addEventListener('click', function() {
+                document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

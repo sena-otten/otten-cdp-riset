@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Detail - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --purple: #9C27B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--primary-dark);
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .sidebar-brand {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Customer Header */
+        .customer-header {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .customer-profile {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .customer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .customer-info h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .customer-info .customer-id {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .customer-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .tag-b2c { background: #E3F2FD; color: #1976D2; }
+        .tag-active { background: #E8F5E9; color: #388E3C; }
+        .tag-gold { background: #FFF8E1; color: #F57C00; }
+
+        .customer-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-light);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .stat-card .stat-change {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--danger); }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 1.5rem;
+        }
+
+        /* Timeline */
+        .timeline-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-tab {
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: var(--bg-light);
+            color: var(--primary);
+        }
+
+        /* Timeline Items */
+        .timeline {
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 45px;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .timeline-icon.register { background: #E3F2FD; color: #1976D2; }
+        .timeline-icon.cart { background: #FFF3E0; color: #F57C00; }
+        .timeline-icon.order { background: #E8F5E9; color: #388E3C; }
+        .timeline-icon.promo { background: #F3E5F5; color: #9C27B0; }
+        .timeline-icon.birthday { background: #FCE4EC; color: #E91E63; }
+        .timeline-icon.review { background: #E0F7FA; color: #00BCD4; }
+        .timeline-icon.support { background: #FFEBEE; color: #f44336; }
+        .timeline-icon.ai { background: #EDE7F6; color: #673AB7; }
+        .timeline-icon.loyalty { background: #FFF8E1; color: #FFC107; }
+
+        .timeline-content {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .timeline-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .timeline-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .badge-success { background: #E8F5E9; color: #388E3C; }
+        .badge-warning { background: #FFF3E0; color: #F57C00; }
+        .badge-info { background: #E3F2FD; color: #1976D2; }
+        .badge-danger { background: #FFEBEE; color: #f44336; }
+        .badge-purple { background: #F3E5F5; color: #9C27B0; }
+
+        /* Customer Details Sidebar */
+        .details-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-section h3 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Channel Preferences */
+        .channel-prefs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .channel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: var(--bg-light);
+            border-radius: 6px;
+        }
+
+        .channel-item .channel-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .channel-status {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .channel-status.enabled { background: #E8F5E9; color: #388E3C; }
+        .channel-status.disabled { background: #FFEBEE; color: #f44336; }
+
+        /* Recent Orders */
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .order-info .order-id {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .order-info .order-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .order-amount {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .load-more button {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .load-more button:hover {
+            background: var(--bg-light);
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .customer-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span>&#9749;</span> CRM Otten
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#">&#128202; Dashboard</a></li>
+                <li><a href="#" class="active">&#128101; Customers</a></li>
+                <li><a href="#">&#128200; Pipeline</a></li>
+                <li><a href="#">&#128221; Activities</a></li>
+                <li><a href="#">&#128172; Messaging</a></li>
+                <li><a href="#">&#128202; Reports</a></li>
+                <li><a href="#">&#9881; Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="#">Customers</a>
+                <span>&#8250;</span>
+                <span>Budi Santoso</span>
+            </div>
+
+            <!-- Customer Header -->
+            <div class="customer-header">
+                <div class="customer-profile">
+                    <div class="customer-avatar">BS</div>
+                    <div class="customer-info">
+                        <h1>Budi Santoso</h1>
+                        <div class="customer-id">CUST-2024-001234 &bull; Member since Jan 2024</div>
+                        <div class="customer-tags">
+                            <span class="tag tag-b2c">B2C Personal</span>
+                            <span class="tag tag-active">Active</span>
+                            <span class="tag tag-gold">Gold Member</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="customer-actions">
+                    <button class="btn btn-outline">&#128172; Message</button>
+                    <button class="btn btn-outline">&#128221; Add Activity</button>
+                    <button class="btn btn-primary">&#9998; Edit</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-change positive">&#9650; 3 this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-value">Rp 4.2M</div>
+                    <div class="stat-change positive">&#9650; 15% vs last period</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Order Value</div>
+                    <div class="stat-value">Rp 175K</div>
+                    <div class="stat-change negative">&#9660; 5% vs last period</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Loyalty Points</div>
+                    <div class="stat-value">2,450</div>
+                    <div class="stat-change positive">&#9650; 350 pending</div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Timeline -->
+                <div class="timeline-card">
+                    <div class="card-header">
+                        <h2>&#128197; Activity Timeline</h2>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active">All</button>
+                            <button class="filter-tab">Orders</button>
+                            <button class="filter-tab">Promos</button>
+                            <button class="filter-tab">Support</button>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <!-- Today -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon ai">&#129302;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">AI: Reorder Reminder Sent</span>
+                                    <span class="timeline-time">Today, 09:00</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Push notification sent: "Kopi favorit kamu hampir habis? Yuk restock sekarang!"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128276; Push Notification</span>
+                                    <span class="timeline-badge badge-info">AI Automation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2 days ago -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon order">&#128722;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Order Completed</span>
+                                    <span class="timeline-time">11 Jan 2024, 14:32</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Order #ORD-2024-005678 delivered successfully
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128176; Rp 245.000</span>
+                                    <span>&#128230; 3 items</span>
+                                    <span class="timeline-badge badge-success">Completed</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3 days ago -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon review">&#11088;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Review Submitted</span>
+                                    <span class="timeline-time">10 Jan 2024, 19:45</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Gave 5-star review for "Ethiopia Sidamo 200g" - "Kopi terenak yang pernah saya coba!"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#11088;&#11088;&#11088;&#11088;&#11088; 5.0</span>
+                                    <span class="timeline-badge badge-success">Verified Purchase</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5 days ago -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon ai">&#129302;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">AI: Review Request Sent</span>
+                                    <span class="timeline-time">8 Jan 2024, 10:00</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Push notification sent: "Gimana kopinya? Yuk kasih review untuk Ethiopia Sidamo!"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128276; Push Notification</span>
+                                    <span class="timeline-badge badge-info">AI Automation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1 week ago -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon order">&#128722;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Order Placed</span>
+                                    <span class="timeline-time">5 Jan 2024, 20:15</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    New order #ORD-2024-005678 placed via Retail App
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128176; Rp 245.000</span>
+                                    <span>&#128241; retail_app</span>
+                                    <span class="timeline-badge badge-success">Paid</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Birthday promo -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon birthday">&#127874;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Birthday Promo Received</span>
+                                    <span class="timeline-time">1 Jan 2024, 00:01</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Birthday voucher BDAY20 (20% off) sent via Email & Push. Valid until 31 Jan 2024.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#127915; BDAY20</span>
+                                    <span class="timeline-badge badge-success">Used</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Promo not converted -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon promo">&#127873;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Promo Received - No Conversion</span>
+                                    <span class="timeline-time">25 Dec 2023, 08:00</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Christmas promo XMAS25 (25% off) sent. Customer opened email but did not purchase.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128231; Email Opened</span>
+                                    <span class="timeline-badge badge-warning">Not Converted</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cart abandonment -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon cart">&#128722;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Cart Abandoned</span>
+                                    <span class="timeline-time">20 Dec 2023, 15:30</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Added V60 Dripper to cart (Rp 350.000) but did not checkout. Abandonment reminder sent.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128176; Rp 350.000</span>
+                                    <span class="timeline-badge badge-danger">Abandoned</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Cart Reminder -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon ai">&#129302;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">AI: Cart Abandonment Reminder</span>
+                                    <span class="timeline-time">20 Dec 2023, 16:30</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Push notification sent: "V60 Dripper masih menunggu di cart kamu. Checkout sekarang!"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128276; Push Notification</span>
+                                    <span class="timeline-badge badge-warning">No Response</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Membership upgrade -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon loyalty">&#127942;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Membership Upgraded to Gold</span>
+                                    <span class="timeline-time">15 Dec 2023, 12:00</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Total spending reached Rp 3.000.000. Upgraded from Silver to Gold tier.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#127942; Gold Member</span>
+                                    <span>&#128176; Rp 3M threshold</span>
+                                    <span class="timeline-badge badge-purple">Tier Up</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Support ticket -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon support">&#128222;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Support Ticket - Resolved</span>
+                                    <span class="timeline-time">10 Dec 2023, 09:15</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Ticket #TKT-001234: "Pengiriman terlambat 2 hari" - Resolved with 10% discount voucher.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128222; CS Call</span>
+                                    <span>&#9201; 15 min</span>
+                                    <span class="timeline-badge badge-success">Resolved</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- First order -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon order">&#127881;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">First Order - Welcome!</span>
+                                    <span class="timeline-time">5 Nov 2023, 18:20</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    First purchase completed! Order #ORD-2023-001234 - Starter Pack Bundle
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128176; Rp 450.000</span>
+                                    <span>&#128230; 5 items</span>
+                                    <span class="timeline-badge badge-success">First Order</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- First add to cart -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon cart">&#128722;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">First Add to Cart</span>
+                                    <span class="timeline-time">5 Nov 2023, 17:45</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Added first item to cart: "Starter Pack Bundle - Everything you need to brew"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128241; retail_app</span>
+                                    <span class="timeline-badge badge-info">First Cart</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Welcome series -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon ai">&#129302;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">AI: Welcome Series Started</span>
+                                    <span class="timeline-time">1 Nov 2023, 10:00</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Welcome email series triggered. Email 1/3: "Selamat datang di Otten Coffee!"
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128231; Email</span>
+                                    <span class="timeline-badge badge-success">Opened</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registration -->
+                        <div class="timeline-item">
+                            <div class="timeline-icon register">&#128100;</div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <span class="timeline-title">Account Registered</span>
+                                    <span class="timeline-time">1 Nov 2023, 09:30</span>
+                                </div>
+                                <div class="timeline-desc">
+                                    Account created via Retail App. Email & phone verified.
+                                </div>
+                                <div class="timeline-meta">
+                                    <span>&#128241; retail_app</span>
+                                    <span>&#9989; Verified</span>
+                                    <span class="timeline-badge badge-success">Complete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="load-more">
+                        <button>Load More Activities</button>
+                    </div>
+                </div>
+
+                <!-- Customer Details Sidebar -->
+                <div>
+                    <div class="details-card">
+                        <div class="detail-section">
+                            <h3>Contact Information</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Email</span>
+                                <span class="detail-value">budi.s@email.com</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Phone</span>
+                                <span class="detail-value">+62 812-3456-7890</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Address</span>
+                                <span class="detail-value">Jakarta Selatan</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Preferences</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Brew Method</span>
+                                <span class="detail-value">V60, French Press</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Roast Level</span>
+                                <span class="detail-value">Medium</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Flavor Notes</span>
+                                <span class="detail-value">Fruity, Chocolate</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3>Channel Preferences</h3>
+                            <div class="channel-prefs">
+                                <div class="channel-item">
+                                    <span class="channel-name">&#128276; Push</span>
+                                    <span class="channel-status enabled">Enabled</span>
+                                </div>
+                                <div class="channel-item">
+                                    <span class="channel-name">&#128172; WhatsApp</span>
+                                    <span class="channel-status enabled">Enabled</span>
+                                </div>
+                                <div class="channel-item">
+                                    <span class="channel-name">&#128231; Email</span>
+                                    <span class="channel-status enabled">Enabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-card">
+                        <div class="detail-section">
+                            <h3>Recent Orders</h3>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <div class="order-id">#ORD-2024-005678</div>
+                                    <div class="order-date">11 Jan 2024</div>
+                                </div>
+                                <div class="order-amount">Rp 245K</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <div class="order-id">#ORD-2024-005234</div>
+                                    <div class="order-date">28 Dec 2023</div>
+                                </div>
+                                <div class="order-amount">Rp 189K</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <div class="order-id">#ORD-2023-004892</div>
+                                    <div class="order-date">15 Dec 2023</div>
+                                </div>
+                                <div class="order-amount">Rp 320K</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="details-card">
+                        <div class="detail-section">
+                            <h3>Active Vouchers</h3>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <div class="order-id">LOYAL10</div>
+                                    <div class="order-date">10% off - Exp: 31 Jan</div>
+                                </div>
+                                <div class="order-amount" style="color: var(--purple);">Active</div>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <div class="order-id">FREESHIP</div>
+                                    <div class="order-date">Free shipping - Exp: 15 Feb</div>
+                                </div>
+                                <div class="order-amount" style="color: var(--purple);">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Activity Calendar Mobile - Otten Coffee CDP</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+
+            /* Activity Colors */
+            --visit: #4CAF50;
+            --call: #2196F3;
+            --meeting: #9C27B0;
+            --task: #FF9800;
+            --deal: #E91E63;
+            --followup: #00BCD4;
+
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+            overflow-x: hidden;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .mobile-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        /* Month Selector */
+        .month-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .month-nav-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .current-month {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* View Tabs */
+        .view-tabs {
+            display: flex;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 108px;
+            z-index: 99;
+        }
+
+        .view-tab {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .view-tab.active {
+            color: var(--primary);
+        }
+
+        .view-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* Mini Calendar */
+        .mini-calendar {
+            background: var(--bg-card);
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .weekdays-mini {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .days-mini {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+        }
+
+        .day-mini {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .day-mini.other-month {
+            color: #CCC;
+        }
+
+        .day-mini.today {
+            background: var(--primary);
+            color: white;
+        }
+
+        .day-mini.selected {
+            background: #E3F2FD;
+            color: var(--info);
+        }
+
+        .day-mini.today.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .day-mini.has-activity::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            width: 4px;
+            height: 4px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+
+        .day-mini.today.has-activity::after {
+            background: white;
+        }
+
+        /* Activity Stats */
+        .activity-stats {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .stat-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-light);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Activity List */
+        .activity-list-mobile {
+            padding-bottom: calc(80px + var(--safe-bottom));
+        }
+
+        .date-header {
+            padding: 0.75rem 1rem;
+            background: var(--bg-light);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            position: sticky;
+            top: 152px;
+            z-index: 50;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            margin: 0.5rem;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .activity-card:active {
+            transform: scale(0.98);
+        }
+
+        .activity-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .activity-time-badge {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .activity-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .activity-assignee {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .assignee-avatar {
+            width: 24px;
+            height: 24px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .activity-status {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .activity-status.scheduled {
+            background: #FFF3E0;
+            color: var(--warning);
+        }
+
+        .activity-status.completed {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .activity-status.overdue {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: calc(90px + var(--safe-bottom));
+            right: 1rem;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.4);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding-bottom: var(--safe-bottom);
+            z-index: 200;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Detail Modal */
+        .detail-modal {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-light);
+            z-index: 300;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            max-width: 430px;
+            margin: 0 auto;
+        }
+
+        .detail-modal.open {
+            transform: translateX(0);
+        }
+
+        .detail-modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .detail-modal-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .detail-modal-title {
+            flex: 1;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .detail-modal-content {
+            padding: 1rem;
+            padding-bottom: calc(100px + var(--safe-bottom));
+        }
+
+        .detail-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .detail-card-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .customer-info-mobile {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .customer-avatar-lg {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .customer-details h4 {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .customer-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .info-grid-mobile {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .info-item-mobile {
+            background: var(--bg-light);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .info-item-mobile .label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-item-mobile .value {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .notes-content {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .history-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        /* Fixed Actions */
+        .detail-actions-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 1rem;
+            padding-bottom: calc(1rem + var(--safe-bottom));
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .action-btn-mobile {
+            flex: 1;
+            padding: 0.85rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .action-btn-mobile.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-btn-mobile.success {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        /* Empty State */
+        .empty-state-mobile {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Quick Actions Sheet */
+        .action-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 430px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: 20px 20px 0 0;
+            padding: 1rem;
+            padding-bottom: calc(1rem + var(--safe-bottom));
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 400;
+        }
+
+        .action-sheet.open {
+            transform: translateY(0);
+        }
+
+        .action-sheet-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 350;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .action-sheet-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .action-sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0 auto 1rem;
+        }
+
+        .action-sheet-title {
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .action-sheet-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .action-sheet-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: none;
+            background: var(--bg-light);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .action-sheet-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .action-sheet-label {
+            font-size: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        /* Pull to refresh indicator */
+        .pull-indicator {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="mobile-header">
+        <div class="header-top">
+            <div class="header-title">&#128197; Activity Calendar</div>
+            <div class="header-actions">
+                <button class="header-btn">&#128269;</button>
+                <button class="header-btn">&#9881;</button>
+            </div>
+        </div>
+        <div class="month-selector">
+            <button class="month-nav-btn">&#10094;</button>
+            <span class="current-month">January 2026</span>
+            <button class="month-nav-btn">&#10095;</button>
+        </div>
+    </header>
+
+    <!-- View Tabs -->
+    <div class="view-tabs">
+        <button class="view-tab active">Calendar</button>
+        <button class="view-tab">List</button>
+        <button class="view-tab">My Tasks</button>
+    </div>
+
+    <!-- Mini Calendar -->
+    <div class="mini-calendar">
+        <div class="weekdays-mini">
+            <div>S</div>
+            <div>M</div>
+            <div>T</div>
+            <div>W</div>
+            <div>T</div>
+            <div>F</div>
+            <div>S</div>
+        </div>
+        <div class="days-mini">
+            <div class="day-mini other-month">28</div>
+            <div class="day-mini other-month">29</div>
+            <div class="day-mini other-month">30</div>
+            <div class="day-mini other-month">31</div>
+            <div class="day-mini">1</div>
+            <div class="day-mini has-activity">2</div>
+            <div class="day-mini">3</div>
+            <div class="day-mini">4</div>
+            <div class="day-mini has-activity">5</div>
+            <div class="day-mini has-activity">6</div>
+            <div class="day-mini has-activity">7</div>
+            <div class="day-mini has-activity">8</div>
+            <div class="day-mini has-activity">9</div>
+            <div class="day-mini">10</div>
+            <div class="day-mini">11</div>
+            <div class="day-mini has-activity">12</div>
+            <div class="day-mini has-activity">13</div>
+            <div class="day-mini today selected has-activity">14</div>
+            <div class="day-mini has-activity">15</div>
+            <div class="day-mini has-activity">16</div>
+            <div class="day-mini">17</div>
+            <div class="day-mini">18</div>
+            <div class="day-mini has-activity">19</div>
+            <div class="day-mini has-activity">20</div>
+            <div class="day-mini has-activity">21</div>
+            <div class="day-mini">22</div>
+            <div class="day-mini has-activity">23</div>
+            <div class="day-mini">24</div>
+            <div class="day-mini">25</div>
+            <div class="day-mini has-activity">26</div>
+            <div class="day-mini">27</div>
+            <div class="day-mini has-activity">28</div>
+            <div class="day-mini has-activity">29</div>
+            <div class="day-mini">30</div>
+            <div class="day-mini has-activity">31</div>
+        </div>
+    </div>
+
+    <!-- Activity Stats -->
+    <div class="activity-stats">
+        <div class="stat-chip">
+            <span style="font-weight: 600;">9</span> Total
+        </div>
+        <div class="stat-chip">
+            <div class="stat-dot" style="background: var(--visit);"></div>
+            <span>2 Visit</span>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-dot" style="background: var(--call);"></div>
+            <span>4 Call</span>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-dot" style="background: var(--task);"></div>
+            <span>3 Task</span>
+        </div>
+    </div>
+
+    <!-- Activity List -->
+    <div class="activity-list-mobile">
+        <div class="date-header">Today, January 14, 2026</div>
+
+        <!-- Activity Card 1 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--visit);">&#128205; Visit</span>
+                <span class="activity-time-badge">09:00 - 10:00</span>
+            </div>
+            <div class="activity-card-title">Kopi Kenangan - Sudirman</div>
+            <div class="activity-card-desc">Monthly review & restock discussion</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">BS</div>
+                    <span>Budi Santoso</span>
+                </div>
+                <span class="activity-status scheduled">&#128337; Scheduled</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 2 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                <span class="activity-time-badge">10:30</span>
+            </div>
+            <div class="activity-card-title">Hotel Santika - Procurement</div>
+            <div class="activity-card-desc">Follow up quotation Q1 2026</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">DP</div>
+                    <span>Dewi Putri</span>
+                </div>
+                <span class="activity-status completed">&#9989; Completed</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 3 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                <span class="activity-time-badge">11:00</span>
+            </div>
+            <div class="activity-card-title">PT Mitra Kopi Indonesia</div>
+            <div class="activity-card-desc">Contract renewal discussion</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">AR</div>
+                    <span>Andi Rahman</span>
+                </div>
+                <span class="activity-status scheduled">&#128337; Scheduled</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 4 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                <span class="activity-time-badge">13:00</span>
+            </div>
+            <div class="activity-card-title">Prepare Proposal - Cafe XYZ</div>
+            <div class="activity-card-desc">Create quotation for 50kg monthly supply</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">BS</div>
+                    <span>Budi Santoso</span>
+                </div>
+                <span class="activity-status overdue">&#9888; High Priority</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 5 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--visit);">&#128205; Visit</span>
+                <span class="activity-time-badge">14:00 - 15:30</span>
+            </div>
+            <div class="activity-card-title">Starbucks Reserve - SCBD</div>
+            <div class="activity-card-desc">Machine maintenance check & training</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">DP</div>
+                    <span>Dewi Putri</span>
+                </div>
+                <span class="activity-status scheduled">&#128337; Scheduled</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 6 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                <span class="activity-time-badge">15:00</span>
+            </div>
+            <div class="activity-card-title">Anomali Coffee - HQ</div>
+            <div class="activity-card-desc">New product introduction call</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">BS</div>
+                    <span>Budi Santoso</span>
+                </div>
+                <span class="activity-status scheduled">&#128337; Scheduled</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 7 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                <span class="activity-time-badge">16:00</span>
+            </div>
+            <div class="activity-card-title">Update Pipeline Report</div>
+            <div class="activity-card-desc">Weekly sales pipeline update for management</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">AR</div>
+                    <span>Andi Rahman</span>
+                </div>
+                <span class="activity-status completed">&#9989; Completed</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 8 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--call);">&#128222; Call</span>
+                <span class="activity-time-badge">16:30</span>
+            </div>
+            <div class="activity-card-title">Fore Coffee - Supply Chain</div>
+            <div class="activity-card-desc">Discuss delivery schedule optimization</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">DP</div>
+                    <span>Dewi Putri</span>
+                </div>
+                <span class="activity-status completed">&#9989; Completed</span>
+            </div>
+        </div>
+
+        <!-- Activity Card 9 -->
+        <div class="activity-card" onclick="openDetail()">
+            <div class="activity-card-header">
+                <span class="activity-type-badge" style="background: var(--task);">&#128203; Task</span>
+                <span class="activity-time-badge">17:00</span>
+            </div>
+            <div class="activity-card-title">Send Product Catalog</div>
+            <div class="activity-card-desc">Email updated catalog to 5 leads from trade show</div>
+            <div class="activity-card-footer">
+                <div class="activity-assignee">
+                    <div class="assignee-avatar">AR</div>
+                    <span>Andi Rahman</span>
+                </div>
+                <span class="activity-status scheduled">&#128337; Scheduled</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" onclick="openActionSheet()">+</button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item">
+            <span class="nav-icon">&#127968;</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item active">
+            <span class="nav-icon">&#128197;</span>
+            <span>Calendar</span>
+        </button>
+        <button class="nav-item">
+            <span class="nav-icon">&#128101;</span>
+            <span>Customers</span>
+        </button>
+        <button class="nav-item">
+            <span class="nav-icon">&#128200;</span>
+            <span>Pipeline</span>
+        </button>
+        <button class="nav-item">
+            <span class="nav-icon">&#128100;</span>
+            <span>Profile</span>
+        </button>
+    </nav>
+
+    <!-- Detail Modal -->
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-modal-header">
+            <div class="detail-modal-nav">
+                <button class="back-btn" onclick="closeDetail()">&#10094;</button>
+                <span class="detail-modal-title">Activity Detail</span>
+                <button class="back-btn">&#8942;</button>
+            </div>
+        </div>
+        <div class="detail-modal-content">
+            <!-- Type & Time -->
+            <div class="detail-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span class="activity-type-badge" style="background: var(--visit); padding: 0.4rem 0.75rem; font-size: 0.8rem;">&#128205; Visit</span>
+                    <span class="activity-status scheduled" style="padding: 0.4rem 0.75rem;">&#128337; Scheduled</span>
+                </div>
+                <h2 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Monthly Review & Restock Discussion</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">
+                    &#128197; Tuesday, January 14, 2026<br>
+                    &#128337; 09:00 - 10:00
+                </p>
+            </div>
+
+            <!-- Customer Info -->
+            <div class="detail-card">
+                <div class="detail-card-title">Customer</div>
+                <div class="customer-info-mobile">
+                    <div class="customer-avatar-lg">KK</div>
+                    <div class="customer-details">
+                        <h4>Kopi Kenangan - Sudirman</h4>
+                        <p>&#128205; Jl. Jend. Sudirman No. 52, Jakarta</p>
+                        <p>&#128222; +62 21 5555 1234</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Details -->
+            <div class="detail-card">
+                <div class="detail-card-title">Details</div>
+                <div class="info-grid-mobile">
+                    <div class="info-item-mobile">
+                        <div class="label">Assigned To</div>
+                        <div class="value">Budi Santoso</div>
+                    </div>
+                    <div class="info-item-mobile">
+                        <div class="label">Priority</div>
+                        <div class="value" style="color: var(--danger);">&#9888; High</div>
+                    </div>
+                    <div class="info-item-mobile">
+                        <div class="label">Related Deal</div>
+                        <div class="value">Q1 Restock</div>
+                    </div>
+                    <div class="info-item-mobile">
+                        <div class="label">Deal Value</div>
+                        <div class="value">Rp 45.000.000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="detail-card">
+                <div class="detail-card-title">Notes</div>
+                <div class="notes-content">
+                    Discuss monthly consumption report and plan for Q1 2026 restock. Customer requested to review new single origin options from Aceh Gayo.
+                    <br><br>
+                    <strong>Prepare samples:</strong> Aceh Gayo, Toraja Sapan, Java Preanger.
+                    <br><br>
+                    Previous meeting notes: Customer interested in expanding to 3 new outlets.
+                </div>
+            </div>
+
+            <!-- History -->
+            <div class="detail-card">
+                <div class="detail-card-title">Activity History</div>
+                <div class="history-item">
+                    <div class="history-date">Jan 13, 2026 - 14:30</div>
+                    <div>Customer confirmed appointment</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">Jan 12, 2026 - 10:00</div>
+                    <div>Reminder sent to customer</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-date">Jan 10, 2026 - 09:15</div>
+                    <div>Activity created by Budi Santoso</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Actions -->
+        <div class="detail-actions-fixed">
+            <button class="action-btn-mobile">&#9998; Edit</button>
+            <button class="action-btn-mobile success">&#9989; Complete</button>
+        </div>
+    </div>
+
+    <!-- Action Sheet Overlay -->
+    <div class="action-sheet-overlay" id="actionSheetOverlay" onclick="closeActionSheet()"></div>
+
+    <!-- Action Sheet -->
+    <div class="action-sheet" id="actionSheet">
+        <div class="action-sheet-handle"></div>
+        <div class="action-sheet-title">Create New Activity</div>
+        <div class="action-sheet-items">
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--visit);">&#128205;</div>
+                <span class="action-sheet-label">Visit</span>
+            </button>
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--call);">&#128222;</div>
+                <span class="action-sheet-label">Call</span>
+            </button>
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--meeting);">&#128101;</div>
+                <span class="action-sheet-label">Meeting</span>
+            </button>
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--task);">&#128203;</div>
+                <span class="action-sheet-label">Task</span>
+            </button>
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--followup);">&#128260;</div>
+                <span class="action-sheet-label">Follow-up</span>
+            </button>
+            <button class="action-sheet-item">
+                <div class="action-sheet-icon" style="background: var(--deal);">&#128176;</div>
+                <span class="action-sheet-label">Deal</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Detail Modal
+        function openDetail() {
+            document.getElementById('detailModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Action Sheet
+        function openActionSheet() {
+            document.getElementById('actionSheet').classList.add('open');
+            document.getElementById('actionSheetOverlay').classList.add('open');
+        }
+
+        function closeActionSheet() {
+            document.getElementById('actionSheet').classList.remove('open');
+            document.getElementById('actionSheetOverlay').classList.remove('open');
+        }
+
+        // Day selection
+        document.querySelectorAll('.day-mini').forEach(day => {
+            day.addEventListener('click', function() {
+                document.querySelectorAll('.day-mini').forEach(d => {
+                    if (!d.classList.contains('today')) {
+                        d.classList.remove('selected');
+                    }
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        // View tabs
+        document.querySelectorAll('.view-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Bottom nav
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

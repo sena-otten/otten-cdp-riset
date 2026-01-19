@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otten CDP Platform - Product Requirements Document</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --accent: #C8A882;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --b2b: #8B4513;
+            --b2c: #D2691E;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Layout */
+        .app-layout {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--primary-dark);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .sidebar-brand span {
+            font-size: 1.25rem;
+        }
+
+        .sidebar-subtitle {
+            color: var(--secondary);
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 0.75rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-section-title {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.75rem 1.5rem 0.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-section-title .section-num {
+            background: rgba(255,255,255,0.15);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.6rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem 0.5rem 2rem;
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 0.8rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--secondary);
+        }
+
+        .nav-num {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            min-width: 24px;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--secondary);
+            color: var(--primary-dark);
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .nav-badge.new {
+            background: var(--info);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+        }
+
+        .sidebar-footer a {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Fixed Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.15rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .header-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.65rem;
+        }
+
+        .header-badge.cdp { background: #1565C0; }
+        .header-badge.sales { background: #2E7D32; }
+        .header-badge.cs { background: #7B1FA2; }
+        .header-badge.aftersales { background: #00796B; }
+        .header-badge.marketing { background: #E65100; }
+
+        .content-iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            overflow-y: auto;
+        }
+
+        /* Mobile */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .sidebar-overlay.open { display: block; }
+            .main-content { margin-left: 0; }
+        }
+
+        /* Scrollbar */
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: var(--primary-dark); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Mobile Toggle -->
+        <button class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</button>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-brand">
+                    <span>&#9749;</span> Otten Coffee CDP
+                </a>
+                <div class="sidebar-subtitle">CDP + Sales + CS + After Sales + Marketing</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- 1. Executive Summary -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">1</span> Executive Summary
+                    </div>
+                    <a href="pages/executive-summary.html#background" class="nav-link iframe-link active">
+                        <span class="nav-num">1.1</span> Background & Vision
+                    </a>
+                    <a href="pages/executive-summary.html#context" class="nav-link iframe-link">
+                        <span class="nav-num">1.2</span> B2B vs B2C Context
+                    </a>
+                    <a href="pages/executive-summary.html#pillars" class="nav-link iframe-link">
+                        <span class="nav-num">1.3</span> CDP + 4 Fitur Utama
+                    </a>
+                    <a href="pages/executive-summary.html#scope-metrics" class="nav-link iframe-link">
+                        <span class="nav-num">1.4</span> Success Metrics
+                    </a>
+                    <a href="pages/executive-summary.html#integration" class="nav-link iframe-link">
+                        <span class="nav-num">1.5</span> System Integration
+                    </a>
+                    <a href="pages/executive-summary.html#stakeholders" class="nav-link iframe-link">
+                        <span class="nav-num">1.6</span> Stakeholders
+                    </a>
+                    <a href="pages/executive-summary.html#roadmap" class="nav-link iframe-link">
+                        <span class="nav-num">1.7</span> Roadmap & Milestones
+                    </a>
+                </div>
+
+                <!-- 2. Business Requirements -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">2</span> Business Requirements
+                    </div>
+                    <a href="pages/business-requirements.html#problem" class="nav-link iframe-link">
+                        <span class="nav-num">2.1</span> Problem Statement
+                    </a>
+                    <a href="pages/business-requirements.html#goals" class="nav-link iframe-link">
+                        <span class="nav-num">2.2</span> Business Goals
+                    </a>
+                    <a href="pages/business-requirements.html#stakeholders" class="nav-link iframe-link">
+                        <span class="nav-num">2.3</span> Stakeholders
+                    </a>
+                    <a href="pages/business-requirements.html#in-out-scope" class="nav-link iframe-link">
+                        <span class="nav-num">2.4</span> In / Out of Scope
+                    </a>
+                </div>
+
+                <!-- 3. Product Requirements -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">3</span> Product Requirements
+                    </div>
+                    <a href="pages/product-requirements.html#personas" class="nav-link iframe-link">
+                        <span class="nav-num">3.1</span> Users & Personas
+                    </a>
+                    <a href="pages/product-requirements.html#journey" class="nav-link iframe-link">
+                        <span class="nav-num">3.2</span> User Journey
+                    </a>
+                    <a href="pages/product-requirements.html#functional" class="nav-link iframe-link">
+                        <span class="nav-num">3.3</span> Functional Requirements
+                    </a>
+                    <a href="pages/product-requirements.html#business-rules" class="nav-link iframe-link">
+                        <span class="nav-num">3.4</span> Business Rules
+                    </a>
+                    <a href="pages/product-requirements.html#non-goals" class="nav-link iframe-link">
+                        <span class="nav-num">3.5</span> Non-Goals
+                    </a>
+                </div>
+
+                <!-- 4. System & Technical -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">4</span> System & Technical
+                    </div>
+                    <a href="pages/system-technical.html#architecture" class="nav-link iframe-link">
+                        <span class="nav-num">4.1</span> High Level Architecture
+                    </a>
+                    <a href="pages/system-technical.html#data-model" class="nav-link iframe-link">
+                        <span class="nav-num">4.2</span> Data Model & ERD
+                    </a>
+                    <a href="pages/system-technical.html#api" class="nav-link iframe-link">
+                        <span class="nav-num">4.3</span> API & Integration
+                    </a>
+                    <a href="pages/system-technical.html#security" class="nav-link iframe-link">
+                        <span class="nav-num">4.4</span> Security & Access
+                    </a>
+                </div>
+
+                <!-- 4.5 Workflow & Automation -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">4.5</span> Workflow & Automation
+                    </div>
+                    <a href="pages/workflow-b2b.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128188;</span> B2B Workflow
+                        <span class="nav-badge">AI</span>
+                    </a>
+                    <a href="pages/workflow-b2c.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128100;</span> B2C Workflow
+                        <span class="nav-badge">AI</span>
+                    </a>
+                </div>
+
+                <!-- 5. Data & Analytics -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">5</span> Data & Analytics
+                    </div>
+                    <a href="pages/data-analytics.html#metrics" class="nav-link iframe-link">
+                        <span class="nav-num">5.1</span> Metrics & KPI
+                    </a>
+                    <a href="pages/data-analytics.html#tracking" class="nav-link iframe-link">
+                        <span class="nav-num">5.2</span> Event Tracking
+                    </a>
+                    <a href="pages/data-analytics.html#reporting" class="nav-link iframe-link">
+                        <span class="nav-num">5.3</span> Data Flow & Reporting
+                    </a>
+                </div>
+
+                <!-- 6. UI/UX Overview -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        <span class="section-num">6</span> UI / UX Overview
+                    </div>
+                    <a href="pages/ui-ux-overview.html#platforms" class="nav-link iframe-link">
+                        <span class="nav-num">6.1</span> Platform & Views
+                    </a>
+                    <a href="pages/ui-ux-overview.html#navigation" class="nav-link iframe-link">
+                        <span class="nav-num">6.2</span> Navigation & Access
+                    </a>
+                </div>
+
+                <!-- Wireframes -->
+                <div class="nav-section">
+                    <div class="nav-section-title">
+                        Wireframes
+                    </div>
+                    <a href="layout/pages/customer-detail.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128100;</span> Customer Detail
+                    </a>
+                    <a href="layout/pages/customer-support.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128222;</span> Customer Support
+                    </a>
+                    <a href="layout/pages/activity-calendar.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128197;</span> Activity Calendar
+                        <span class="nav-badge new">NEW</span>
+                    </a>
+                    <a href="layout/pages/activity-calendar-mobile.html" class="nav-link iframe-link">
+                        <span class="nav-num">&#128241;</span> Activity Calendar (Mobile)
+                        <span class="nav-badge new">NEW</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>v1.0 - CDP Platform PRD</p>
+                <p>Last updated: Jan 2026</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Fixed Header -->
+            <header class="main-header">
+                <div class="header-container">
+                    <div class="header-top">
+                        <div>
+                            <h1 class="header-title">Otten Coffee - Customer Data Platform (CDP)</h1>
+                            <p class="header-subtitle">CDP + Sales CRM + Customer Service + After Sales + Marketing</p>
+                        </div>
+                        <div class="header-meta">
+                            <div>Version 1.0</div>
+                            <div>Status: Planning</div>
+                            <div>Jan 2026</div>
+                        </div>
+                    </div>
+                    <div class="header-badges">
+                        <span class="header-badge cdp">CDP - Data Foundation</span>
+                        <span class="header-badge sales">Sales CRM</span>
+                        <span class="header-badge cs">Customer Service</span>
+                        <span class="header-badge aftersales">After Sales</span>
+                        <span class="header-badge marketing">Marketing</span>
+                        <span class="header-badge">B2B + B2C</span>
+                        <span class="header-badge">AI-Powered</span>
+                    </div>
+                </div>
+            </header>
+            <iframe id="content-frame" class="content-iframe" src="pages/executive-summary.html"></iframe>
+        </main>
+    </div>
+
+    <script>
+        // Handle iframe navigation
+        document.querySelectorAll('.iframe-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const iframe = document.getElementById('content-frame');
+                iframe.src = href;
+
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close mobile sidebar
+                if (window.innerWidth <= 768) toggleSidebar();
+            });
+        });
+
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
