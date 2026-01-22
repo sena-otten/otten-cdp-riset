@@ -399,7 +399,7 @@
                                     <span class="channel email">Email</span>
                                     <span class="time">Immediate</span>
                                 </div>
-                                <div class="timeline-desc">Welcome message + 10% first order voucher + app features intro</div>
+                                <div class="timeline-desc">Welcome message + <strong>12% first order voucher</strong> + app features intro</div>
                             </div>
                         </div>
                         <div class="timeline-item">
@@ -410,7 +410,7 @@
                                     <span class="channel push">Push</span>
                                     <span class="time">Day 1</span>
                                 </div>
-                                <div class="timeline-desc">If no order: "Jangan lupa gunakan voucher 10% kamu!"</div>
+                                <div class="timeline-desc">If no order: "Jangan lupa gunakan voucher 12% kamu!"</div>
                             </div>
                         </div>
                         <div class="timeline-item">
@@ -447,6 +447,254 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace to App Conversion -->
+        <section class="section">
+            <div class="section-header" style="background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);">&#128241; Marketplace → App Conversion Strategy</div>
+            <div class="section-content">
+                <div class="info-box" style="background: #E8F5E9; border-color: #2E7D32;">
+                    <strong>&#127919; Goal:</strong> Convert marketplace customers ke internal app dengan <strong>voucher tiered system</strong> yang lebih tinggi dari campaign biasa (5-7%) tapi tetap profitable karena tidak ada platform fee 20%.
+                </div>
+
+                <!-- Tiered Voucher Structure -->
+                <div class="journey-flow" style="margin-top: 1rem;">
+                    <div class="journey-title">
+                        QR Code Voucher Structure
+                        <span class="tag" style="background: #2E7D32;">CONVERT</span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>Voucher</th>
+                                <th>Trigger</th>
+                                <th>Validity</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #E8F5E9;">
+                                <td><strong>1st Order (New User)</strong></td>
+                                <td style="color:#2E7D32; font-weight: bold;">12%</td>
+                                <td>Scan QR from MP package</td>
+                                <td>30 hari</td>
+                                <td>Higher than campaign 5-7%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2nd Order</strong></td>
+                                <td style="color:#E65100; font-weight: bold;">8%</td>
+                                <td>Auto after 1st order complete</td>
+                                <td>14 hari</td>
+                                <td>Encourage quick repeat</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3rd Order</strong></td>
+                                <td style="color:#1565C0; font-weight: bold;">5%</td>
+                                <td>Auto after 2nd order complete</td>
+                                <td>14 hari</td>
+                                <td>Transition to loyalty points</td>
+                            </tr>
+                            <tr style="background: #FFF8E1;">
+                                <td><strong>4th+ Order</strong></td>
+                                <td style="color:#6F4E37; font-weight: bold;">Loyalty Points</td>
+                                <td>Ongoing program</td>
+                                <td>-</td>
+                                <td>1.5% cashback as points</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Conversion Flow -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">
+                        Marketplace → App Conversion Journey
+                        <span class="tag" style="background: #2E7D32;">VOUCHER-FIRST</span>
+                    </div>
+                    <div class="flow-container">
+                        <div class="flow-step">
+                            <div class="flow-node trigger">
+                                <div class="flow-node-icon">&#128230;</div>
+                                <div class="flow-node-label">MP Order</div>
+                                <div class="flow-node-detail">+ QR Card</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node action">
+                                <div class="flow-node-icon">&#128241;</div>
+                                <div class="flow-node-label">Scan QR</div>
+                                <div class="flow-node-detail">Download App</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node" style="border-color: #2E7D32; background: #E8F5E9;">
+                                <div class="flow-node-icon">&#127873;</div>
+                                <div class="flow-node-label">12% Voucher</div>
+                                <div class="flow-node-detail">1st Order</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node" style="border-color: #E65100; background: #FFF3E0;">
+                                <div class="flow-node-icon">&#127873;</div>
+                                <div class="flow-node-label">8% Voucher</div>
+                                <div class="flow-node-detail">2nd Order</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node" style="border-color: #1565C0; background: #E3F2FD;">
+                                <div class="flow-node-icon">&#127873;</div>
+                                <div class="flow-node-label">5% Voucher</div>
+                                <div class="flow-node-detail">3rd Order</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">&#8594;</div>
+                        <div class="flow-step">
+                            <div class="flow-node end" style="background: #FDF8F3;">
+                                <div class="flow-node-icon">&#127942;</div>
+                                <div class="flow-node-label">Loyal</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Automation -->
+                <div class="journey-flow" style="margin-top: 1.5rem;">
+                    <div class="journey-title">Marketplace Convert Automation Sequence</div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128241; QR Code Scanned</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">User dari marketplace scan QR dan register di app</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127873; Welcome + 12% Voucher</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Immediate</span>
+                                </div>
+                                <div class="timeline-desc">"Selamat datang! Voucher 12% sudah aktif di akun kamu. Berlaku 30 hari."</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Reminder 1</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 3</span>
+                                </div>
+                                <div class="timeline-desc">"Voucher 12% menunggumu! Lebih hemat dari marketplace"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128231; Value Comparison</h4>
+                                    <span class="channel email">Email</span>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc">Email perbandingan harga: App price + voucher vs Marketplace price</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9889; Urgency Push</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 14</span>
+                                </div>
+                                <div class="timeline-desc">"Voucher 12% kamu tinggal 16 hari lagi! Gunakan sekarang"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9888; Final Warning</h4>
+                                    <span class="channel push">Push</span>
+                                    <span class="time">Day 27</span>
+                                </div>
+                                <div class="timeline-desc">"3 hari lagi voucher 12% expired! Jangan sampai hangus"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Post First Order -->
+                <div class="trigger-grid" style="margin-top: 1.5rem;">
+                    <div class="trigger-card" style="border-left-color: #2E7D32;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127881;</span>
+                            <h4>After 1st Order Complete</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_status = delivered & source = marketplace_qr</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-issue 8% voucher for 2nd order</dd>
+                            <dt>Message:</dt>
+                            <dd>"Pesanan pertama sampai! Ini voucher 8% untuk order berikutnya"</dd>
+                            <dt>Validity:</dt>
+                            <dd>14 hari</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #E65100;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128260;</span>
+                            <h4>After 2nd Order Complete</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_count = 2 & source = marketplace_qr</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-issue 5% voucher for 3rd order</dd>
+                            <dt>Message:</dt>
+                            <dd>"Order ke-2 berhasil! Voucher 5% + intro loyalty program"</dd>
+                            <dt>Transition:</dt>
+                            <dd>Start earning loyalty points</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #6F4E37;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127942;</span>
+                            <h4>After 3rd Order (Converted!)</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_count >= 3 & source = marketplace_qr</dd>
+                            <dt>Action:</dt>
+                            <dd>Mark as "Converted Loyal", remove MP tag</dd>
+                            <dt>Message:</dt>
+                            <dd>"Selamat! Kamu sekarang Otten Loyal Member"</dd>
+                            <dt>Next:</dt>
+                            <dd>Regular loyalty program (1.5% points)</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem; background: #E3F2FD; border-color: #1565C0;">
+                    <strong>&#128200; Economics:</strong> Avg voucher cost 7% + loyalty 1.5% = 8.5% total. vs Marketplace fee 20% = <strong>Save 11.5% per order</strong>. Dengan internal app margin 30% vs MP 16%, setiap customer yang convert = +Rp 336jt profit per 1000 customers/tahun.
                 </div>
             </div>
         </section>
@@ -639,19 +887,21 @@
                             <dd>no_order > 30 days</dd>
                             <dt>Condition:</dt>
                             <dd>has_previous_orders = true</dd>
+                            <dt>Approach:</dt>
+                            <dd>Differentiated by customer source</dd>
                         </dl>
                         <div class="sequence-steps">
                             <div class="sequence-step">
                                 <span class="step-num">1</span>
-                                <span>Day 30: "We miss you" email</span>
+                                <span>Day 30: Content (Loyal) / 10% voucher (MP)</span>
                             </div>
                             <div class="sequence-step">
                                 <span class="step-num">2</span>
-                                <span>Day 45: 10% comeback offer</span>
+                                <span>Day 45: Reco (Loyal) / 12% voucher (MP)</span>
                             </div>
                             <div class="sequence-step">
                                 <span class="step-num">3</span>
-                                <span>Day 60: Free shipping</span>
+                                <span>Day 60: 7% (Loyal) / Free ship + 8% (MP)</span>
                             </div>
                         </div>
                     </div>
@@ -734,6 +984,7 @@
                     <div class="journey-title">
                         Inactive Customer Win-back Journey
                         <span class="tag">RE-ENGAGEMENT</span>
+                        <span class="tag" style="background: #6F4E37; margin-left: 0.25rem;">DIFFERENTIATED</span>
                     </div>
                     <div class="timeline-flow">
                         <div class="timeline-item">
@@ -743,40 +994,49 @@
                                     <h4>&#128564; Inactive Detected</h4>
                                     <span class="time">Day 30</span>
                                 </div>
-                                <div class="timeline-desc">No orders for 30 days, customer flagged as inactive</div>
+                                <div class="timeline-desc">No orders for 30 days, check customer source tag</div>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot action"></div>
                             <div class="timeline-content">
                                 <div class="timeline-header">
-                                    <h4>&#128140; We Miss You</h4>
+                                    <h4>&#128140; First Touch</h4>
                                     <span class="channel email">Email</span>
                                     <span class="time">Day 30</span>
                                 </div>
-                                <div class="timeline-desc">"Sudah lama tidak mampir! Lihat produk baru kami"</div>
+                                <div class="timeline-desc">
+                                    <strong style="color:#6F4E37;">Loyal:</strong> "Apa kabar? Lihat produk baru" (content) |
+                                    <strong style="color:#2E7D32;">MP Convert:</strong> "Ini voucher 10% untukmu!"
+                                </div>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot action"></div>
                             <div class="timeline-content">
                                 <div class="timeline-header">
-                                    <h4>&#127873; Comeback Offer</h4>
+                                    <h4>&#127873; Second Touch</h4>
                                     <span class="channel push">Push</span>
                                     <span class="time">Day 45</span>
                                 </div>
-                                <div class="timeline-desc">"Khusus untukmu: Diskon 10% untuk pembelian berikutnya!"</div>
+                                <div class="timeline-desc">
+                                    <strong style="color:#6F4E37;">Loyal:</strong> Personalized recommendation |
+                                    <strong style="color:#2E7D32;">MP Convert:</strong> "Upgrade! Voucher 12% spesial"
+                                </div>
                             </div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-dot action"></div>
                             <div class="timeline-content">
                                 <div class="timeline-header">
-                                    <h4>&#128666; Free Shipping</h4>
+                                    <h4>&#128666; Final Offer</h4>
                                     <span class="channel email">Email</span>
                                     <span class="time">Day 60</span>
                                 </div>
-                                <div class="timeline-desc">Last chance: Free ongkir untuk semua pembelian</div>
+                                <div class="timeline-desc">
+                                    <strong style="color:#6F4E37;">Loyal:</strong> 7% voucher (if needed) |
+                                    <strong style="color:#2E7D32;">MP Convert:</strong> Free ongkir + 8% voucher
+                                </div>
                             </div>
                         </div>
                         <div class="timeline-item">
@@ -789,6 +1049,221 @@
                                 <div class="timeline-desc">If no response: mark as dormant, reduce email frequency</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Differentiated Automation: Existing Loyal vs Marketplace Convert -->
+        <section class="section">
+            <div class="section-header" style="background: linear-gradient(135deg, #6F4E37 0%, #1565C0 100%);">&#9878; Differentiated Automation: Existing Loyal vs Marketplace Convert</div>
+            <div class="section-content">
+                <div class="info-box" style="background: #FDF8F3; border-color: #6F4E37;">
+                    <strong>&#128161; Strategi:</strong> Existing Loyal Users = <strong>Content-First</strong> (sudah trust, tidak perlu banyak voucher). Marketplace Converts = <strong>Voucher-First</strong> (perlu insentif untuk switch behavior).
+                </div>
+
+                <!-- Comparison Table -->
+                <table style="margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Aspect</th>
+                            <th style="width: 40%; background: #FDF8F3;">&#127942; Existing Loyal User</th>
+                            <th style="width: 40%; background: #E8F5E9;">&#128241; Marketplace Convert</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Primary Approach</strong></td>
+                            <td style="background: #FDF8F3;"><span class="tag" style="background: #6F4E37; color: white;">Content-First</span></td>
+                            <td style="background: #E8F5E9;"><span class="tag" style="background: #2E7D32; color: white;">Voucher-First</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Welcome Message</strong></td>
+                            <td style="background: #FDF8F3;">Thank you + Loyalty points info</td>
+                            <td style="background: #E8F5E9;">Welcome + <strong>12% voucher</strong> langsung</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Day 3 Trigger</strong></td>
+                            <td style="background: #FDF8F3;">Coffee brewing tips & content</td>
+                            <td style="background: #E8F5E9;">Voucher reminder + price comparison</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Day 7 Trigger</strong></td>
+                            <td style="background: #FDF8F3;">New product recommendation</td>
+                            <td style="background: #E8F5E9;">Value comparison MP vs App</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reorder Reminder</strong></td>
+                            <td style="background: #FDF8F3;">"Waktunya restock?" + points info</td>
+                            <td style="background: #E8F5E9;">"Restock sekarang!" + voucher if available</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inactive (30 days)</strong></td>
+                            <td style="background: #FDF8F3;">Content: "Apa kabar?" + new arrivals</td>
+                            <td style="background: #E8F5E9;"><strong>10% win-back voucher</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inactive (45 days)</strong></td>
+                            <td style="background: #FDF8F3;">Personalized recommendation</td>
+                            <td style="background: #E8F5E9;"><strong>12% comeback voucher</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inactive (60 days)</strong></td>
+                            <td style="background: #FDF8F3;">7% win-back voucher (if needed)</td>
+                            <td style="background: #E8F5E9;">Free shipping + 8% voucher</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Avg Voucher Cost</strong></td>
+                            <td style="background: #FDF8F3; color: #2E7D32;"><strong>2-3% of GMV</strong></td>
+                            <td style="background: #E8F5E9; color: #E65100;"><strong>7-8% of GMV</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rationale</strong></td>
+                            <td style="background: #FDF8F3;">Already loyal, value content & experience</td>
+                            <td style="background: #E8F5E9;">Need incentive to change buying habit</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Side by Side Timeline -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                    <!-- Existing Loyal -->
+                    <div>
+                        <div class="journey-flow" style="background: #FDF8F3; border: 2px solid #6F4E37;">
+                            <div class="journey-title" style="color: #6F4E37;">
+                                &#127942; Existing Loyal - Content First
+                            </div>
+                            <div class="timeline-flow">
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #6F4E37; box-shadow: 0 0 0 2px #6F4E37;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#128218; Coffee Content</h4>
+                                            <span class="time">Day 3</span>
+                                        </div>
+                                        <div class="timeline-desc">Brewing tips, origin stories, recipes</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #6F4E37; box-shadow: 0 0 0 2px #6F4E37;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#127381; New Arrivals</h4>
+                                            <span class="time">Day 7</span>
+                                        </div>
+                                        <div class="timeline-desc">Personalized product recommendations</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #6F4E37; box-shadow: 0 0 0 2px #6F4E37;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#128176; Points Reminder</h4>
+                                            <span class="time">Day 14</span>
+                                        </div>
+                                        <div class="timeline-desc">"Kamu punya X points! Redeem untuk diskon"</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #6F4E37; box-shadow: 0 0 0 2px #6F4E37;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#128230; Reorder Smart</h4>
+                                            <span class="time">Based on pattern</span>
+                                        </div>
+                                        <div class="timeline-desc">AI-predicted restock reminder</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Marketplace Convert -->
+                    <div>
+                        <div class="journey-flow" style="background: #E8F5E9; border: 2px solid #2E7D32;">
+                            <div class="journey-title" style="color: #2E7D32;">
+                                &#128241; MP Convert - Voucher First
+                            </div>
+                            <div class="timeline-flow">
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #2E7D32; box-shadow: 0 0 0 2px #2E7D32;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#127873; Voucher Reminder</h4>
+                                            <span class="time">Day 3</span>
+                                        </div>
+                                        <div class="timeline-desc">"Voucher 12% menunggu! Hemat dari MP"</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #2E7D32; box-shadow: 0 0 0 2px #2E7D32;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#128200; Price Compare</h4>
+                                            <span class="time">Day 7</span>
+                                        </div>
+                                        <div class="timeline-desc">Side-by-side: App vs Marketplace price</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #2E7D32; box-shadow: 0 0 0 2px #2E7D32;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#9889; Urgency</h4>
+                                            <span class="time">Day 14</span>
+                                        </div>
+                                        <div class="timeline-desc">"16 hari lagi voucher expired!"</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-dot" style="background: #2E7D32; box-shadow: 0 0 0 2px #2E7D32;"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <h4>&#9888; Final Warning</h4>
+                                            <span class="time">Day 27</span>
+                                        </div>
+                                        <div class="timeline-desc">"3 hari lagi! Jangan sampai hangus"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tagging System -->
+                <div class="trigger-grid" style="margin-top: 1.5rem;">
+                    <div class="trigger-card" style="border-left-color: #6F4E37;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127991;</span>
+                            <h4>Customer Tagging System</h4>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>source = organic:</dt>
+                            <dd>Tag as "EXISTING_LOYAL"</dd>
+                            <dt>source = marketplace_qr:</dt>
+                            <dd>Tag as "MP_CONVERT"</dd>
+                            <dt>MP_CONVERT + order_count >= 3:</dt>
+                            <dd>Upgrade to "CONVERTED_LOYAL"</dd>
+                            <dt>Automation:</dt>
+                            <dd>Different workflow based on tag</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #1565C0;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128202;</span>
+                            <h4>Conversion Metrics</h4>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>QR Scan Rate:</dt>
+                            <dd>Target > 15% of MP orders</dd>
+                            <dt>1st Order Conv:</dt>
+                            <dd>Target > 60% of QR scans</dd>
+                            <dt>Full Conversion (3 orders):</dt>
+                            <dd>Target > 40% of 1st orders</dd>
+                            <dt>Avg Cost per Convert:</dt>
+                            <dd>~8% voucher + 1.5% loyalty = 9.5%</dd>
+                        </dl>
                     </div>
                 </div>
             </div>

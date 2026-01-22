@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Development Questionnaires - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --b2b: #1565C0;
+            --b2c: #E65100;
+            --support: #7B1FA2;
+            --director: #1A237E;
+            --manager: #283593;
+            --staff: #3949AB;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header-icon { font-size: 2.5rem; }
+        .page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .page-header p { opacity: 0.9; font-size: 0.9rem; }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .section-header.b2b { background: var(--b2b); }
+        .section-header.b2c { background: var(--b2c); }
+        .section-header.support { background: var(--support); }
+
+        .section-content { padding: 1.5rem; }
+
+        /* Division Header */
+        .division-header {
+            background: linear-gradient(135deg, var(--b2b) 0%, #0D47A1 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .division-header.b2c {
+            background: linear-gradient(135deg, var(--b2c) 0%, #BF360C 100%);
+        }
+
+        .division-header.support {
+            background: linear-gradient(135deg, var(--support) 0%, #4A148C 100%);
+        }
+
+        .division-header.general {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .division-header h3 { font-size: 1.1rem; }
+        .division-header p { font-size: 0.85rem; opacity: 0.9; }
+
+        /* Level Badge */
+        .level-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .level-badge.director { background: var(--director); color: white; }
+        .level-badge.manager { background: var(--manager); color: white; }
+        .level-badge.staff { background: var(--staff); color: white; }
+        .level-badge.all { background: var(--primary); color: white; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.b2b { background: #E3F2FD; color: #1565C0; }
+        .tag.b2c { background: #FFF3E0; color: #E65100; }
+        .tag.support { background: #F3E5F5; color: #7B1FA2; }
+        .tag.required { background: #FFEBEE; color: #C62828; }
+        .tag.optional { background: #F5F5F5; color: #616161; }
+
+        /* Question Group */
+        .question-group {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .question-group-header {
+            background: var(--bg-light);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .question-item:last-child { border-bottom: none; }
+
+        .question-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+        }
+
+        .question-type {
+            background: #E3F2FD;
+            color: #1565C0;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .question-note {
+            background: var(--bg-light);
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box.warning {
+            background: #FFF3E0;
+            border-left-color: var(--warning);
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toc h4 { font-size: 0.9rem; margin-bottom: 0.75rem; }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+        }
+
+        .toc-item:hover { background: white; }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .page-header { flex-direction: column; text-align: center; }
+            .badge { margin: 0.5rem 0 0 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-header-icon">&#128203;</div>
+            <div>
+                <h1>Pre-Development Questionnaires</h1>
+                <p>Requirement Gathering - SOP & Business Process Discovery</p>
+            </div>
+            <span class="badge">v1.0</span>
+        </div>
+
+        <!-- Overview -->
+        <section class="section">
+            <div class="section-header">&#128196; Overview</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Questionnaire untuk mengumpulkan requirements dari setiap divisi sebelum development CDP. Dikelompokkan berdasarkan divisi (B2B/B2C/Support) dan level organisasi.</p>
+
+                <!-- TOC -->
+                <div class="toc">
+                    <h4>Daftar Questionnaire:</h4>
+                    <div class="toc-grid">
+                        <a href="#b2b-sales" class="toc-item"><span class="tag b2b">B2B</span> Sales Division</a>
+                        <a href="#b2b-aftersales" class="toc-item"><span class="tag b2b">B2B</span> After-Sales Division</a>
+                        <a href="#b2c-marketing" class="toc-item"><span class="tag b2c">B2C</span> Marketing Division</a>
+                        <a href="#b2c-ecommerce" class="toc-item"><span class="tag b2c">B2C</span> E-Commerce Division</a>
+                        <a href="#support-cs" class="toc-item"><span class="tag support">Support</span> Customer Service</a>
+                        <a href="#general-data" class="toc-item"><span class="tag">General</span> Data & Reporting</a>
+                    </div>
+                </div>
+
+                <!-- Level Legend -->
+                <div class="info-box">
+                    <strong>&#128100; Target Respondent Level:</strong>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <span><span class="level-badge director">Director</span> Strategic decisions, KPIs, budget</span>
+                        <span><span class="level-badge manager">Manager</span> Operational process, team workflow</span>
+                        <span><span class="level-badge staff">Staff</span> Daily tasks, tools usage, pain points</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- B2B DIVISION -->
+        <!-- ============================================ -->
+
+        <div class="division-header" id="b2b">
+            <div>&#128188;</div>
+            <div>
+                <h3>B2B Division</h3>
+                <p>Sales & After-Sales Teams</p>
+            </div>
+        </div>
+
+        <!-- B2B Sales - Director Level -->
+        <section class="section" id="b2b-sales">
+            <div class="section-header b2b">&#128188; B2B Sales Division</div>
+            <div class="section-content">
+
+                <!-- Director Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge director">Director</span>
+                        Strategic & Business Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Apa target utama divisi sales untuk 1-3 tahun ke depan?</div>
+                        <div class="question-note">Contoh: revenue growth %, customer acquisition, market expansion</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>KPI apa saja yang digunakan untuk mengukur performa sales team?</div>
+                        <div class="question-note">List semua KPI beserta target dan cara pengukuran saat ini</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Apa tantangan terbesar dalam mencapai target sales saat ini?</div>
+                        <div class="question-note">Rank top 5 challenges</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Segmen customer B2B mana yang menjadi prioritas? (Cafe/Restaurant/Hotel/Office)</div>
+                        <div class="question-note">Jelaskan alasan prioritas dan potensi masing-masing segmen</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Bagaimana struktur organisasi sales saat ini? (Territory/Segment/Account-based)</div>
+                        <div class="question-note">Sertakan org chart jika ada</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Berapa budget yang dialokasikan untuk tools/technology sales per tahun?</div>
+                        <div class="question-note">Current spending dan planned investment</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Data/report apa yang paling sering Anda butuhkan untuk decision making?</div>
+                        <div class="question-note">Frequency, format, dan source data saat ini</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Apa ekspektasi utama dari sistem CRM/CDP yang akan dibangun?</div>
+                        <div class="question-note">Top 5 must-have features dari perspektif director</div>
+                    </div>
+                </div>
+
+                <!-- Manager Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Operational & Process Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Bagaimana SOP sales process saat ini? (dari lead hingga closing)</div>
+                        <div class="question-note">Jelaskan step-by-step, waktu rata-rata per step, dan bottleneck</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Berapa rata-rata sales cycle untuk masing-masing segmen?</div>
+                        <div class="question-note">Cafe: ___ hari, Restaurant: ___ hari, Hotel: ___ hari, Office: ___ hari</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Tools apa saja yang digunakan sales team saat ini?</div>
+                        <div class="question-note">List semua tools: CRM, spreadsheet, apps, dll beserta pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana proses assignment leads ke sales reps?</div>
+                        <div class="question-note">Manual/auto, criteria assignment, load balancing</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Bagaimana proses approval untuk quotation/discount/payment terms?</div>
+                        <div class="question-note">Approval matrix, threshold, turnaround time</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Report apa yang harus disiapkan tim Anda secara rutin?</div>
+                        <div class="question-note">Daily, weekly, monthly reports - content dan recipient</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Bagaimana proses monitoring performa individual sales?</div>
+                        <div class="question-note">Metrics, frequency review, coaching process</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Apa kriteria untuk qualify/disqualify sebuah lead?</div>
+                        <div class="question-note">Scoring criteria, minimum requirements</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">9</span>Bagaimana handover process dari sales ke after-sales setelah deal won?</div>
+                        <div class="question-note">Information yang di-share, timeline, responsibilities</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">10</span>Apa pain points terbesar dalam manage sales team saat ini?</div>
+                        <div class="question-note">Top 5 operational challenges</div>
+                    </div>
+                </div>
+
+                <!-- Staff Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Daily Operations & Tools Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Jelaskan aktivitas harian Anda sebagai sales rep.</div>
+                        <div class="question-note">Breakdown waktu per aktivitas (prospecting, calling, visiting, admin, dll)</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Dari mana Anda mendapatkan leads/prospects?</div>
+                        <div class="question-note">Source leads dan kualitas masing-masing source</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana Anda mencatat informasi customer dan aktivitas?</div>
+                        <div class="question-note">Tools yang digunakan, format, frequency update</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Informasi apa yang paling penting sebelum visit/call customer?</div>
+                        <div class="question-note">Data yang dibutuhkan dan source saat ini</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Berapa rata-rata visit/call per hari? Apa kendalanya?</div>
+                        <div class="question-note">Target vs actual, bottleneck</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Bagaimana proses membuat quotation saat ini?</div>
+                        <div class="question-note">Tools, template, approval time, pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Apa saja administrative tasks yang menyita waktu Anda?</div>
+                        <div class="question-note">Tasks yang seharusnya bisa di-automate</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Bagaimana Anda track follow-up dan reminder?</div>
+                        <div class="question-note">Tools/method saat ini dan efektivitasnya</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">9</span>Channel komunikasi apa yang paling efektif dengan customer B2B?</div>
+                        <div class="question-note">WA, call, email, visit - rank by effectiveness</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">10</span>Fitur apa yang paling Anda harapkan dari sistem CRM baru?</div>
+                        <div class="question-note">Top 5 wishlist dari perspektif daily user</div>
+                    </div>
+                </div>
+
+                <!-- Target & Metrics Deep-Dive: Manager -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Target Leads / Retention / Revenue - Deep Dive
+                    </div>
+
+                    <div style="background: #E3F2FD; padding: 0.75rem 1rem; border-left: 3px solid #1565C0; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#127919; LEAD TARGETS</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Berapa target jumlah leads baru per bulan untuk tim sales?</div>
+                        <div class="question-note">Total leads, breakdown per sales rep, per segment (Cafe/Restaurant/Hotel/Office)</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana definisi "qualified lead" di perusahaan?</div>
+                        <div class="question-note">Scoring criteria: budget, authority, need, timeline (BANT) atau criteria lain</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Berapa target conversion rate dari lead ke opportunity?</div>
+                        <div class="question-note">Current rate: ___%, Target rate: ___%, Per segment breakdown</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Berapa target conversion rate dari opportunity ke won deal?</div>
+                        <div class="question-note">Current win rate: ___%, Target: ___%, Per product category/segment</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Bagaimana lead distribution/assignment ke sales reps?</div>
+                        <div class="question-note">Round-robin, territory-based, skill-based, capacity-based?</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Apa lead response time target (dari inquiry masuk hingga first contact)?</div>
+                        <div class="question-note">Current avg: ___ jam, Target: ___ jam, SLA per channel</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Bagaimana tracking lead aging dan follow-up compliance?</div>
+                        <div class="question-note">Max lead age tanpa activity, escalation rules</div>
+                    </div>
+
+                    <div style="background: #E8F5E9; padding: 0.75rem 1rem; border-left: 3px solid #4CAF50; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#128274; RETENTION TARGETS</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Berapa target customer retention rate (CRR) B2B?</div>
+                        <div class="question-note">Current CRR: ___%, Target CRR: ___%, Per segment</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">9</span>Berapa acceptable churn rate per bulan/quarter?</div>
+                        <div class="question-note">Current churn: ___%, Max acceptable: ___%, Early warning threshold</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">10</span>Bagaimana definisi "at-risk customer" yang perlu intervention?</div>
+                        <div class="question-note">Triggers: order frequency drop, volume drop, complaint pattern, dll</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">11</span>Apa target untuk win-back churned customers?</div>
+                        <div class="question-note">Win-back rate target: ___%, Timeline max untuk reactivation attempt</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">12</span>Berapa target Net Promoter Score (NPS) untuk B2B?</div>
+                        <div class="question-note">Current NPS: ___, Target NPS: ___, Measurement frequency</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">13</span>Bagaimana mengukur customer health score?</div>
+                        <div class="question-note">Komponen: order recency, frequency, monetary, engagement, support tickets</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">14</span>Apa retention KPI yang menjadi tanggung jawab sales rep vs after-sales?</div>
+                        <div class="question-note">Ownership matrix: siapa responsible untuk metric apa</div>
+                    </div>
+
+                    <div style="background: #FFF3E0; padding: 0.75rem 1rem; border-left: 3px solid #FF9800; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#128176; REVENUE TARGETS</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">15</span>Berapa target revenue total tim B2B per bulan/quarter/tahun?</div>
+                        <div class="question-note">Breakdown: new customer revenue vs existing customer revenue</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">16</span>Berapa target revenue per sales rep?</div>
+                        <div class="question-note">Individual quota, tiering (junior/senior), adjustment factors</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">17</span>Berapa target average deal size per segment?</div>
+                        <div class="question-note">Cafe: Rp___, Restaurant: Rp___, Hotel: Rp___, Office: Rp___</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">18</span>Berapa target revenue dari upselling/cross-selling ke existing customers?</div>
+                        <div class="question-note">% dari total revenue, product categories untuk upsell</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">19</span>Bagaimana target revenue di-breakdown per product category?</div>
+                        <div class="question-note">Coffee beans, machines, equipment, supplies - % contribution</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">20</span>Berapa target Customer Lifetime Value (CLV) per segment?</div>
+                        <div class="question-note">Current CLV vs target, calculation method</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">21</span>Apa target recurring revenue (subscription/repeat order)?</div>
+                        <div class="question-note">% recurring vs one-time, MRR target</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">22</span>Bagaimana commission/incentive structure terkait target?</div>
+                        <div class="question-note">Base vs variable, threshold, accelerators, retention bonus</div>
+                    </div>
+                </div>
+
+                <!-- Target & Metrics Deep-Dive: Staff (Sales Rep) -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Target Leads / Retention / Revenue - Sales Rep Perspective
+                    </div>
+
+                    <div style="background: #E3F2FD; padding: 0.75rem 1rem; border-left: 3px solid #1565C0; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#127919; LEAD TARGETS - REP LEVEL</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Berapa target leads yang harus Anda prospek per minggu?</div>
+                        <div class="question-note">New leads: ___, Follow-up: ___, Visit target: ___</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Berapa target conversion dari leads yang Anda handle?</div>
+                        <div class="question-note">Lead to meeting: ___%, Meeting to proposal: ___%, Proposal to close: ___%</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana Anda menentukan prioritas leads untuk di-follow up?</div>
+                        <div class="question-note">Criteria sendiri vs sistem scoring, time-based rules</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Berapa lama maksimal lead boleh "menganggur" sebelum harus di-contact?</div>
+                        <div class="question-note">Hot lead: ___ jam, Warm lead: ___ hari, Cold lead: ___ hari</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Apa kendala terbesar dalam mencapai target lead conversion?</div>
+                        <div class="question-note">Quality leads, response time, competitive situation, pricing</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Data apa yang Anda butuhkan untuk qualify lead dengan cepat?</div>
+                        <div class="question-note">Business size, current supplier, purchase history, decision maker</div>
+                    </div>
+
+                    <div style="background: #E8F5E9; padding: 0.75rem 1rem; border-left: 3px solid #4CAF50; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#128274; RETENTION TARGETS - REP LEVEL</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Berapa customer yang Anda handle dan harus maintain?</div>
+                        <div class="question-note">Active accounts: ___, Dormant accounts: ___, Total portfolio value: ___</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Berapa minimum contact frequency dengan existing customer?</div>
+                        <div class="question-note">Top accounts: ___x/bulan, Regular: ___x/bulan, Small: ___x/quarter</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">9</span>Bagaimana Anda mendeteksi customer yang mulai "menjauh"?</div>
+                        <div class="question-note">Early warning signs yang Anda perhatikan secara manual</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">10</span>Apa yang Anda lakukan ketika customer mengurangi order?</div>
+                        <div class="question-note">SOP intervention, escalation ke manager, offering strategy</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">11</span>Apakah ada target khusus untuk customer satisfaction dari accounts Anda?</div>
+                        <div class="question-note">CSAT score, complaint rate, response satisfaction</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">12</span>Bagaimana koordinasi dengan after-sales untuk retain customer?</div>
+                        <div class="question-note">Joint visit, information sharing, escalation</div>
+                    </div>
+
+                    <div style="background: #FFF3E0; padding: 0.75rem 1rem; border-left: 3px solid #FF9800; margin: 0.5rem 1rem; font-size: 0.85rem;">
+                        <strong>&#128176; REVENUE TARGETS - REP LEVEL</strong>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">13</span>Berapa target revenue bulanan Anda?</div>
+                        <div class="question-note">Total: Rp___, New customer: Rp___, Existing customer: Rp___</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">14</span>Berapa target deal yang harus closing per bulan?</div>
+                        <div class="question-note">New deals: ___, Repeat orders: ___, Min deal size: Rp___</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">15</span>Apakah ada target upselling/cross-selling per customer?</div>
+                        <div class="question-note">Target: Rp___ atau ___% dari current spend, Product focus</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">16</span>Bagaimana target Anda di-review dan adjust?</div>
+                        <div class="question-note">Review frequency, adjustment criteria, ramp-up period</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">17</span>Apa tools/data yang membantu Anda track progress ke target?</div>
+                        <div class="question-note">Dashboard, report, manual tracking - gaps yang ada</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">18</span>Hambatan terbesar dalam mencapai revenue target?</div>
+                        <div class="question-note">Pricing flexibility, product availability, competitive pressure, dll</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">19</span>Bagaimana struktur insentif mempengaruhi prioritas kerja Anda?</div>
+                        <div class="question-note">Focus new vs existing, product prioritization, timing</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">20</span>Data real-time apa yang paling membantu untuk chase target?</div>
+                        <div class="question-note">Pipeline status, customer order patterns, competitive deals</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B After-Sales -->
+        <section class="section" id="b2b-aftersales">
+            <div class="section-header b2b">&#128736; B2B After-Sales Division</div>
+            <div class="section-content">
+
+                <!-- Director Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge director">Director</span>
+                        Strategic & Business Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Apa target utama divisi after-sales? (retention, satisfaction, revenue)</div>
+                        <div class="question-note">KPIs dan target untuk 1-3 tahun ke depan</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Berapa kontribusi revenue dari after-sales services?</div>
+                        <div class="question-note">Maintenance contracts, spare parts, training, etc.</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Apa strategi untuk meningkatkan customer retention B2B?</div>
+                        <div class="question-note">Current initiatives dan planned programs</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana struktur tim after-sales saat ini?</div>
+                        <div class="question-note">Org chart, coverage area, specialization</div>
+                    </div>
+                </div>
+
+                <!-- Manager Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Operational & Process Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Bagaimana SOP untuk service request handling?</div>
+                        <div class="question-note">Dari request masuk hingga resolution, SLA per stage</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana scheduling untuk maintenance visits?</div>
+                        <div class="question-note">Tools, algorithm assignment, optimization</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana proses warranty claim handling?</div>
+                        <div class="question-note">Workflow, approval, tracking</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana manage inventory spare parts?</div>
+                        <div class="question-note">Tracking, reorder point, integration dengan warehouse</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Bagaimana track machine/equipment yang sudah terjual?</div>
+                        <div class="question-note">Registry, service history, lifecycle management</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Report apa yang dibutuhkan untuk monitor performa service?</div>
+                        <div class="question-note">Metrics, frequency, current tools</div>
+                    </div>
+                </div>
+
+                <!-- Staff Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Daily Operations & Tools Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Jelaskan flow pekerjaan harian sebagai teknisi/support.</div>
+                        <div class="question-note">Dari terima assignment hingga closing job</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Informasi apa yang Anda butuhkan sebelum visit customer?</div>
+                        <div class="question-note">Machine info, history, contact, location</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana Anda report hasil service visit?</div>
+                        <div class="question-note">Form, tools, time required, follow-up process</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Apa kendala terbesar dalam daily operations?</div>
+                        <div class="question-note">Top 5 pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Fitur mobile app apa yang paling dibutuhkan di lapangan?</div>
+                        <div class="question-note">Wishlist untuk field service app</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- B2C DIVISION -->
+        <!-- ============================================ -->
+
+        <div class="division-header b2c" id="b2c">
+            <div>&#128722;</div>
+            <div>
+                <h3>B2C Division</h3>
+                <p>Marketing & E-Commerce Teams</p>
+            </div>
+        </div>
+
+        <!-- B2C Marketing -->
+        <section class="section" id="b2c-marketing">
+            <div class="section-header b2c">&#128226; B2C Marketing Division</div>
+            <div class="section-content">
+
+                <!-- Director Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge director">Director</span>
+                        Strategic & Business Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Apa target utama marketing untuk 1-3 tahun ke depan?</div>
+                        <div class="question-note">Brand awareness, customer acquisition, engagement metrics</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana budget allocation untuk marketing channels?</div>
+                        <div class="question-note">Digital, offline, events - current dan planned</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Apa customer segments yang menjadi focus B2C?</div>
+                        <div class="question-note">Demographics, psychographics, behavior segments</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Data customer apa yang paling valuable untuk marketing?</div>
+                        <div class="question-note">Current data gaps dan ideal customer profile</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Apa ekspektasi dari marketing automation?</div>
+                        <div class="question-note">Use cases, expected ROI, priority campaigns</div>
+                    </div>
+                </div>
+
+                <!-- Manager Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Operational & Process Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Bagaimana proses campaign planning dan execution saat ini?</div>
+                        <div class="question-note">Workflow, approval, timeline, tools</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Channels marketing apa saja yang digunakan?</div>
+                        <div class="question-note">Email, SMS, push, social, paid ads - performance masing-masing</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana proses segmentasi customer saat ini?</div>
+                        <div class="question-note">Criteria, tools, frequency update</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Automation journeys apa yang ingin diimplementasi?</div>
+                        <div class="question-note">Welcome, cart abandonment, reactivation, etc.</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Bagaimana measure campaign effectiveness?</div>
+                        <div class="question-note">Metrics, attribution model, reporting tools</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Bagaimana koordinasi dengan tim e-commerce?</div>
+                        <div class="question-note">Handoff process, shared data, collaboration points</div>
+                    </div>
+                </div>
+
+                <!-- Staff Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Daily Operations & Tools Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Tools apa saja yang digunakan untuk marketing operations?</div>
+                        <div class="question-note">Email tools, social media tools, analytics, dll</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana proses membuat dan mengirim campaign?</div>
+                        <div class="question-note">Step by step, time required, pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana manage content/creative assets?</div>
+                        <div class="question-note">Storage, versioning, approval workflow</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Data apa yang sulit didapatkan untuk campaign targeting?</div>
+                        <div class="question-note">Data gaps dan workarounds saat ini</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Fitur automation apa yang paling dibutuhkan?</div>
+                        <div class="question-note">Top 5 wishlist</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2C E-Commerce -->
+        <section class="section" id="b2c-ecommerce">
+            <div class="section-header b2c">&#128722; B2C E-Commerce Division</div>
+            <div class="section-content">
+
+                <!-- Director Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge director">Director</span>
+                        Strategic & Business Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Apa target GMV dan growth untuk e-commerce?</div>
+                        <div class="question-note">Current performance dan targets 1-3 tahun</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Platform e-commerce apa saja yang digunakan?</div>
+                        <div class="question-note">Website, marketplace (Tokopedia, Shopee), B2B app</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Apa strategi untuk customer retention di e-commerce?</div>
+                        <div class="question-note">Loyalty program, repeat purchase initiatives</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana integrasi data antar platforms?</div>
+                        <div class="question-note">Current state dan pain points</div>
+                    </div>
+                </div>
+
+                <!-- Manager Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Operational & Process Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Bagaimana SOP order fulfillment?</div>
+                        <div class="question-note">Dari order masuk hingga delivered, SLA per stage</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana handle returns dan complaints?</div>
+                        <div class="question-note">Process, SLA, escalation</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana manage inventory across channels?</div>
+                        <div class="question-note">Sync mechanism, stock allocation</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana track customer behavior di website/app?</div>
+                        <div class="question-note">Analytics tools, events tracked</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Report e-commerce apa yang dibutuhkan?</div>
+                        <div class="question-note">Metrics, frequency, current gaps</div>
+                    </div>
+                </div>
+
+                <!-- Staff Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Daily Operations & Tools Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Tools apa yang digunakan untuk manage orders?</div>
+                        <div class="question-note">OMS, dashboard marketplace, dll</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana process update product catalog?</div>
+                        <div class="question-note">Tools, workflow, pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Apa bottleneck terbesar dalam daily operations?</div>
+                        <div class="question-note">Top 5 pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Fitur apa yang diharapkan dari sistem baru?</div>
+                        <div class="question-note">Wishlist untuk improve daily work</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SUPPORT DIVISION -->
+        <!-- ============================================ -->
+
+        <div class="division-header support" id="support">
+            <div>&#128222;</div>
+            <div>
+                <h3>Support Division</h3>
+                <p>Customer Service Team</p>
+            </div>
+        </div>
+
+        <!-- Customer Service -->
+        <section class="section" id="support-cs">
+            <div class="section-header support">&#128222; Customer Service Division</div>
+            <div class="section-content">
+
+                <!-- Director Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge director">Director</span>
+                        Strategic & Business Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Apa target utama customer service? (CSAT, response time, resolution rate)</div>
+                        <div class="question-note">Current performance dan targets</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana CS support both B2B dan B2C?</div>
+                        <div class="question-note">Team structure, differentiation, prioritization</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Channels support apa saja yang digunakan?</div>
+                        <div class="question-note">Phone, WA, email, social - volume per channel</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Apa strategi untuk improve customer experience?</div>
+                        <div class="question-note">Planned initiatives, automation, self-service</div>
+                    </div>
+                </div>
+
+                <!-- Manager Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge manager">Manager</span>
+                        Operational & Process Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Bagaimana SOP handling inquiry/complaint?</div>
+                        <div class="question-note">Workflow per category, SLA, escalation matrix</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Kategori inquiry/complaint apa yang paling sering?</div>
+                        <div class="question-note">Top 10 categories dengan volume</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Bagaimana routing/assignment tiket ke agent?</div>
+                        <div class="question-note">Rules, skill-based routing, load balancing</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Bagaimana koordinasi dengan divisi lain untuk resolution?</div>
+                        <div class="question-note">Handoff ke sales, after-sales, warehouse</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Tools apa yang digunakan untuk CS operations?</div>
+                        <div class="question-note">Ticketing, messaging, knowledge base</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Bagaimana measure agent performance?</div>
+                        <div class="question-note">Metrics, QA process, coaching</div>
+                    </div>
+                </div>
+
+                <!-- Staff Level -->
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge staff">Staff</span>
+                        Daily Operations & Tools Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>Jelaskan flow pekerjaan harian sebagai CS agent.</div>
+                        <div class="question-note">Dari login hingga end of shift</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Berapa rata-rata handle time per interaction?</div>
+                        <div class="question-note">Per channel: call ___ min, chat ___ min</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Informasi customer apa yang dibutuhkan untuk handle inquiry?</div>
+                        <div class="question-note">Data yang sering dicari dan source-nya</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Apa kendala terbesar dalam handle customer?</div>
+                        <div class="question-note">Top 5 pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Fitur apa yang paling dibutuhkan untuk improve productivity?</div>
+                        <div class="question-note">Wishlist: quick reply, customer history, dll</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- GENERAL / CROSS-DIVISION -->
+        <!-- ============================================ -->
+
+        <div class="division-header general" id="general">
+            <div>&#128202;</div>
+            <div>
+                <h3>General / Cross-Division</h3>
+                <p>Data, Reporting & Integration</p>
+            </div>
+        </div>
+
+        <!-- Data & Reporting -->
+        <section class="section" id="general-data">
+            <div class="section-header">&#128202; Data & Reporting Requirements</div>
+            <div class="section-content">
+
+                <div class="question-group">
+                    <div class="question-group-header">
+                        <span class="level-badge all">All Levels</span>
+                        Data & Integration Questions
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">1</span>System/aplikasi apa saja yang saat ini menyimpan data customer?</div>
+                        <div class="question-note">List semua systems, data yang disimpan, ownership</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">2</span>Bagaimana data di-share antar divisi saat ini?</div>
+                        <div class="question-note">Manual/automated, format, frequency, pain points</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">3</span>Report standard apa yang dibutuhkan per divisi?</div>
+                        <div class="question-note">List reports dengan frequency dan recipients</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">4</span>Dashboard metrics apa yang dibutuhkan untuk daily monitoring?</div>
+                        <div class="question-note">Per role: director, manager, staff</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">5</span>Apa definisi "single customer view" yang diharapkan?</div>
+                        <div class="question-note">Data points yang harus visible dalam 1 screen</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">6</span>Bagaimana handle data privacy dan consent?</div>
+                        <div class="question-note">Current policy, compliance requirements</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">7</span>Integration apa yang critical untuk fase pertama?</div>
+                        <div class="question-note">Prioritized list: ERP, e-commerce, messaging, etc.</div>
+                    </div>
+
+                    <div class="question-item">
+                        <div class="question-text"><span class="question-number">8</span>Apa expectation untuk data freshness/real-time?</div>
+                        <div class="question-note">Per data type: real-time, hourly, daily</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="section">
+            <div class="section-header">&#9989; Summary & Next Steps</div>
+            <div class="section-content">
+                <div class="info-box warning">
+                    <strong>&#128197; Recommended Interview Schedule:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Week 1:</strong> Director-level interviews (all divisions) - 1 hour each</li>
+                        <li><strong>Week 2:</strong> Manager-level interviews (all divisions) - 1.5 hours each</li>
+                        <li><strong>Week 3:</strong> Staff-level focus groups (per division) - 2 hours each</li>
+                        <li><strong>Week 4:</strong> Cross-division workshop (data & integration) - 3 hours</li>
+                    </ul>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Division</th>
+                            <th>Director</th>
+                            <th>Manager</th>
+                            <th>Staff</th>
+                            <th>Total Questions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag b2b">B2B</span> Sales</td>
+                            <td>8</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 2rem; font-style: italic; color: var(--text-muted);">↳ Target Deep-Dive (Leads/Retention/Revenue)</td>
+                            <td>-</td>
+                            <td>+22</td>
+                            <td>+20</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag b2b">B2B</span> After-Sales</td>
+                            <td>4</td>
+                            <td>6</td>
+                            <td>5</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag b2c">B2C</span> Marketing</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>5</td>
+                            <td>16</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag b2c">B2C</span> E-Commerce</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>4</td>
+                            <td>13</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag support">Support</span> CS</td>
+                            <td>4</td>
+                            <td>6</td>
+                            <td>5</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>General (Data)</td>
+                            <td colspan="3">All levels</td>
+                            <td>8</td>
+                        </tr>
+                        <tr style="font-weight: bold; background: var(--bg-light);">
+                            <td>Total</td>
+                            <td>25</td>
+                            <td>55</td>
+                            <td>49</td>
+                            <td>137</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

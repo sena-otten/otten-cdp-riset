@@ -1,0 +1,3302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Strategy - CRM Otten Coffee</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --b2b: #1565C0;
+            --b2c: #E65100;
+            --marketing: #7B1FA2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--marketing) 0%, #4A148C 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-header-icon { font-size: 2.5rem; }
+        .page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .page-header p { opacity: 0.9; font-size: 0.9rem; }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: auto;
+        }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--marketing);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .section-header.b2b { background: var(--b2b); }
+        .section-header.b2c { background: var(--b2c); }
+
+        .section-content { padding: 1.5rem; }
+
+        /* Division Header */
+        .division-header {
+            background: linear-gradient(135deg, var(--b2b) 0%, #0D47A1 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .division-header.b2c {
+            background: linear-gradient(135deg, var(--b2c) 0%, #BF360C 100%);
+        }
+
+        .division-header h3 { font-size: 1.1rem; }
+        .division-header p { font-size: 0.85rem; opacity: 0.9; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.b2b { background: #E3F2FD; color: #1565C0; }
+        .tag.b2c { background: #FFF3E0; color: #E65100; }
+        .tag.high { background: #FFEBEE; color: #C62828; }
+        .tag.medium { background: #FFF3E0; color: #E65100; }
+        .tag.low { background: #E8F5E9; color: #2E7D32; }
+        .tag.automation { background: #F3E5F5; color: #7B1FA2; }
+
+        /* Strategy Card */
+        .strategy-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .strategy-card-header {
+            background: var(--bg-light);
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strategy-card-content {
+            padding: 1rem;
+        }
+
+        /* Campaign Flow */
+        .campaign-flow {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .flow-step.trigger { border-color: var(--warning); background: #FFF8E1; }
+        .flow-step.action { border-color: var(--success); background: #E8F5E9; }
+        .flow-step.wait { border-color: var(--info); background: #E3F2FD; }
+        .flow-step.condition { border-color: var(--marketing); background: #F3E5F5; }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box.warning {
+            background: #FFF3E0;
+            border-left-color: var(--warning);
+        }
+
+        .info-box.success {
+            background: #E8F5E9;
+            border-left-color: var(--success);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Channel Badge */
+        .channel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin: 0.1rem;
+        }
+
+        .channel-badge.email { background: #E3F2FD; color: #1565C0; }
+        .channel-badge.whatsapp { background: #E8F5E9; color: #2E7D32; }
+        .channel-badge.sms { background: #FFF3E0; color: #E65100; }
+        .channel-badge.push { background: #F3E5F5; color: #7B1FA2; }
+        .channel-badge.social { background: #FCE4EC; color: #C2185B; }
+
+        /* TOC */
+        .toc {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toc h4 { font-size: 0.9rem; margin-bottom: 0.75rem; }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+        }
+
+        .toc-item:hover { background: white; }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .page-header { flex-direction: column; text-align: center; }
+            .badge { margin: 0.5rem 0 0 0; }
+            .flow-steps { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-header-icon">&#128226;</div>
+            <div>
+                <h1>Marketing Strategy</h1>
+                <p>B2B & B2C Marketing Automation & Campaign Strategy</p>
+            </div>
+            <span class="badge">v1.0</span>
+        </div>
+
+        <!-- Overview -->
+        <section class="section">
+            <div class="section-header">&#128196; Overview</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Dokumen strategi marketing untuk B2B dan B2C, mencakup campaign types, automation flows, channel strategy, dan metrics.</p>
+
+                <!-- TOC -->
+                <div class="toc">
+                    <h4>Daftar Isi:</h4>
+                    <div class="toc-grid">
+                        <a href="#b2b-strategy" class="toc-item"><span class="tag b2b">B2B</span> Account-Based Marketing</a>
+                        <a href="#b2b-nurturing" class="toc-item"><span class="tag b2b">B2B</span> Lead Nurturing</a>
+                        <a href="#b2b-referral" class="toc-item"><span class="tag b2b">B2B</span> Referral Program</a>
+                        <a href="#b2c-acquisition" class="toc-item"><span class="tag b2c">B2C</span> Customer Acquisition</a>
+                        <a href="#b2c-retention" class="toc-item"><span class="tag b2c">B2C</span> Retention & Loyalty</a>
+                        <a href="#b2c-seasonal" class="toc-item"><span class="tag b2c">B2C</span> Seasonal Campaigns</a>
+                        <a href="#marketplace-conversion" class="toc-item"><span class="tag" style="background:#E8F5E9;color:#2E7D32;">Strategy</span> Marketplace → App</a>
+                        <a href="#head-to-head" class="toc-item"><span class="tag high">NEW</span> Cost & Margin Comparison</a>
+                    </div>
+                </div>
+
+                <!-- Channel Overview -->
+                <div class="info-box">
+                    <strong>&#128233; Marketing Channels:</strong>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <span class="channel-badge email">&#9993; Email</span>
+                        <span class="channel-badge whatsapp">&#128172; WhatsApp</span>
+                        <span class="channel-badge sms">&#128241; SMS</span>
+                        <span class="channel-badge push">&#128276; Push Notification</span>
+                        <span class="channel-badge social">&#128247; Social Media</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- B2B MARKETING STRATEGY -->
+        <!-- ============================================ -->
+
+        <div class="division-header" id="b2b-strategy">
+            <div>&#128188;</div>
+            <div>
+                <h3>B2B Marketing Strategy</h3>
+                <p>Account-Based Marketing, Lead Nurturing, Referral</p>
+            </div>
+        </div>
+
+        <!-- B2B: Account-Based Marketing -->
+        <section class="section">
+            <div class="section-header b2b">&#127919; Account-Based Marketing (ABM)</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Strategi marketing yang fokus pada target accounts dengan personalized campaigns berdasarkan segmen dan potential value.</p>
+
+                <!-- Target Account Tiers -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127942; Target Account Tiers</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Kriteria</th>
+                                    <th>Potential Value</th>
+                                    <th>Approach</th>
+                                    <th>Channels</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tag high">Tier 1</span></td>
+                                    <td>Hotel chain, Large F&B group, Enterprise office</td>
+                                    <td>> Rp 500jt/tahun</td>
+                                    <td>1-to-1 personalized, dedicated sales</td>
+                                    <td>Visit, Email, WA Personal</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag medium">Tier 2</span></td>
+                                    <td>Restaurant chain, Medium hotel, Coworking</td>
+                                    <td>Rp 100-500jt/tahun</td>
+                                    <td>1-to-few, industry personalization</td>
+                                    <td>Email, WA, Webinar</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag low">Tier 3</span></td>
+                                    <td>Single cafe, Small restaurant, Small office</td>
+                                    <td>< Rp 100jt/tahun</td>
+                                    <td>1-to-many, automated nurturing</td>
+                                    <td>Email, WA Broadcast</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ABM Campaign Types -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128640; ABM Campaign Types</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Campaign</th>
+                                    <th>Target</th>
+                                    <th>Content</th>
+                                    <th>Goal</th>
+                                    <th>Frequency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Industry Spotlight</strong></td>
+                                    <td>By segment (Hotel/Cafe/Restaurant)</td>
+                                    <td>Case study, ROI calculator, industry trends</td>
+                                    <td>Brand awareness, lead generation</td>
+                                    <td>Monthly</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Product Launch</strong></td>
+                                    <td>All B2B prospects</td>
+                                    <td>New machine, new blend, new service</td>
+                                    <td>Product adoption, upselling</td>
+                                    <td>Per launch</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Executive Briefing</strong></td>
+                                    <td>Tier 1 decision makers</td>
+                                    <td>Market insights, exclusive preview</td>
+                                    <td>Relationship building</td>
+                                    <td>Quarterly</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Training & Certification</strong></td>
+                                    <td>All B2B customers</td>
+                                    <td>Barista training, machine operation</td>
+                                    <td>Customer success, retention</td>
+                                    <td>Monthly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Personalization Matrix -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127922; Personalization Matrix</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Segment</th>
+                                    <th>Pain Points</th>
+                                    <th>Key Messages</th>
+                                    <th>Recommended Products</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Hotel & Resort</strong></td>
+                                    <td>Consistency, volume, 24/7 availability</td>
+                                    <td>"Premium guest experience", "Reliable supply"</td>
+                                    <td>Super-automatic machines, premium blends</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cafe & Coffee Shop</strong></td>
+                                    <td>Quality, uniqueness, barista skills</td>
+                                    <td>"Stand out from competition", "Specialty coffee"</td>
+                                    <td>Espresso machines, single origin beans</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Restaurant & F&B</strong></td>
+                                    <td>Cost efficiency, ease of use</td>
+                                    <td>"Profit per cup", "Easy operation"</td>
+                                    <td>Bean-to-cup, house blend</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Office & Corporate</strong></td>
+                                    <td>Employee satisfaction, minimal maintenance</td>
+                                    <td>"Happy employees", "Zero hassle"</td>
+                                    <td>Rental machines, maintenance package</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B: Lead Nurturing -->
+        <section class="section" id="b2b-nurturing">
+            <div class="section-header b2b">&#127793; Lead Nurturing Automation</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated email/WA sequences untuk nurture leads dari awareness hingga sales-ready.</p>
+
+                <!-- Nurturing Stages -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128200; Nurturing Stage & Content</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Stage</th>
+                                    <th>Lead Status</th>
+                                    <th>Content Type</th>
+                                    <th>CTA</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tag">Awareness</span></td>
+                                    <td>New lead, cold</td>
+                                    <td>Educational content, industry trends, tips</td>
+                                    <td>Download guide, read blog</td>
+                                    <td>Week 1-2</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag">Interest</span></td>
+                                    <td>Engaged, opened emails</td>
+                                    <td>Case studies, product overview, ROI stories</td>
+                                    <td>Watch demo, attend webinar</td>
+                                    <td>Week 3-4</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag">Consideration</span></td>
+                                    <td>Requested info, attended webinar</td>
+                                    <td>Product comparison, pricing guide, testimonials</td>
+                                    <td>Request quote, schedule call</td>
+                                    <td>Week 5-6</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag">Decision</span></td>
+                                    <td>Requested quote, hot lead</td>
+                                    <td>Special offers, free trial, consultation</td>
+                                    <td>Schedule visit, start trial</td>
+                                    <td>Week 7-8</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lead Nurturing Flow -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9889; Automation Flow: New Lead Nurturing</div>
+                    <div class="strategy-card-content">
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; New Lead</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Welcome Email</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 3 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Opened?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: var(--success); font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#9993; Case Study Email</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 5 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: Invite Demo</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: var(--danger); font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#9993; Re-engage Email</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 7 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Still inactive?</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128203; Add to re-nurture list</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lead Scoring -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127919; Lead Scoring Model</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Points</th>
+                                    <th>Decay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Form submission (contact us)</td><td>+30</td><td>-5/month</td></tr>
+                                <tr><td>Request quotation</td><td>+50</td><td>-10/month</td></tr>
+                                <tr><td>Attend webinar</td><td>+25</td><td>-5/month</td></tr>
+                                <tr><td>Download content</td><td>+15</td><td>-3/month</td></tr>
+                                <tr><td>Email opened</td><td>+5</td><td>-1/month</td></tr>
+                                <tr><td>Email clicked</td><td>+10</td><td>-2/month</td></tr>
+                                <tr><td>Website visit (product page)</td><td>+10</td><td>-2/month</td></tr>
+                                <tr><td>Website visit (pricing page)</td><td>+20</td><td>-5/month</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box" style="margin-top: 1rem;">
+                            <strong>Score Threshold:</strong>
+                            &#128308; Cold (0-30) |
+                            &#128992; Warm (31-60) |
+                            &#128994; Hot (61-80) |
+                            &#128293; Sales-Ready (81+)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B: Referral Program -->
+        <section class="section" id="b2b-referral">
+            <div class="section-header b2b">&#129309; B2B Referral Program</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Program referral untuk existing customers untuk merekomendasikan Otten ke network mereka.</p>
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127873; Referral Reward Structure</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Referred Customer Value</th>
+                                    <th>Referrer Reward</th>
+                                    <th>New Customer Bonus</th>
+                                    <th>Conditions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>< Rp 50jt (first order)</td>
+                                    <td>5% credit atau free beans 2kg</td>
+                                    <td>10% discount first order</td>
+                                    <td>After payment completed</td>
+                                </tr>
+                                <tr>
+                                    <td>Rp 50-200jt</td>
+                                    <td>7% credit atau free machine service</td>
+                                    <td>12% discount + free training</td>
+                                    <td>After payment completed</td>
+                                </tr>
+                                <tr>
+                                    <td>> Rp 200jt</td>
+                                    <td>10% credit atau premium gift</td>
+                                    <td>15% discount + free installation</td>
+                                    <td>After payment completed</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Referral Automation -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9889; Referral Campaign Automation</div>
+                    <div class="strategy-card-content">
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; Customer 3 months active</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; NPS >= 8?</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Referral Invite Email</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 7 days</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="font-size: 0.8rem;">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Referred someone?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 4rem;">
+                                <span style="color: var(--success); font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#9993; Thank You + Tracking Link</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128176; Process Reward (when converted)</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 4rem;">
+                                <span style="color: var(--danger); font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#128172; WA Reminder</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 30 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Limited Time Bonus Offer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2B: Event & Trade Show -->
+        <section class="section">
+            <div class="section-header b2b">&#127914; Event & Trade Show Marketing</div>
+            <div class="section-content">
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128197; Annual Event Calendar - B2B</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Timing</th>
+                                    <th>Target Audience</th>
+                                    <th>Activities</th>
+                                    <th>Follow-up</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Food & Hotel Indonesia</strong></td>
+                                    <td>Q2 (Apr/May)</td>
+                                    <td>Hotels, Restaurants, Cafes</td>
+                                    <td>Booth, demo, exclusive deals</td>
+                                    <td>Lead capture &#8594; nurture sequence</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SIAL Interfood</strong></td>
+                                    <td>Q4 (Nov)</td>
+                                    <td>F&B industry professionals</td>
+                                    <td>Product showcase, tasting</td>
+                                    <td>Lead capture &#8594; Q1 follow-up</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Indonesia Coffee Events</strong></td>
+                                    <td>Q3 (Aug/Sep)</td>
+                                    <td>Coffee enthusiasts, cafe owners</td>
+                                    <td>Cupping session, barista workshop</td>
+                                    <td>Community building &#8594; conversion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Otten Coffee Roadshow</strong></td>
+                                    <td>Monthly (rotating cities)</td>
+                                    <td>Local businesses per region</td>
+                                    <td>Product demo, local partnership</td>
+                                    <td>Regional sales follow-up</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pre/Post Event Flow -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9889; Event Marketing Automation</div>
+                    <div class="strategy-card-content">
+                        <p style="font-size: 0.85rem; margin-bottom: 1rem;"><strong>Pre-Event (T-30 to T-0):</strong></p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step action">&#9993; Save the Date (T-30)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Event Details (T-14)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA Reminder (T-3)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128241; SMS Day-of (T-0)</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.85rem; margin: 1rem 0;"><strong>Post-Event (T+1 to T+30):</strong></p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step action">&#9993; Thank You + Content (T+1)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA Personal Follow-up (T+3)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Special Offer (T+7)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128222; Sales Call (T+14)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- B2C MARKETING STRATEGY -->
+        <!-- ============================================ -->
+
+        <div class="division-header b2c" id="b2c-acquisition">
+            <div>&#128722;</div>
+            <div>
+                <h3>B2C Marketing Strategy</h3>
+                <p>Customer Acquisition, Retention, Loyalty & Seasonal Campaigns</p>
+            </div>
+        </div>
+
+        <!-- B2C: Customer Acquisition -->
+        <section class="section">
+            <div class="section-header b2c">&#127919; Customer Acquisition Strategy</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Strategi akuisisi customer baru melalui berbagai channels dan campaigns.</p>
+
+                <!-- Acquisition Channels -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128202; Acquisition Channels & Budget Allocation</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Channel</th>
+                                    <th>Budget %</th>
+                                    <th>Target CAC</th>
+                                    <th>Expected Conv. Rate</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Meta Ads (FB/IG)</strong></td>
+                                    <td>35%</td>
+                                    <td>Rp 35.000</td>
+                                    <td>2.5%</td>
+                                    <td>Awareness, retargeting</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Google Ads (Search)</strong></td>
+                                    <td>25%</td>
+                                    <td>Rp 45.000</td>
+                                    <td>4%</td>
+                                    <td>High-intent buyers</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Google Ads (Shopping)</strong></td>
+                                    <td>15%</td>
+                                    <td>Rp 30.000</td>
+                                    <td>3.5%</td>
+                                    <td>Product discovery</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Influencer/KOL</strong></td>
+                                    <td>15%</td>
+                                    <td>Rp 50.000</td>
+                                    <td>1.5%</td>
+                                    <td>Brand awareness, trust</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Affiliate Program</strong></td>
+                                    <td>10%</td>
+                                    <td>Rp 40.000</td>
+                                    <td>3%</td>
+                                    <td>Performance-based</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- New Customer Journey -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128100; New Customer Welcome Journey</div>
+                    <div class="strategy-card-content">
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; First Purchase</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Welcome Email + Guide</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 3 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: How was your coffee?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 7 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Product Recommendations</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 14 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; 2nd Purchase Offer (10% off)</div>
+                            </div>
+                        </div>
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#127919; Goal:</strong> Convert 1st-time buyer to 2nd purchase within 30 days. Target: 25% conversion rate.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart Abandonment -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128722; Cart Abandonment Recovery</div>
+                    <div class="strategy-card-content">
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; Cart Abandoned (> 1 hour)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Reminder Email (no discount)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 24 hours</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Purchased?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: var(--danger); font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#128172; WA: Items waiting</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 48 hours</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; 5% Discount Offer</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: var(--danger); font-size: 0.8rem;">Still No &#8594;</span>
+                                <div class="flow-step wait">&#8987; Wait 72 hours</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Final: 10% + Free Shipping</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128203; Exit sequence</div>
+                            </div>
+                        </div>
+                        <div class="info-box warning" style="margin-top: 1rem;">
+                            <strong>&#9888; Rules:</strong> Max 1 cart abandonment sequence per customer per 7 days. Exclude customers who already have active orders.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2C: Retention & Loyalty -->
+        <section class="section" id="b2c-retention">
+            <div class="section-header b2c">&#128081; Retention & Loyalty Program</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Program untuk meningkatkan repeat purchase dan customer lifetime value.</p>
+
+                <!-- Loyalty Tiers -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127942; Otten Coffee Loyalty Tiers</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Requirement</th>
+                                    <th>Points Multiplier</th>
+                                    <th>Benefits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tag" style="background: #CD7F32; color: white;">Bronze</span></td>
+                                    <td>Sign up</td>
+                                    <td>1x</td>
+                                    <td>Earn points, birthday reward</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #C0C0C0; color: #333;">Silver</span></td>
+                                    <td>Spend Rp 500K lifetime</td>
+                                    <td>1.25x</td>
+                                    <td>+ Free shipping 1x/month, early access</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #FFD700; color: #333;">Gold</span></td>
+                                    <td>Spend Rp 2jt lifetime</td>
+                                    <td>1.5x</td>
+                                    <td>+ Exclusive products, priority CS</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #1a1a1a; color: white;">Platinum</span></td>
+                                    <td>Spend Rp 5jt lifetime</td>
+                                    <td>2x</td>
+                                    <td>+ Free shipping always, VIP events, personal advisor</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box" style="margin-top: 1rem;">
+                            <strong>&#128176; Points System:</strong> Rp 10.000 = 1 point. Redeem: 100 points = Rp 10.000 discount.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Replenishment Campaign -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9889; Replenishment Reminder Automation</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product Category</th>
+                                    <th>Avg. Consumption</th>
+                                    <th>Reminder Timing</th>
+                                    <th>Channel</th>
+                                    <th>Offer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Coffee Beans (250g)</td>
+                                    <td>14-21 days</td>
+                                    <td>Day 12</td>
+                                    <td>Email + WA</td>
+                                    <td>5% off same product</td>
+                                </tr>
+                                <tr>
+                                    <td>Coffee Beans (1kg)</td>
+                                    <td>30-45 days</td>
+                                    <td>Day 25</td>
+                                    <td>Email + WA</td>
+                                    <td>Free shipping</td>
+                                </tr>
+                                <tr>
+                                    <td>Capsules (10 pcs)</td>
+                                    <td>10-14 days</td>
+                                    <td>Day 8</td>
+                                    <td>Push + WA</td>
+                                    <td>Bundle discount</td>
+                                </tr>
+                                <tr>
+                                    <td>Drip Coffee (10 pcs)</td>
+                                    <td>14-21 days</td>
+                                    <td>Day 12</td>
+                                    <td>Email</td>
+                                    <td>Try new flavor</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Win-back Campaign -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128148; Win-back Campaign (Churned Customers)</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Inactive Period</th>
+                                    <th>Segment</th>
+                                    <th>Message</th>
+                                    <th>Offer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>30-60 days</td>
+                                    <td>At-risk</td>
+                                    <td>"We miss you!"</td>
+                                    <td>10% off next order</td>
+                                </tr>
+                                <tr>
+                                    <td>60-90 days</td>
+                                    <td>Lapsed</td>
+                                    <td>"Come back special"</td>
+                                    <td>15% off + free shipping</td>
+                                </tr>
+                                <tr>
+                                    <td>90-180 days</td>
+                                    <td>Churned</td>
+                                    <td>"A lot has changed!"</td>
+                                    <td>20% off + free gift</td>
+                                </tr>
+                                <tr>
+                                    <td>> 180 days</td>
+                                    <td>Lost</td>
+                                    <td>"Start fresh with us"</td>
+                                    <td>25% off (last attempt)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="campaign-flow" style="margin-top: 1rem;">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Win-back Flow (60 days inactive):</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 60 days no purchase</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; We Miss You Email</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; 5 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA Personal</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; 7 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Final Offer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RFM Segmentation -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128202; RFM Segmentation & Strategy</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Segment</th>
+                                    <th>RFM Score</th>
+                                    <th>Description</th>
+                                    <th>Strategy</th>
+                                    <th>Frequency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Champions</strong></td>
+                                    <td>R5 F5 M5</td>
+                                    <td>Best customers, buy often, high value</td>
+                                    <td>Reward, exclusive access, referral program</td>
+                                    <td>Weekly engagement</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Loyal</strong></td>
+                                    <td>R4-5 F4-5 M3-4</td>
+                                    <td>Consistent buyers, good value</td>
+                                    <td>Upsell, loyalty program</td>
+                                    <td>Bi-weekly</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Potential</strong></td>
+                                    <td>R4-5 F2-3 M3-4</td>
+                                    <td>Recent buyers with potential</td>
+                                    <td>Convert to loyal, recommend products</td>
+                                    <td>Weekly</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>New</strong></td>
+                                    <td>R5 F1 M1-2</td>
+                                    <td>First-time buyers</td>
+                                    <td>Welcome series, 2nd purchase incentive</td>
+                                    <td>Immediate</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>At Risk</strong></td>
+                                    <td>R2-3 F3-4 M3-4</td>
+                                    <td>Used to buy often, slowing down</td>
+                                    <td>Re-engagement, special offers</td>
+                                    <td>Urgent</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hibernating</strong></td>
+                                    <td>R1-2 F1-2 M1-2</td>
+                                    <td>Low engagement overall</td>
+                                    <td>Win-back campaigns, survey</td>
+                                    <td>Monthly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B2C: Seasonal Campaigns -->
+        <section class="section" id="b2c-seasonal">
+            <div class="section-header b2c">&#127881; Seasonal & Promotional Campaigns</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Calendar of promotional campaigns throughout the year aligned with key dates and events.</p>
+
+                <!-- Campaign Calendar -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128197; Annual Campaign Calendar B2C</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Campaign</th>
+                                    <th>Theme</th>
+                                    <th>Discount</th>
+                                    <th>Focus Products</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Jan</strong></td>
+                                    <td>New Year New Brew</td>
+                                    <td>Fresh start, try something new</td>
+                                    <td>15% new products</td>
+                                    <td>New arrivals, equipment starter kit</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Feb</strong></td>
+                                    <td>Valentine's Day</td>
+                                    <td>Coffee for couples</td>
+                                    <td>Buy 2 get 10% off</td>
+                                    <td>Gift sets, flavored coffee</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mar-Apr</strong></td>
+                                    <td>Ramadan & Lebaran</td>
+                                    <td>Berbagi kebaikan</td>
+                                    <td>Up to 25% + hampers</td>
+                                    <td>Gift hampers, premium beans</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>May</strong></td>
+                                    <td>Mother's Day</td>
+                                    <td>Treat Mom</td>
+                                    <td>Free gift wrapping</td>
+                                    <td>Easy-brew products, gift sets</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jun</strong></td>
+                                    <td>Mid-Year Sale</td>
+                                    <td>Clearance & deals</td>
+                                    <td>Up to 40% selected</td>
+                                    <td>Previous season, overstock</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jul</strong></td>
+                                    <td>Cold Brew Season</td>
+                                    <td>Beat the heat</td>
+                                    <td>Bundle deals</td>
+                                    <td>Cold brew, iced coffee, accessories</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Aug</strong></td>
+                                    <td>Independence Day</td>
+                                    <td>Local coffee pride</td>
+                                    <td>17% off local beans</td>
+                                    <td>Indonesian single origins</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sep</strong></td>
+                                    <td>International Coffee Day (Oct 1)</td>
+                                    <td>Celebrate coffee</td>
+                                    <td>Flash sales, giveaways</td>
+                                    <td>All categories</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Oct</strong></td>
+                                    <td>10.10 Sale</td>
+                                    <td>Double digits deals</td>
+                                    <td>10% off + 10x points</td>
+                                    <td>All categories</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nov</strong></td>
+                                    <td>11.11 Singles Day</td>
+                                    <td>Biggest sale of year</td>
+                                    <td>Up to 50% + flash deals</td>
+                                    <td>All categories, machines</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dec</strong></td>
+                                    <td>Year End / Christmas</td>
+                                    <td>Holiday gifts</td>
+                                    <td>Gift bundles, 12.12</td>
+                                    <td>Gift sets, premium items</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Flash Sale Strategy -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9889; Flash Sale Strategy</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Duration</th>
+                                    <th>Timing</th>
+                                    <th>Discount</th>
+                                    <th>Communication</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Lightning Deal</strong></td>
+                                    <td>2-4 hours</td>
+                                    <td>Weekday noon (12-2pm)</td>
+                                    <td>30-50%</td>
+                                    <td>Push + WA 1 hour before</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Daily Deal</strong></td>
+                                    <td>24 hours</td>
+                                    <td>Starts 00:00</td>
+                                    <td>20-30%</td>
+                                    <td>Email night before + morning push</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Weekend Special</strong></td>
+                                    <td>Sat-Sun</td>
+                                    <td>Weekend</td>
+                                    <td>15-25%</td>
+                                    <td>Email Thu + reminder Sat AM</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Payday Sale</strong></td>
+                                    <td>3 days</td>
+                                    <td>25-27 each month</td>
+                                    <td>Extra 10% + free shipping</td>
+                                    <td>Email + WA + Push</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Social Media Strategy -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128247; Social Media Content Strategy</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Content Mix</th>
+                                    <th>Posting Frequency</th>
+                                    <th>Best Time</th>
+                                    <th>Primary Goal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Instagram</strong></td>
+                                    <td>40% product, 30% education, 20% UGC, 10% promo</td>
+                                    <td>1-2 posts/day + 5 stories</td>
+                                    <td>7-9 AM, 12-1 PM, 7-9 PM</td>
+                                    <td>Brand awareness, engagement</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TikTok</strong></td>
+                                    <td>50% education, 30% entertainment, 20% product</td>
+                                    <td>1 video/day</td>
+                                    <td>7-9 PM</td>
+                                    <td>Reach, viral content</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>YouTube</strong></td>
+                                    <td>70% tutorial, 20% review, 10% behind scenes</td>
+                                    <td>2 videos/week</td>
+                                    <td>Weekend mornings</td>
+                                    <td>SEO, education, trust</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Facebook</strong></td>
+                                    <td>50% promo, 30% community, 20% education</td>
+                                    <td>1 post/day</td>
+                                    <td>12-2 PM</td>
+                                    <td>Older demographics, groups</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Influencer Strategy -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127775; Influencer & KOL Strategy</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Followers</th>
+                                    <th>Engagement Rate</th>
+                                    <th>Compensation</th>
+                                    <th>Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nano</strong></td>
+                                    <td>1K - 10K</td>
+                                    <td>5-10%</td>
+                                    <td>Free products</td>
+                                    <td>Authentic reviews, UGC</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Micro</strong></td>
+                                    <td>10K - 50K</td>
+                                    <td>3-5%</td>
+                                    <td>Products + Rp 500K-2jt</td>
+                                    <td>Niche audience, conversions</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mid-tier</strong></td>
+                                    <td>50K - 500K</td>
+                                    <td>2-3%</td>
+                                    <td>Rp 2-10jt</td>
+                                    <td>Reach + engagement balance</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Macro</strong></td>
+                                    <td>500K - 1M</td>
+                                    <td>1-2%</td>
+                                    <td>Rp 10-50jt</td>
+                                    <td>Major campaigns, brand lift</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box" style="margin-top: 1rem;">
+                            <strong>&#127919; Target Niches:</strong> Coffee enthusiasts, home baristas, lifestyle, WFH/remote workers, food bloggers, minimalist living
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- MARKETPLACE TO APP CONVERSION -->
+        <!-- ============================================ -->
+
+        <div class="division-header" id="marketplace-conversion" style="background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);">
+            <div>&#128722;</div>
+            <div>
+                <h3>Marketplace → Internal App Conversion</h3>
+                <p>Strategy untuk konversi customer marketplace ke internal e-commerce app</p>
+            </div>
+        </div>
+
+        <!-- Current Situation Analysis -->
+        <section class="section">
+            <div class="section-header" style="background: #2E7D32;">&#128202; Analisis Situasi & Opportunity</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Perbandingan cost structure antara marketplace vs internal app untuk menentukan budget insentif optimal.</p>
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128176; Cost Comparison Analysis</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Faktor</th>
+                                    <th>Marketplace</th>
+                                    <th>Internal App</th>
+                                    <th>Opportunity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Platform Fee</strong></td>
+                                    <td style="color: #C62828;">~20%</td>
+                                    <td style="color: #2E7D32;">0%</td>
+                                    <td><span class="tag" style="background:#E8F5E9;color:#2E7D32;">20% margin tersedia</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Current Reward (New User)</strong></td>
+                                    <td>-</td>
+                                    <td>5% voucher via QR</td>
+                                    <td>Gap besar, bisa lebih agresif</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Current Reward (Existing)</strong></td>
+                                    <td>-</td>
+                                    <td>1% voucher</td>
+                                    <td>Terlalu kecil untuk motivasi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Campaign Voucher</strong></td>
+                                    <td>-</td>
+                                    <td>5-7%</td>
+                                    <td>QR reward harus > campaign untuk differentiate</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Customer Data</strong></td>
+                                    <td style="color: #C62828;">Limited</td>
+                                    <td style="color: #2E7D32;">Full ownership</td>
+                                    <td>Better personalization</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Repeat Purchase Control</strong></td>
+                                    <td style="color: #C62828;">Compete with others</td>
+                                    <td style="color: #2E7D32;">Direct communication</td>
+                                    <td>Higher retention potential</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#128161; Key Insight:</strong> Dengan margin 20% dari marketplace fee, bisa alokasi hingga <strong>15% untuk insentif</strong> dan masih profit lebih baik dari marketplace!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HEAD TO HEAD COMPARISON -->
+        <section class="section" id="head-to-head">
+            <div class="section-header" style="background: linear-gradient(135deg, #C62828 0%, #B71C1C 50%, #2E7D32 50%, #1B5E20 100%);">&#9878; Head-to-Head: Marketplace vs Internal App</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Perbandingan detail semua cost components dan net margin antara penjualan via marketplace vs internal e-commerce app.</p>
+
+                <!-- Assumption Box -->
+                <div class="info-box" style="margin-bottom: 1.5rem;">
+                    <strong>&#128202; Asumsi Perhitungan:</strong>
+                    <ul style="margin: 0.5rem 0 0 1.5rem; font-size: 0.85rem;">
+                        <li>Harga jual produk: <strong>Rp 200.000</strong> (contoh: 250g specialty beans)</li>
+                        <li>COGS (Harga Pokok): <strong>Rp 100.000</strong> (50% dari harga jual)</li>
+                        <li>Gross Profit sebelum channel cost: <strong>Rp 100.000</strong> (50%)</li>
+                    </ul>
+                </div>
+
+                <!-- Complete Cost Breakdown -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128176; Complete Cost Breakdown per Channel</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">Cost Component</th>
+                                    <th style="background:#FFEBEE; width: 20%;">Marketplace</th>
+                                    <th style="background:#E8F5E9; width: 20%;">Internal App</th>
+                                    <th style="width: 30%;">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #FFF8E1;">
+                                    <td colspan="4" style="font-weight: 600; color: #E65100;">&#128178; Platform & Transaction Fees</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform Commission</td>
+                                    <td style="color:#C62828;"><strong>15-20%</strong></td>
+                                    <td style="color:#2E7D32;"><strong>0%</strong></td>
+                                    <td>Tokped/Shopee take rate</td>
+                                </tr>
+                                <tr>
+                                    <td>Payment Gateway Fee</td>
+                                    <td style="color:#C62828;">Included in commission</td>
+                                    <td style="color:#E65100;">2-3%</td>
+                                    <td>Midtrans, Xendit, etc.</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform Admin Fee</td>
+                                    <td style="color:#C62828;">1-2%</td>
+                                    <td style="color:#2E7D32;">0%</td>
+                                    <td>Varies by marketplace</td>
+                                </tr>
+                                <tr style="background: #FFF8E1;">
+                                    <td colspan="4" style="font-weight: 600; color: #E65100;">&#127873; Promotional Costs</td>
+                                </tr>
+                                <tr>
+                                    <td>Voucher/Discount</td>
+                                    <td style="color:#C62828;">5-15%*</td>
+                                    <td style="color:#E65100;">5-12%</td>
+                                    <td>*MP often requires promo participation</td>
+                                </tr>
+                                <tr>
+                                    <td>Free Shipping Subsidy</td>
+                                    <td style="color:#C62828;">0-50%**</td>
+                                    <td style="color:#E65100;">0-100%</td>
+                                    <td>**Shared dengan marketplace</td>
+                                </tr>
+                                <tr>
+                                    <td>Flash Sale Discount</td>
+                                    <td style="color:#C62828;">10-30%</td>
+                                    <td style="color:#2E7D32;">Optional</td>
+                                    <td>MP push untuk flash sale</td>
+                                </tr>
+                                <tr>
+                                    <td>Cashback/Coins</td>
+                                    <td style="color:#C62828;">2-5%</td>
+                                    <td style="color:#2E7D32;">0%</td>
+                                    <td>MP loyalty program cost</td>
+                                </tr>
+                                <tr style="background: #FFF8E1;">
+                                    <td colspan="4" style="font-weight: 600; color: #E65100;">&#128226; Marketing & Visibility (Paid Ads)</td>
+                                </tr>
+                                <tr>
+                                    <td>Platform Promoted Listing</td>
+                                    <td style="color:#C62828;">3-8%</td>
+                                    <td style="color:#2E7D32;">N/A</td>
+                                    <td>TopAds, Iklanku, etc. per order</td>
+                                </tr>
+                                <tr>
+                                    <td>Google Ads (Search + Shopping)</td>
+                                    <td style="color:#2E7D32;">N/A</td>
+                                    <td style="color:#E65100;">2-4%</td>
+                                    <td>Brand + product keywords, PMax</td>
+                                </tr>
+                                <tr>
+                                    <td>Meta Ads (FB + IG)</td>
+                                    <td style="color:#2E7D32;">N/A</td>
+                                    <td style="color:#E65100;">2-3%</td>
+                                    <td>Prospecting + retargeting</td>
+                                </tr>
+                                <tr>
+                                    <td>TikTok / Other Social</td>
+                                    <td style="color:#2E7D32;">N/A</td>
+                                    <td style="color:#E65100;">0.5-1%</td>
+                                    <td>Awareness + consideration</td>
+                                </tr>
+                                <tr>
+                                    <td>Affiliate / Influencer</td>
+                                    <td style="color:#C62828;">2-5%</td>
+                                    <td style="color:#E65100;">2-4%</td>
+                                    <td>Performance-based, KOL</td>
+                                </tr>
+                                <tr style="background: #ECEFF1;">
+                                    <td><strong>Total Ads Budget</strong></td>
+                                    <td style="color:#C62828;"><strong>5-13%</strong></td>
+                                    <td style="color:#E65100;"><strong>6.5-12%</strong></td>
+                                    <td>Comparable, tapi beda model</td>
+                                </tr>
+                                <tr style="background: #FFF8E1;">
+                                    <td colspan="4" style="font-weight: 600; color: #E65100;">&#128100; Customer Retention</td>
+                                </tr>
+                                <tr>
+                                    <td>Loyalty Points Cost</td>
+                                    <td style="color:#2E7D32;">0%</td>
+                                    <td style="color:#E65100;">1-2%</td>
+                                    <td>Internal loyalty program</td>
+                                </tr>
+                                <tr>
+                                    <td>Referral Reward</td>
+                                    <td style="color:#2E7D32;">0%</td>
+                                    <td style="color:#E65100;">0-3%</td>
+                                    <td>When used for acquisition</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Ads Cost Model Explanation -->
+                <div class="info-box warning" style="margin-bottom: 1rem;">
+                    <strong>&#128161; Perbedaan Model Ads Cost:</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem; font-size: 0.85rem;">
+                        <div>
+                            <strong style="color:#C62828;">Marketplace:</strong> Ads = per-order cost (visibility fee setiap transaksi)
+                        </div>
+                        <div>
+                            <strong style="color:#2E7D32;">Internal App:</strong> Ads = CAC (acquisition cost), diamortisasi over customer lifetime
+                        </div>
+                    </div>
+                    <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #666;">
+                        Untuk apple-to-apple comparison, app ads di-allocate per order = Total Ads ÷ Avg Orders per Customer (8 orders/tahun)
+                    </p>
+                </div>
+
+                <!-- Scenario Comparison -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128202; Net Margin Comparison by Scenario (Including Ads)</div>
+                    <div class="strategy-card-content">
+                        <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-muted);">Berdasarkan Gross Profit Rp 100.000 (50% dari harga jual Rp 200.000). App ads allocated per order: 8% ÷ 8 orders = <strong>1% per order</strong></p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Scenario</th>
+                                    <th style="background:#FFEBEE;">Marketplace Cost</th>
+                                    <th style="background:#FFEBEE;">MP Net Margin</th>
+                                    <th style="background:#E8F5E9;">App Cost</th>
+                                    <th style="background:#E8F5E9;">App Net Margin</th>
+                                    <th>Difference</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; Regular Order (No Promo) - Organic/Repeat Traffic</td>
+                                </tr>
+                                <tr>
+                                    <td>Standard Purchase (no ads)</td>
+                                    <td style="color:#C62828;">-20% (Rp 40K)</td>
+                                    <td><strong>Rp 60.000</strong> (30%)</td>
+                                    <td style="color:#2E7D32;">-3% PG (Rp 6K)</td>
+                                    <td><strong>Rp 94.000</strong> (47%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 34.000</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Standard Purchase (with ads)</td>
+                                    <td style="color:#C62828;">-20% -5% ads (Rp 50K)</td>
+                                    <td><strong>Rp 50.000</strong> (25%)</td>
+                                    <td style="color:#E65100;">-3% PG -1% ads (Rp 8K)</td>
+                                    <td><strong>Rp 92.000</strong> (46%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 42.000</strong></td>
+                                </tr>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; New Customer Acquisition (Paid Traffic)</td>
+                                </tr>
+                                <tr>
+                                    <td>New User (MP: promo+ads)</td>
+                                    <td style="color:#C62828;">-20% -10% -5% (Rp 70K)</td>
+                                    <td><strong>Rp 30.000</strong> (15%)</td>
+                                    <td style="color:#E65100;">-3% -12% -8% CAC (Rp 46K)</td>
+                                    <td><strong>Rp 54.000</strong> (27%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 24.000</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><em>↳ 2nd order onwards</em></td>
+                                    <td style="color:#C62828;">-20% -5% ads (Rp 50K)</td>
+                                    <td><strong>Rp 50.000</strong> (25%)</td>
+                                    <td style="color:#E65100;">-3% -8% -1% (Rp 24K)</td>
+                                    <td><strong>Rp 76.000</strong> (38%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 26.000</strong></td>
+                                </tr>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; Flash Sale / Big Campaign</td>
+                                </tr>
+                                <tr>
+                                    <td>Flash Sale (heavy promo)</td>
+                                    <td style="color:#C62828;">-20% -20% -8% (Rp 96K)</td>
+                                    <td style="color:#C62828;"><strong>Rp 4.000</strong> (2%)</td>
+                                    <td style="color:#E65100;">-3% -15% -3% (Rp 42K)</td>
+                                    <td><strong>Rp 58.000</strong> (29%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 54.000</strong></td>
+                                </tr>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; Loyal Customer (Organic Repeat)</td>
+                                </tr>
+                                <tr>
+                                    <td>Repeat Order + Loyalty</td>
+                                    <td style="color:#C62828;">-20% (Rp 40K)</td>
+                                    <td><strong>Rp 60.000</strong> (30%)</td>
+                                    <td style="color:#E65100;">-3% -5% -2% pts (Rp 20K)</td>
+                                    <td><strong>Rp 80.000</strong> (40%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 20.000</strong></td>
+                                </tr>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; With Free Shipping</td>
+                                </tr>
+                                <tr>
+                                    <td>Free Ship (avg Rp 15K)</td>
+                                    <td style="color:#C62828;">-20% -50% ship (Rp 47.5K)</td>
+                                    <td><strong>Rp 52.500</strong> (26%)</td>
+                                    <td style="color:#E65100;">-3% PG - 100% ship (Rp 21K)</td>
+                                    <td><strong>Rp 79.000</strong> (39.5%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 26.500</strong></td>
+                                </tr>
+                                <tr style="background: #FFFDE7;">
+                                    <td colspan="6" style="font-weight: 600;">&#128313; Worst Case (Heavy Promo)</td>
+                                </tr>
+                                <tr>
+                                    <td>Max Discount + All Incentives</td>
+                                    <td style="color:#C62828;">-20% - 25% - 5% ads (Rp 100K)</td>
+                                    <td style="color:#C62828;"><strong>Rp 0</strong> (0%)</td>
+                                    <td style="color:#E65100;">-3% - 15% - 2% pts (Rp 40K)</td>
+                                    <td><strong>Rp 60.000</strong> (30%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 60.000</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Annual Projection -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128197; Annual Projection (per 1000 customers) - With Full Ads Cost</div>
+                    <div class="strategy-card-content">
+                        <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-muted);">Asumsi: 1000 customers, avg order Rp 300K, frequency 8x/tahun = Rp 2.4M GMV per customer/tahun</p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th style="background:#FFEBEE;">Marketplace</th>
+                                    <th style="background:#E8F5E9;">Internal App</th>
+                                    <th>Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Total GMV (1000 cust)</strong></td>
+                                    <td>Rp 2.4 Miliar</td>
+                                    <td>Rp 2.4 Miliar</td>
+                                    <td>Same revenue</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gross Profit (50%)</strong></td>
+                                    <td>Rp 1.2 Miliar</td>
+                                    <td>Rp 1.2 Miliar</td>
+                                    <td>Same GP</td>
+                                </tr>
+                                <tr style="background:#FFF8E1;">
+                                    <td colspan="4" style="font-size: 0.8rem; color: #E65100;"><em>Channel & Transaction Costs</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Platform Fee</strong></td>
+                                    <td style="color:#C62828;">- Rp 480 jt (20%)</td>
+                                    <td style="color:#2E7D32;">Rp 0</td>
+                                    <td style="color:#2E7D32;"><strong>Save Rp 480 jt</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Payment Gateway</strong></td>
+                                    <td style="color:#666;">Included</td>
+                                    <td style="color:#E65100;">- Rp 72 jt (3%)</td>
+                                    <td>Additional cost</td>
+                                </tr>
+                                <tr style="background:#FFF8E1;">
+                                    <td colspan="4" style="font-size: 0.8rem; color: #E65100;"><em>Marketing & Ads Costs</em></td>
+                                </tr>
+                                <tr>
+                                    <td>↳ Google Ads (Search+Shopping)</td>
+                                    <td style="color:#666;">N/A</td>
+                                    <td style="color:#E65100;">- Rp 72 jt (3%)</td>
+                                    <td>Brand + product keywords</td>
+                                </tr>
+                                <tr>
+                                    <td>↳ Meta Ads (FB+IG)</td>
+                                    <td style="color:#666;">N/A</td>
+                                    <td style="color:#E65100;">- Rp 60 jt (2.5%)</td>
+                                    <td>Prospecting + retargeting</td>
+                                </tr>
+                                <tr>
+                                    <td>↳ TikTok / Other</td>
+                                    <td style="color:#666;">N/A</td>
+                                    <td style="color:#E65100;">- Rp 24 jt (1%)</td>
+                                    <td>Awareness</td>
+                                </tr>
+                                <tr>
+                                    <td>↳ Affiliate/Influencer</td>
+                                    <td style="color:#C62828;">- Rp 72 jt (3%)</td>
+                                    <td style="color:#E65100;">- Rp 48 jt (2%)</td>
+                                    <td style="color:#2E7D32;">Save Rp 24 jt</td>
+                                </tr>
+                                <tr>
+                                    <td>↳ Platform Ads (TopAds, etc)</td>
+                                    <td style="color:#C62828;">- Rp 72 jt (3%)</td>
+                                    <td style="color:#666;">N/A</td>
+                                    <td style="color:#2E7D32;">Save Rp 72 jt</td>
+                                </tr>
+                                <tr style="background:#ECEFF1;">
+                                    <td><strong>Total Ads Cost</strong></td>
+                                    <td style="color:#C62828;"><strong>- Rp 144 jt (6%)</strong></td>
+                                    <td style="color:#E65100;"><strong>- Rp 204 jt (8.5%)</strong></td>
+                                    <td>App invests more in ads</td>
+                                </tr>
+                                <tr style="background:#FFF8E1;">
+                                    <td colspan="4" style="font-size: 0.8rem; color: #E65100;"><em>Promotional & Retention Costs</em></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Avg Promo/Voucher</strong></td>
+                                    <td style="color:#C62828;">- Rp 192 jt (8%)</td>
+                                    <td style="color:#E65100;">- Rp 168 jt (7%)</td>
+                                    <td style="color:#2E7D32;">Save Rp 24 jt</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Loyalty Program</strong></td>
+                                    <td style="color:#2E7D32;">Rp 0</td>
+                                    <td style="color:#E65100;">- Rp 36 jt (1.5%)</td>
+                                    <td>Investment in retention</td>
+                                </tr>
+                                <tr style="background: #FFEBEE;">
+                                    <td><strong>TOTAL COSTS</strong></td>
+                                    <td style="color:#C62828;"><strong>- Rp 816 jt (34%)</strong></td>
+                                    <td style="color:#E65100;"><strong>- Rp 480 jt (20%)</strong></td>
+                                    <td style="color:#2E7D32;"><strong>Save Rp 336 jt</strong></td>
+                                </tr>
+                                <tr style="background: #E8F5E9; font-weight: bold;">
+                                    <td><strong>NET PROFIT</strong></td>
+                                    <td style="color:#C62828;">Rp 384 jt (16%)</td>
+                                    <td style="color:#2E7D32;">Rp 720 jt (30%)</td>
+                                    <td style="color:#2E7D32;"><strong>+Rp 336 jt (+88%)</strong></td>
+                                </tr>
+                                <tr style="background: #FFF8E1;">
+                                    <td><strong>Net Margin</strong></td>
+                                    <td>16% of GMV</td>
+                                    <td>30% of GMV</td>
+                                    <td><strong>+14 ppts</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#128161; Key Insight:</strong> Dengan ads budget yang lebih tinggi (6% vs 8.5%), internal app tetap menghasilkan <strong>+88% lebih profit</strong> karena tidak ada platform fee 20%.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ads Channel Breakdown -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128202; Digital Ads Budget Allocation (Industry Benchmark)</div>
+                    <div class="strategy-card-content">
+                        <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-muted);">Recommended allocation untuk e-commerce coffee/FMCG dengan target 8-10% of GMV untuk marketing</p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Channel</th>
+                                    <th>% of GMV</th>
+                                    <th>Annual Budget (Rp 2.4M GMV)</th>
+                                    <th>ROAS Target</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Google Search</strong></td>
+                                    <td>1.5%</td>
+                                    <td>Rp 36 jt</td>
+                                    <td>4-6x</td>
+                                    <td>High-intent, brand keywords</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Google Shopping/PMax</strong></td>
+                                    <td>1.5%</td>
+                                    <td>Rp 36 jt</td>
+                                    <td>5-8x</td>
+                                    <td>Product discovery, comparison</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Meta - Prospecting</strong></td>
+                                    <td>1.5%</td>
+                                    <td>Rp 36 jt</td>
+                                    <td>2-4x</td>
+                                    <td>New customer acquisition</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Meta - Retargeting</strong></td>
+                                    <td>1%</td>
+                                    <td>Rp 24 jt</td>
+                                    <td>8-12x</td>
+                                    <td>Cart abandonment, re-engage</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TikTok Ads</strong></td>
+                                    <td>0.5%</td>
+                                    <td>Rp 12 jt</td>
+                                    <td>2-3x</td>
+                                    <td>Younger demo, awareness</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>YouTube</strong></td>
+                                    <td>0.5%</td>
+                                    <td>Rp 12 jt</td>
+                                    <td>1-2x</td>
+                                    <td>Brand awareness, education</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Affiliate/Influencer</strong></td>
+                                    <td>2%</td>
+                                    <td>Rp 48 jt</td>
+                                    <td>3-5x</td>
+                                    <td>Trust, authentic content</td>
+                                </tr>
+                                <tr style="background: #E8F5E9; font-weight: bold;">
+                                    <td><strong>TOTAL</strong></td>
+                                    <td><strong>8.5%</strong></td>
+                                    <td><strong>Rp 204 jt</strong></td>
+                                    <td><strong>Blended 4-5x</strong></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-light); border-radius: 8px;">
+                            <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">&#127919; CAC Calculation:</p>
+                            <table style="font-size: 0.85rem;">
+                                <tr>
+                                    <td>Total Ads Budget</td>
+                                    <td>Rp 204 jt / tahun</td>
+                                </tr>
+                                <tr>
+                                    <td>New Customers Acquired (30% of 1000)</td>
+                                    <td>300 customers</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CAC (Cost per Acquisition)</strong></td>
+                                    <td><strong>Rp 680.000</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Avg CLV (8 orders x Rp 300K x 30% margin)</td>
+                                    <td>Rp 720.000</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CLV:CAC Ratio</strong></td>
+                                    <td><strong>1.06x</strong> (Year 1)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CLV:CAC Ratio</strong> (2 year retention)</td>
+                                    <td><strong>2.1x</strong> ✓</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Break-even Analysis -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9878; Break-even & ROI Analysis (With Ads Cost)</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Analysis</th>
+                                    <th>Calculation</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>MP Total Cost (fee + ads + promo)</strong></td>
+                                    <td>20% + 6% + 8% = 34%</td>
+                                    <td><span class="tag high">34% of GMV</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>App Total Cost (PG + ads + voucher + loyalty)</strong></td>
+                                    <td>3% + 8.5% + 7% + 1.5% = 20%</td>
+                                    <td><span class="tag low">20% of GMV</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cost Advantage</strong></td>
+                                    <td>34% - 20% = 14%</td>
+                                    <td style="color:#2E7D32;"><strong>Save 14% per order</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max voucher to match MP margin</strong></td>
+                                    <td>20% (MP fee) - 3% (PG) - 8.5% (ads) = 8.5%</td>
+                                    <td><span class="tag medium">8.5% break-even vs MP (with same ads)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Recommended voucher (aggressive)</strong></td>
+                                    <td>12% (higher than break-even = invest in acquisition)</td>
+                                    <td><span class="tag" style="background:#E3F2FD;color:#1565C0;">12% for new user acquisition</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Net margin improvement</strong></td>
+                                    <td>App 30% vs MP 16%</td>
+                                    <td style="color:#2E7D32;"><strong>+14 ppts margin</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Profit per Rp 100K GP</strong></td>
+                                    <td>App Rp 60K vs MP Rp 32K</td>
+                                    <td style="color:#2E7D32;"><strong>+88% more profit</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#128161; Conclusion:</strong> Dengan budget ads yang lebih tinggi (6% vs 8.5%), internal app tetap <strong>hampir 2x lebih profitable</strong> karena tidak ada platform fee 20%. Ini memungkinkan lebih banyak budget untuk voucher/acquisition tanpa mengorbankan margin.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Comparison -->
+                <div style="background: var(--bg-light); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <p style="font-size: 1rem; font-weight: 600; margin-bottom: 1.5rem; text-align: center;">&#128200; Visual: Where Does Your Money Go? (Full Cost Including Ads)</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Marketplace -->
+                        <div style="background: white; border-radius: 8px; padding: 1.25rem; border: 2px solid #FFCDD2;">
+                            <p style="font-weight: 600; color: #C62828; margin-bottom: 1rem; text-align: center;">&#128722; MARKETPLACE</p>
+                            <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 1rem;">Per Rp 100.000 Gross Profit</p>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Platform Fee (20%)</span>
+                                    <span style="color:#C62828;">-Rp 40.000</span>
+                                </div>
+                                <div style="background: #FFCDD2; height: 16px; border-radius: 4px; width: 100%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Avg Promo (8%)</span>
+                                    <span style="color:#C62828;">-Rp 16.000</span>
+                                </div>
+                                <div style="background: #FFCDD2; height: 16px; border-radius: 4px; width: 40%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Platform Ads (3%)</span>
+                                    <span style="color:#C62828;">-Rp 6.000</span>
+                                </div>
+                                <div style="background: #FFCDD2; height: 16px; border-radius: 4px; width: 15%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Affiliate (3%)</span>
+                                    <span style="color:#C62828;">-Rp 6.000</span>
+                                </div>
+                                <div style="background: #FFCDD2; height: 16px; border-radius: 4px; width: 15%;"></div>
+                            </div>
+
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #FFCDD2;">
+                                <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                    <span>NET PROFIT</span>
+                                    <span style="color:#C62828;">Rp 32.000 (16%)</span>
+                                </div>
+                                <div style="background: #4CAF50; height: 24px; border-radius: 4px; width: 32%; margin-top: 0.5rem;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Internal App -->
+                        <div style="background: white; border-radius: 8px; padding: 1.25rem; border: 2px solid #C8E6C9;">
+                            <p style="font-weight: 600; color: #2E7D32; margin-bottom: 1rem; text-align: center;">&#128241; INTERNAL APP</p>
+                            <p style="font-size: 0.8rem; color: #666; text-align: center; margin-bottom: 1rem;">Per Rp 100.000 Gross Profit</p>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Payment Gateway (3%)</span>
+                                    <span style="color:#E65100;">-Rp 6.000</span>
+                                </div>
+                                <div style="background: #FFE0B2; height: 16px; border-radius: 4px; width: 15%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Digital Ads (8.5%)</span>
+                                    <span style="color:#E65100;">-Rp 17.000</span>
+                                </div>
+                                <div style="background: #FFE0B2; height: 16px; border-radius: 4px; width: 42.5%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Avg Voucher (7%)</span>
+                                    <span style="color:#E65100;">-Rp 14.000</span>
+                                </div>
+                                <div style="background: #FFE0B2; height: 16px; border-radius: 4px; width: 35%;"></div>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                                    <span>Loyalty Points (1.5%)</span>
+                                    <span style="color:#E65100;">-Rp 3.000</span>
+                                </div>
+                                <div style="background: #FFE0B2; height: 16px; border-radius: 4px; width: 7.5%;"></div>
+                            </div>
+
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #C8E6C9;">
+                                <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                    <span>NET PROFIT</span>
+                                    <span style="color:#2E7D32;">Rp 60.000 (30%)</span>
+                                </div>
+                                <div style="background: #4CAF50; height: 24px; border-radius: 4px; width: 60%; margin-top: 0.5rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Summary -->
+                    <div style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-radius: 8px; padding: 1rem; margin-top: 1.5rem; text-align: center;">
+                        <p style="font-size: 1.1rem; font-weight: 600; color: #1B5E20;">
+                            &#127881; Internal App menghasilkan <span style="font-size: 1.3rem;">+88%</span> lebih profit per transaksi!
+                        </p>
+                        <p style="font-size: 0.85rem; color: #2E7D32; margin-top: 0.5rem;">
+                            Rp 60.000 vs Rp 32.000 = <strong>Rp 28.000 lebih banyak</strong> per Rp 100K gross profit (dengan ads cost yang lebih tinggi)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div class="strategy-card" style="margin-top: 1.5rem;">
+                    <div class="strategy-card-header" style="background: #1B5E20;">&#127919; Key Takeaways (With Full Ads Cost)</div>
+                    <div class="strategy-card-content">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            <div style="background: #E8F5E9; padding: 1rem; border-radius: 8px;">
+                                <p style="font-weight: 600; color: #1B5E20; margin-bottom: 0.5rem;">&#128176; Margin Advantage</p>
+                                <p style="font-size: 2rem; font-weight: bold; color: #2E7D32;">+14%</p>
+                                <p style="font-size: 0.8rem; color: #666;">Net margin improvement (30% vs 16%)</p>
+                            </div>
+                            <div style="background: #E8F5E9; padding: 1rem; border-radius: 8px;">
+                                <p style="font-weight: 600; color: #1B5E20; margin-bottom: 0.5rem;">&#128202; Annual Savings</p>
+                                <p style="font-size: 2rem; font-weight: bold; color: #2E7D32;">Rp 336jt</p>
+                                <p style="font-size: 0.8rem; color: #666;">Per 1000 customers (with higher app ads)</p>
+                            </div>
+                            <div style="background: #E8F5E9; padding: 1rem; border-radius: 8px;">
+                                <p style="font-weight: 600; color: #1B5E20; margin-bottom: 0.5rem;">&#127919; Blended ROAS</p>
+                                <p style="font-size: 2rem; font-weight: bold; color: #2E7D32;">4-5x</p>
+                                <p style="font-size: 0.8rem; color: #666;">Target return on ad spend</p>
+                            </div>
+                            <div style="background: #E8F5E9; padding: 1rem; border-radius: 8px;">
+                                <p style="font-weight: 600; color: #1B5E20; margin-bottom: 0.5rem;">&#9889; CLV:CAC</p>
+                                <p style="font-size: 2rem; font-weight: bold; color: #2E7D32;">2.1x</p>
+                                <p style="font-size: 0.8rem; color: #666;">Healthy ratio (2 year retention)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Revised Reward Structure -->
+        <section class="section">
+            <div class="section-header" style="background: #2E7D32;">&#127873; Revised Reward Structure</div>
+            <div class="section-content">
+
+                <!-- Problem Statement -->
+                <div class="info-box warning" style="margin-bottom: 1rem;">
+                    <strong>&#9888; Problem:</strong> Current QR reward (5% new, 1% existing) sama atau lebih rendah dari campaign voucher biasa (5-7%). <strong>Tidak ada insentif khusus</strong> untuk customer marketplace pindah ke app!
+                </div>
+
+                <!-- Strategy Calculation -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#129518; Margin Calculation & Strategy</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Scenario</th>
+                                    <th>Cost</th>
+                                    <th>Net Margin</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sale via Marketplace</td>
+                                    <td style="color:#C62828;">-20% (platform fee)</td>
+                                    <td>80%</td>
+                                    <td><span class="tag high">Baseline</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Sale via App (no voucher)</td>
+                                    <td style="color:#2E7D32;">0%</td>
+                                    <td>100%</td>
+                                    <td><span class="tag low">Ideal</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Sale via App (12% voucher)</td>
+                                    <td>-12%</td>
+                                    <td>88%</td>
+                                    <td><span class="tag" style="background:#E8F5E9;color:#2E7D32;">+8% vs marketplace</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Sale via App (15% voucher)</td>
+                                    <td>-15%</td>
+                                    <td>85%</td>
+                                    <td><span class="tag" style="background:#E8F5E9;color:#2E7D32;">+5% vs marketplace</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#128161; Key Insight:</strong> Bisa kasih voucher hingga <strong>19%</strong> dan masih lebih profitable dari marketplace. Sweet spot: <strong>12% untuk akuisisi</strong> (hemat 8% vs marketplace, jelas lebih tinggi dari campaign 5-7%).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128200; Recalculated Reward Structure</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer Type</th>
+                                    <th>Current</th>
+                                    <th>Campaign Biasa</th>
+                                    <th>Recommended QR</th>
+                                    <th>Rationale</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>New User (1st purchase)</strong></td>
+                                    <td>5%</td>
+                                    <td>5-7%</td>
+                                    <td><span class="tag high">12% + Free Shipping</span></td>
+                                    <td>Jelas lebih tinggi dari campaign (5-7%), hemat 8% vs marketplace</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2nd Purchase</strong></td>
+                                    <td>-</td>
+                                    <td>5-7%</td>
+                                    <td><span class="tag medium">8%</span></td>
+                                    <td>Masih di atas campaign range, lock-in behavior</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3rd Purchase</strong></td>
+                                    <td>-</td>
+                                    <td>5-7%</td>
+                                    <td><span class="tag low">5%</span></td>
+                                    <td>Match low-end campaign, loyalty sudah terbentuk</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4th+ Purchase</strong></td>
+                                    <td>-</td>
+                                    <td>5-7%</td>
+                                    <td><span class="tag" style="background:#F5F5F5;color:#616161;">Loyalty program</span></td>
+                                    <td>Masuk tier-based rewards (Silver/Gold/Platinum)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Existing User (repeat QR)</strong></td>
+                                    <td>1%</td>
+                                    <td>5-7%</td>
+                                    <td><span class="tag" style="background:#E3F2FD;color:#1565C0;">5% + Points 2x</span></td>
+                                    <td>Match campaign + bonus points = higher perceived value</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Graduated Discount Visual -->
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-light); border-radius: 8px;">
+                            <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">&#128200; Voucher Graduation Path:</p>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.85rem;">
+                                <div style="background: #FFEBEE; padding: 0.5rem 1rem; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #C62828;">12%</div>
+                                    <div style="font-size: 0.7rem; color: #666;">1st Order</div>
+                                </div>
+                                <span>&#8594;</span>
+                                <div style="background: #FFF3E0; padding: 0.5rem 1rem; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #E65100;">8%</div>
+                                    <div style="font-size: 0.7rem; color: #666;">2nd Order</div>
+                                </div>
+                                <span>&#8594;</span>
+                                <div style="background: #E8F5E9; padding: 0.5rem 1rem; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #2E7D32;">5%</div>
+                                    <div style="font-size: 0.7rem; color: #666;">3rd Order</div>
+                                </div>
+                                <span>&#8594;</span>
+                                <div style="background: #E3F2FD; padding: 0.5rem 1rem; border-radius: 6px; text-align: center;">
+                                    <div style="font-weight: bold; color: #1565C0;">Loyalty</div>
+                                    <div style="font-size: 0.7rem; color: #666;">4th+ Order</div>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.75rem; color: #666; margin-top: 0.75rem;">
+                                <strong>Total investment untuk acquire 1 loyal customer:</strong> 12% + 8% + 5% = <strong>avg ~8.3%/order</strong> untuk 3 orders pertama (masih hemat 11.7% vs marketplace 20%)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128241; QR Code Enhancement</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Current</th>
+                                    <th>Improvement</th>
+                                    <th>Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Generic voucher</td>
+                                    <td><strong>Personalized voucher</strong> berdasarkan product purchased di marketplace</td>
+                                    <td>Higher relevance, better conversion</td>
+                                </tr>
+                                <tr>
+                                    <td>Static point reward</td>
+                                    <td><strong>Bonus point multiplier</strong> (2x points untuk 7 hari pertama)</td>
+                                    <td>Urgency + higher perceived value</td>
+                                </tr>
+                                <tr>
+                                    <td>Single use voucher</td>
+                                    <td><strong>Multi-tier unlock</strong> (redeem dapat voucher lain untuk next purchase)</td>
+                                    <td>Chain effect, repeat behavior</td>
+                                </tr>
+                                <tr>
+                                    <td>No tracking per source</td>
+                                    <td><strong>Unique QR per marketplace</strong> (Tokopedia/Shopee/etc)</td>
+                                    <td>Better attribution, optimize spend</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voucher Automation Flows -->
+        <section class="section">
+            <div class="section-header" style="background: #2E7D32;">&#9889; Voucher Automation Strategy</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated voucher flows untuk maximize retention di internal e-commerce app.</p>
+
+                <!-- Flow 1: New App User Welcome -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128100; Flow 1: New App User Welcome Series</div>
+                    <div class="strategy-card-content">
+                        <div class="campaign-flow">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Day 0: First Purchase</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 1st Purchase (12% + Free Ship applied)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Welcome Email + "Here's 8% for next order"</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: Order confirmation + voucher reminder</div>
+                            </div>
+                        </div>
+                        <div class="campaign-flow">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Day 7: First Check-in</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step wait">&#8987; Day 7</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Used 8% voucher?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "Voucher 8% expires in 7 days!"</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #2E7D32; font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#9993; Give 5% voucher for 3rd purchase</div>
+                            </div>
+                        </div>
+                        <div class="campaign-flow">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Day 14: Second Push</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step wait">&#8987; Day 14</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; 2nd purchase done?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#9993; Extend voucher + add FREE SHIPPING</div>
+                            </div>
+                        </div>
+                        <div class="campaign-flow">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Day 30: Final Conversion Check</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step wait">&#8987; Day 30</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Total purchases >= 2?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #2E7D32; font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#127881; "Welcome to Loyal Customer" + ongoing benefits</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#9993; Final push: 10% LAST CHANCE (valid 7 days)</div>
+                            </div>
+                        </div>
+                        <div class="info-box success" style="margin-top: 1rem;">
+                            <strong>&#127919; Goal:</strong> Convert 1st-time buyer to 2nd purchase within 30 days. <strong>Target: 40% conversion rate.</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flow 2: Tiered Loyalty -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127942; Flow 2: Tiered Loyalty Monthly Voucher</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Requirement</th>
+                                    <th>Monthly Auto-Voucher</th>
+                                    <th>Special Perks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="tag" style="background: #CD7F32; color: white;">Bronze</span></td>
+                                    <td>Register app</td>
+                                    <td>-</td>
+                                    <td>Birthday 10%, earn points</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #C0C0C0; color: #333;">Silver</span></td>
+                                    <td>3 orders atau Rp 500K</td>
+                                    <td><strong>5%</strong> (auto tiap tgl 1)</td>
+                                    <td>+ Free shipping 1x/bulan</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #FFD700; color: #333;">Gold</span></td>
+                                    <td>6 orders atau Rp 1.5jt</td>
+                                    <td><strong>7%</strong> + surprise voucher</td>
+                                    <td>+ Early access sale, priority CS</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag" style="background: #1a1a1a; color: white;">Platinum</span></td>
+                                    <td>12 orders atau Rp 3jt</td>
+                                    <td><strong>10%</strong> + exclusive deals</td>
+                                    <td>+ Free shipping always, VIP events</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="campaign-flow" style="margin-top: 1rem;">
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Auto-issuance Flow:</strong></p>
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 1st of month</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Check tier</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#127873; Issue tier voucher</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "Your monthly reward is here!"</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flow 3: Behavior Triggers -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128269; Flow 3: Behavior-Based Trigger Vouchers</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trigger</th>
+                                    <th>Condition</th>
+                                    <th>Voucher</th>
+                                    <th>Validity</th>
+                                    <th>Channel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Browse Abandonment</strong></td>
+                                    <td>View product 3x, no purchase</td>
+                                    <td>5% specific product</td>
+                                    <td>48 hours</td>
+                                    <td>Push + Email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cart Abandonment</strong></td>
+                                    <td>Cart > Rp 200K, idle 2 hours</td>
+                                    <td>7% cart items</td>
+                                    <td>72 hours</td>
+                                    <td>WA + Push</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Wishlist Reminder</strong></td>
+                                    <td>Item in wishlist 7 days</td>
+                                    <td>5% wishlist items</td>
+                                    <td>7 days</td>
+                                    <td>Email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Price Drop Alert</strong></td>
+                                    <td>Wishlist item price drop</td>
+                                    <td>Notify + extra 3%</td>
+                                    <td>3 days</td>
+                                    <td>Push + WA</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Back in Stock</strong></td>
+                                    <td>Wishlist/viewed item restock</td>
+                                    <td>5% priority access</td>
+                                    <td>24 hours</td>
+                                    <td>Push + WA</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Replenishment</strong></td>
+                                    <td>Based on consumption pattern</td>
+                                    <td>5% same product</td>
+                                    <td>7 days</td>
+                                    <td>WA + Email</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Flow 4: Win-back -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128148; Flow 4: Win-back dari App Churn</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Inactive Period</th>
+                                    <th>Segment</th>
+                                    <th>Voucher</th>
+                                    <th>Message</th>
+                                    <th>Channel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>30 days</td>
+                                    <td><span class="tag medium">At-risk</span></td>
+                                    <td>10%</td>
+                                    <td>"We miss you!"</td>
+                                    <td>Email + WA</td>
+                                </tr>
+                                <tr>
+                                    <td>45 days</td>
+                                    <td><span class="tag medium">Lapsed</span></td>
+                                    <td>12% + free shipping</td>
+                                    <td>"Special comeback offer"</td>
+                                    <td>WA Personal</td>
+                                </tr>
+                                <tr>
+                                    <td>60 days</td>
+                                    <td><span class="tag high">Churned</span></td>
+                                    <td>15%</td>
+                                    <td>"Last chance exclusive"</td>
+                                    <td>All channels</td>
+                                </tr>
+                                <tr>
+                                    <td>90 days</td>
+                                    <td><span class="tag high">Lost</span></td>
+                                    <td>20% (match marketplace)</td>
+                                    <td>"Why pay more elsewhere?"</td>
+                                    <td>All channels</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="info-box warning" style="margin-top: 1rem;">
+                            <strong>&#128161; Smart Logic:</strong> Jika customer inactive 90 hari di app TAPI active di marketplace (detected via QR scan), trigger special message: "We noticed you're still buying coffee. Get <strong>20% off</strong> when you order directly - same as marketplace discount, but fresher delivery!"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Voucher Rules & Guardrails -->
+        <section class="section">
+            <div class="section-header" style="background: #2E7D32;">&#128274; Voucher Rules & Guardrails</div>
+            <div class="section-content">
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#9888; Business Rules</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rule</th>
+                                    <th>Setting</th>
+                                    <th>Rationale</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Max voucher stack</strong></td>
+                                    <td>1 voucher + 1 free shipping</td>
+                                    <td>Prevent margin loss</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Min. order untuk voucher %</strong></td>
+                                    <td>Rp 150.000</td>
+                                    <td>Maintain AOV</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Voucher expiry notification</strong></td>
+                                    <td>3 days, 1 day, 3 hours before</td>
+                                    <td>Create urgency</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Max vouchers per customer/month</strong></td>
+                                    <td>4 triggered + unlimited earned</td>
+                                    <td>Control cost, reward loyalty</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Exclusion items</strong></td>
+                                    <td>Sale items > 30% off</td>
+                                    <td>Protect margin on promos</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>New user voucher abuse</strong></td>
+                                    <td>1 device/email/phone per lifetime</td>
+                                    <td>Prevent fraud</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Voucher cooling period</strong></td>
+                                    <td>Same trigger voucher: 7 days gap</td>
+                                    <td>Prevent spam feeling</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128202; Conversion KPIs</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Target</th>
+                                    <th>Formula</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>QR Scan Rate</strong></td>
+                                    <td>> 15%</td>
+                                    <td>QR scanned / QR distributed</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>QR → App Install</strong></td>
+                                    <td>> 60%</td>
+                                    <td>App installs / QR scanned</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>QR → First Purchase</strong></td>
+                                    <td>> 40%</td>
+                                    <td>Purchasers / QR scanned</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>1st → 2nd Purchase (30 days)</strong></td>
+                                    <td>> 40%</td>
+                                    <td>Users with 2+ orders / new users</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Voucher Redemption Rate</strong></td>
+                                    <td>> 60%</td>
+                                    <td>Vouchers used / vouchers issued</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>90-Day Retention</strong></td>
+                                    <td>> 50%</td>
+                                    <td>Active at day 90 / acquired</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CAC via QR</strong></td>
+                                    <td>< Rp 30.000</td>
+                                    <td>Total voucher cost / new customers</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CLV:CAC Ratio</strong></td>
+                                    <td>> 3:1</td>
+                                    <td>Customer lifetime value / acquisition cost</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">12%</div>
+                        <div class="metric-label">New User Voucher</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">> 40%</div>
+                        <div class="metric-label">2nd Purchase Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">> 60%</div>
+                        <div class="metric-label">Voucher Redemption</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">3:1</div>
+                        <div class="metric-label">CLV:CAC Ratio</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loyalty Automation Comparison -->
+        <section class="section">
+            <div class="section-header" style="background: #2E7D32;">&#128101; Automation: Existing Loyal vs Marketplace Convert</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Perbandingan skema automation untuk dua segmen berbeda: customer yang sudah loyal di app vs customer yang baru convert dari marketplace.</p>
+
+                <!-- Segment Definition -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128100; Segment Definition</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th style="background:#E8F5E9;">Existing Loyal User</th>
+                                    <th style="background:#E3F2FD;">Marketplace → App Convert</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Definition</strong></td>
+                                    <td>User yang register & purchase langsung di app (organic)</td>
+                                    <td>User yang awalnya beli di marketplace, convert via QR code</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Source</strong></td>
+                                    <td>Direct, SEO, Social, Referral, Ads</td>
+                                    <td>Tokopedia, Shopee, Lazada, Blibli (via QR)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Behavior Pattern</strong></td>
+                                    <td>App-first, familiar dengan fitur</td>
+                                    <td>Marketplace habits, price-sensitive, comparison shopper</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Key Challenge</strong></td>
+                                    <td>Maintain engagement, prevent churn to competitor</td>
+                                    <td>Break marketplace habit, build app loyalty</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Value Sensitivity</strong></td>
+                                    <td>Medium - values convenience & relationship</td>
+                                    <td>High - used to comparing prices across platforms</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Expected CAC</strong></td>
+                                    <td>Rp 25-40K (ads, content)</td>
+                                    <td>Rp 15-25K (voucher cost only)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Voucher Strategy Comparison -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127873; Voucher Strategy Comparison</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Stage</th>
+                                    <th style="background:#E8F5E9;">Existing Loyal User</th>
+                                    <th style="background:#E3F2FD;">Marketplace Convert</th>
+                                    <th>Rationale</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>1st Purchase</strong></td>
+                                    <td>5-7% (standard campaign)</td>
+                                    <td><span class="tag high">12% + Free Ship</span></td>
+                                    <td>Convert perlu insentif lebih besar untuk switch platform</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2nd Purchase</strong></td>
+                                    <td>5% atau loyalty points</td>
+                                    <td><span class="tag medium">8%</span></td>
+                                    <td>Convert masih perlu reinforcement, loyal sudah terbiasa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3rd Purchase</strong></td>
+                                    <td>Loyalty tier benefits</td>
+                                    <td><span class="tag low">5%</span></td>
+                                    <td>Mulai equalize treatment</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4th+ Purchase</strong></td>
+                                    <td colspan="2" style="text-align: center;">Same loyalty program (Bronze → Silver → Gold → Platinum)</td>
+                                    <td>Unified after proven loyalty</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Monthly Auto-Voucher</strong></td>
+                                    <td>Based on tier (0-10%)</td>
+                                    <td>Based on tier + bonus 2% (first 6 months)</td>
+                                    <td>Extra incentive untuk convert selama transition period</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Birthday Voucher</strong></td>
+                                    <td>10%</td>
+                                    <td>12%</td>
+                                    <td>Slight premium untuk reinforce app preference</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Automation Flow: Existing Loyal -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header" style="background: #E8F5E9; color: #1B5E20;">&#128154; Automation Flow: Existing Loyal User</div>
+                    <div class="strategy-card-content">
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">&#9312; Onboarding (Day 0-14)</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; Register + 1st Purchase</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Welcome Email (brand story)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: App features tour</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step wait">&#8987; Day 3</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Coffee education content</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Day 7</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128276; Push: Product recommendation</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step wait">&#8987; Day 14</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; 2nd purchase?</div>
+                                <span style="color: #C62828; font-size: 0.8rem;"> No &#8594;</span>
+                                <div class="flow-step action">&#9993; 5% voucher nudge</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin: 1.5rem 0 0.75rem;">&#9313; Engagement Loop (Monthly)</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 1st of Month</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Newsletter + tier voucher</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128276; Push: Points balance reminder</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step trigger">&#9889; Based on purchase pattern</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: Replenishment reminder</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#127873; 5% same product voucher</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin: 1.5rem 0 0.75rem;">&#9314; Retention & Win-back</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 30 days inactive</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; "We miss you" + 7%</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; 15 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA Personal + 10%</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step trigger">&#9889; 60 days inactive</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#9993; Survey: Why left? + 12%</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; 30 days</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128222; CS Call (high-value only)</div>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="margin-top: 1rem;">
+                            <strong>&#127919; Focus:</strong> Content-driven engagement, brand relationship, community building. Voucher sebagai secondary motivator.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automation Flow: Marketplace Convert -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header" style="background: #E3F2FD; color: #0D47A1;">&#128309; Automation Flow: Marketplace → App Convert</div>
+                    <div class="strategy-card-content">
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;">&#9312; Conversion Phase (Day 0-30) - AGGRESSIVE</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; QR Scan from Marketplace</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128241; App Install + 12% voucher</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "Your exclusive MP discount"</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step wait">&#8987; Day 1</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; 1st purchase done?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#128276; Push: "12% menunggu Anda!"</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Day 3</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "Voucher expires soon"</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #2E7D32; font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#9993; "Thanks! Here's 8% for next"</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin: 1.5rem 0 0.75rem;">&#9313; Habit Building Phase (Day 7-60)</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step wait">&#8987; Day 7</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "8% voucher reminder"</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Day 14</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; 2nd purchase?</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#9993; Extend 8% + FREE SHIPPING</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step wait">&#8987; Day 21</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: Price comparison vs MP</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #2E7D32; font-size: 0.8rem;">Yes &#8594;</span>
+                                <div class="flow-step action">&#127881; "2 orders! Here's 5%"</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step wait">&#8987; Day 30</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Total >= 2 orders?</div>
+                                <span style="color: #C62828; font-size: 0.8rem;"> No &#8594;</span>
+                                <div class="flow-step action">&#9993; FINAL: 10% last chance</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin: 1.5rem 0 0.75rem;">&#9314; Loyalty Transition Phase (Day 60-180)</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 3+ orders completed</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#127942; Welcome to Loyalty Program!</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128176; Bonus 500 points</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem;">
+                                <div class="flow-step trigger">&#9889; Monthly (first 6 months)</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#127873; Tier voucher + BONUS 2%</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "MP convert exclusive"</div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.85rem; font-weight: 600; margin: 1.5rem 0 0.75rem;">&#9315; Anti-Relapse Protection</p>
+                        <div class="campaign-flow">
+                            <div class="flow-steps">
+                                <div class="flow-step trigger">&#9889; 21 days no app purchase</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step condition">&#128269; Bought at MP? (detect via QR)</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #C62828; font-size: 0.8rem;">Yes (relapsed) &#8594;</span>
+                                <div class="flow-step action">&#128172; WA: "Same price di app!"</div>
+                                <span class="flow-arrow">&#8594;</span>
+                                <div class="flow-step action">&#127873; 10% comeback voucher</div>
+                            </div>
+                            <div class="flow-steps" style="margin-top: 0.5rem; margin-left: 2rem;">
+                                <span style="color: #2E7D32; font-size: 0.8rem;">No &#8594;</span>
+                                <div class="flow-step action">&#9993; Standard replenishment</div>
+                            </div>
+                        </div>
+
+                        <div class="info-box warning" style="margin-top: 1rem;">
+                            <strong>&#127919; Focus:</strong> Price-driven messaging, frequent reminders, comparison dengan marketplace. Voucher sebagai PRIMARY motivator. Transisi ke content setelah habit terbentuk.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Comparison -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128197; Communication Frequency Comparison</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Channel</th>
+                                    <th style="background:#E8F5E9;">Existing Loyal</th>
+                                    <th style="background:#E3F2FD;">Marketplace Convert</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Email</strong></td>
+                                    <td>2x/week (content-heavy)</td>
+                                    <td>3x/week first month, then 2x</td>
+                                    <td>Convert perlu lebih frequent di awal</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>WhatsApp</strong></td>
+                                    <td>1x/week + triggered</td>
+                                    <td>2x/week first month, then 1x</td>
+                                    <td>WA lebih personal, efektif untuk convert</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Push Notification</strong></td>
+                                    <td>3x/week</td>
+                                    <td>Daily first 2 weeks, then 3x</td>
+                                    <td>Keep app top-of-mind untuk convert</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>SMS</strong></td>
+                                    <td>Transactional only</td>
+                                    <td>1x/week promo first month</td>
+                                    <td>SMS untuk reinforce urgent offers</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Content Strategy Comparison -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#128221; Content Strategy Comparison</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Content Type</th>
+                                    <th style="background:#E8F5E9;">Existing Loyal</th>
+                                    <th style="background:#E3F2FD;">Marketplace Convert</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Primary Message</strong></td>
+                                    <td>"Discover more, enjoy benefits"</td>
+                                    <td>"Same product, better price & service"</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Value Proposition</strong></td>
+                                    <td>Quality, community, exclusive access</td>
+                                    <td>Savings, convenience, faster delivery</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Educational Content</strong></td>
+                                    <td>60% of communications</td>
+                                    <td>20% of communications</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Promo/Voucher Content</strong></td>
+                                    <td>30% of communications</td>
+                                    <td>70% of communications</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Social Proof</strong></td>
+                                    <td>Community stories, expert content</td>
+                                    <td>Price comparison, savings calculator</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CTA Style</strong></td>
+                                    <td>"Explore", "Discover", "Learn"</td>
+                                    <td>"Save Now", "Claim Discount", "Order Direct"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Success Metrics -->
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127919; Success Metrics per Segment</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th style="background:#E8F5E9;">Existing Loyal Target</th>
+                                    <th style="background:#E3F2FD;">MP Convert Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>2nd Purchase Rate (30 days)</strong></td>
+                                    <td>> 35%</td>
+                                    <td>> 45%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3rd Purchase Rate (60 days)</strong></td>
+                                    <td>> 50%</td>
+                                    <td>> 55%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>90-Day Retention</strong></td>
+                                    <td>> 45%</td>
+                                    <td>> 50%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Avg Order Frequency</strong></td>
+                                    <td>1.5x/month</td>
+                                    <td>1.8x/month (higher voucher usage)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Avg Voucher Usage</strong></td>
+                                    <td>40%</td>
+                                    <td>75%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email Open Rate</strong></td>
+                                    <td>> 25%</td>
+                                    <td>> 35% (promo-driven)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Relapse Rate (back to MP)</strong></td>
+                                    <td>N/A</td>
+                                    <td>< 20% dalam 6 bulan</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CLV after 12 months</strong></td>
+                                    <td>Rp 1.2jt</td>
+                                    <td>Rp 1.5jt (higher frequency)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary Visual -->
+                <div style="background: var(--bg-light); border-radius: 8px; padding: 1.5rem; margin-top: 1rem;">
+                    <p style="font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; text-align: center;">&#128200; Strategy Summary</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="background: #E8F5E9; padding: 1rem; border-radius: 8px; border-left: 4px solid #2E7D32;">
+                            <p style="font-weight: 600; color: #1B5E20; margin-bottom: 0.5rem;">&#128154; Existing Loyal User</p>
+                            <ul style="font-size: 0.8rem; margin-left: 1.25rem; color: #333;">
+                                <li>Content-first, voucher-second</li>
+                                <li>Build relationship & community</li>
+                                <li>Standard loyalty program</li>
+                                <li>Lower frequency, higher value</li>
+                                <li>Focus: Lifetime value growth</li>
+                            </ul>
+                        </div>
+                        <div style="background: #E3F2FD; padding: 1rem; border-radius: 8px; border-left: 4px solid #1565C0;">
+                            <p style="font-weight: 600; color: #0D47A1; margin-bottom: 0.5rem;">&#128309; Marketplace Convert</p>
+                            <ul style="font-size: 0.8rem; margin-left: 1.25rem; color: #333;">
+                                <li>Voucher-first, content-second</li>
+                                <li>Break marketplace habit</li>
+                                <li>Bonus incentives first 6 months</li>
+                                <li>Higher frequency, price-focused</li>
+                                <li>Focus: Habit formation & retention</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Marketing KPIs -->
+        <section class="section">
+            <div class="section-header">&#128202; Marketing KPIs & Metrics</div>
+            <div class="section-content">
+
+                <div class="strategy-card">
+                    <div class="strategy-card-header">&#127919; Key Metrics Dashboard</div>
+                    <div class="strategy-card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Metric</th>
+                                    <th>B2B Target</th>
+                                    <th>B2C Target</th>
+                                    <th>Measurement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3"><strong>Acquisition</strong></td>
+                                    <td>Customer Acquisition Cost (CAC)</td>
+                                    <td>< Rp 500K</td>
+                                    <td>< Rp 40K</td>
+                                    <td>Marketing spend / new customers</td>
+                                </tr>
+                                <tr>
+                                    <td>Lead Conversion Rate</td>
+                                    <td>> 15%</td>
+                                    <td>> 3%</td>
+                                    <td>Leads converted / total leads</td>
+                                </tr>
+                                <tr>
+                                    <td>Cost Per Lead (CPL)</td>
+                                    <td>< Rp 100K</td>
+                                    <td>< Rp 15K</td>
+                                    <td>Campaign spend / leads generated</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3"><strong>Engagement</strong></td>
+                                    <td>Email Open Rate</td>
+                                    <td>> 25%</td>
+                                    <td>> 20%</td>
+                                    <td>Opens / delivered</td>
+                                </tr>
+                                <tr>
+                                    <td>Email Click Rate</td>
+                                    <td>> 5%</td>
+                                    <td>> 3%</td>
+                                    <td>Clicks / delivered</td>
+                                </tr>
+                                <tr>
+                                    <td>WhatsApp Response Rate</td>
+                                    <td>> 40%</td>
+                                    <td>> 30%</td>
+                                    <td>Responses / messages sent</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3"><strong>Retention</strong></td>
+                                    <td>Customer Retention Rate</td>
+                                    <td>> 85%</td>
+                                    <td>> 40%</td>
+                                    <td>(End - New) / Start customers</td>
+                                </tr>
+                                <tr>
+                                    <td>Repeat Purchase Rate</td>
+                                    <td>> 70%</td>
+                                    <td>> 35%</td>
+                                    <td>Repeat buyers / total buyers</td>
+                                </tr>
+                                <tr>
+                                    <td>Net Promoter Score (NPS)</td>
+                                    <td>> 50</td>
+                                    <td>> 40</td>
+                                    <td>Promoters - Detractors %</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2"><strong>Revenue</strong></td>
+                                    <td>Marketing ROI</td>
+                                    <td>> 400%</td>
+                                    <td>> 300%</td>
+                                    <td>(Revenue - Cost) / Cost</td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Lifetime Value (CLV)</td>
+                                    <td>> Rp 50jt</td>
+                                    <td>> Rp 1.5jt</td>
+                                    <td>Avg purchase x frequency x lifespan</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Summary Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">< Rp 40K</div>
+                        <div class="metric-label">Target CAC (B2C)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">> 35%</div>
+                        <div class="metric-label">Repeat Purchase Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">> 20%</div>
+                        <div class="metric-label">Email Open Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">> 300%</div>
+                        <div class="metric-label">Marketing ROI</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>

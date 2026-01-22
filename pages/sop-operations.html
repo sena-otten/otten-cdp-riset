@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP & Operations - Otten CDP</title>
+    <style>
+        :root {
+            --primary: #6F4E37;
+            --primary-dark: #4A3423;
+            --secondary: #D4A574;
+            --bg-light: #FDF8F3;
+            --bg-card: #FFFFFF;
+            --text-dark: #2C1810;
+            --text-muted: #7C6A5D;
+            --border: #E8DDD4;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --info: #2196F3;
+            --danger: #f44336;
+            --sales: #388E3C;
+            --cs: #7B1FA2;
+            --aftersales: #00796B;
+            --marketing: #E65100;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .page-header p { opacity: 0.9; font-size: 0.9rem; }
+
+        /* Section */
+        .section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .section-header.sales { background: var(--sales); }
+        .section-header.cs { background: var(--cs); }
+        .section-header.aftersales { background: var(--aftersales); }
+        .section-header.marketing { background: var(--marketing); }
+        .section-header.checklist { background: var(--primary); }
+
+        .section-content { padding: 1.5rem; }
+
+        /* SOP Card */
+        .sop-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .sop-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sop-card .sop-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .sop-card ol, .sop-card ul {
+            margin-left: 1.25rem;
+            font-size: 0.85rem;
+        }
+
+        .sop-card li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Checklist */
+        .checklist-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .checklist-group h4 {
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: var(--bg-light);
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-top: 0.2rem;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .checklist-item label {
+            flex: 1;
+        }
+
+        .checklist-item .owner {
+            font-size: 0.7rem;
+            background: var(--secondary);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #E3F2FD;
+            border-left: 3px solid var(--info);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .info-box.warning {
+            background: #FFF3E0;
+            border-color: var(--warning);
+        }
+
+        .info-box.success {
+            background: #E8F5E9;
+            border-color: var(--success);
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--bg-light); font-weight: 600; color: var(--primary-dark); font-size: 0.8rem; }
+        tr:hover { background: var(--bg-light); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .tag.required { background: #FFEBEE; color: #C62828; }
+        .tag.optional { background: #E3F2FD; color: #1565C0; }
+        .tag.daily { background: #E8F5E9; color: #2E7D32; }
+        .tag.weekly { background: #FFF3E0; color: #E65100; }
+        .tag.monthly { background: #F3E5F5; color: #7B1FA2; }
+
+        /* Flow Steps */
+        .flow-steps {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: "→";
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-step .step-num {
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step .step-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .flow-step .step-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .flow-steps { flex-direction: column; }
+            .flow-step::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>SOP & Operations</h1>
+            <p>Standard Operating Procedures dan Checklist untuk operasional CDP</p>
+        </div>
+
+        <!-- 5.1 Sales SOP -->
+        <section class="section" id="sales">
+            <div class="section-header sales">5.1 Sales SOP (B2B)</div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Scope:</strong> SOP untuk tim Sales B2B dalam menggunakan CRM, mengelola pipeline, dan melakukan visit.
+                </div>
+
+                <!-- SOP: Lead Management -->
+                <div class="sop-card" style="border-left-color: var(--sales);">
+                    <h4>&#128203; SOP-SALES-001: Lead Management</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Daily</span>
+                        <span>&#128100; Owner: Sales Rep</span>
+                        <span>&#9989; Approval: Sales Manager</span>
+                    </div>
+                    <ol>
+                        <li><strong>Lead Entry:</strong> Input lead baru ke CRM dalam waktu 1x24 jam setelah diterima</li>
+                        <li><strong>Data Validation:</strong> Pastikan mandatory fields terisi (Company Name, Contact Person, Phone/WA)</li>
+                        <li><strong>Initial Contact:</strong> Lakukan first contact dalam 2x24 jam</li>
+                        <li><strong>Lead Qualification:</strong> Update status dan scoring berdasarkan BANT criteria</li>
+                        <li><strong>Follow-up Schedule:</strong> Set reminder untuk follow-up berikutnya</li>
+                        <li><strong>Conversion/Disqualify:</strong> Convert ke Deal atau mark sebagai Disqualified dengan alasan</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Visit Planning -->
+                <div class="sop-card" style="border-left-color: var(--sales);">
+                    <h4>&#128205; SOP-SALES-002: Visit Planning & Execution</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Weekly</span>
+                        <span>&#128100; Owner: Sales Rep</span>
+                        <span>&#9989; Approval: Sales Manager</span>
+                    </div>
+                    <ol>
+                        <li><strong>Weekly Planning (Jumat):</strong> Submit visit plan untuk minggu depan via CRM</li>
+                        <li><strong>Route Optimization:</strong> Gunakan fitur route planning untuk efisiensi</li>
+                        <li><strong>Pre-Visit Prep:</strong> Review customer profile dan history sebelum visit</li>
+                        <li><strong>Check-in:</strong> Lakukan GPS check-in saat tiba di lokasi</li>
+                        <li><strong>Visit Report:</strong> Input visit report dengan foto dan notes dalam 2 jam setelah visit</li>
+                        <li><strong>Follow-up Action:</strong> Create task/reminder untuk action items dari visit</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Deal Management -->
+                <div class="sop-card" style="border-left-color: var(--sales);">
+                    <h4>&#128176; SOP-SALES-003: Deal & Pipeline Management</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Daily</span>
+                        <span>&#128100; Owner: Sales Rep</span>
+                        <span>&#9989; Approval: Sales Manager</span>
+                    </div>
+                    <ol>
+                        <li><strong>Deal Creation:</strong> Create deal setelah lead qualified dengan estimasi value</li>
+                        <li><strong>Stage Update:</strong> Update pipeline stage setiap ada progress (max 3 hari)</li>
+                        <li><strong>Probability:</strong> Adjust win probability berdasarkan kondisi aktual</li>
+                        <li><strong>Quotation:</strong> Generate quotation via system untuk tracking</li>
+                        <li><strong>Negotiation Notes:</strong> Log semua negotiation points dan competitor info</li>
+                        <li><strong>Won/Lost:</strong> Update status final dengan detail alasan</li>
+                    </ol>
+                </div>
+
+                <!-- Quick Reference Table -->
+                <h4 style="font-size: 0.9rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Quick Reference: Sales Metrics Target</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Target</th>
+                            <th>Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>New Leads Entry</td>
+                            <td>Min 5 leads/minggu</td>
+                            <td><span class="tag weekly">Weekly</span></td>
+                        </tr>
+                        <tr>
+                            <td>Customer Visits</td>
+                            <td>Min 15 visits/minggu</td>
+                            <td><span class="tag weekly">Weekly</span></td>
+                        </tr>
+                        <tr>
+                            <td>Visit Report Completion</td>
+                            <td>100% dalam 2 jam</td>
+                            <td><span class="tag daily">Daily</span></td>
+                        </tr>
+                        <tr>
+                            <td>Pipeline Update</td>
+                            <td>Max 3 hari stale</td>
+                            <td><span class="tag daily">Daily</span></td>
+                        </tr>
+                        <tr>
+                            <td>Conversion Rate</td>
+                            <td>Min 20% lead to deal</td>
+                            <td><span class="tag monthly">Monthly</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5.2 Customer Service SOP -->
+        <section class="section" id="cs">
+            <div class="section-header cs">5.2 Customer Service SOP</div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Scope:</strong> SOP untuk tim Customer Service dalam menangani inquiry, complaint, dan support request.
+                </div>
+
+                <!-- SOP: Ticket Handling -->
+                <div class="sop-card" style="border-left-color: var(--cs);">
+                    <h4>&#127915; SOP-CS-001: Ticket Handling</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Ticket</span>
+                        <span>&#128100; Owner: CS Agent</span>
+                        <span>&#9989; SLA: Based on Priority</span>
+                    </div>
+                    <ol>
+                        <li><strong>Ticket Receipt:</strong> Acknowledge ticket dalam 15 menit (auto-reply)</li>
+                        <li><strong>Categorization:</strong> Classify ticket (Inquiry/Complaint/Request/Technical)</li>
+                        <li><strong>Priority Assignment:</strong> Set priority berdasarkan urgency dan impact</li>
+                        <li><strong>First Response:</strong> Berikan response pertama sesuai SLA priority</li>
+                        <li><strong>Resolution:</strong> Handle atau escalate sesuai kategori</li>
+                        <li><strong>Closure:</strong> Confirm resolution dengan customer dan close ticket</li>
+                        <li><strong>CSAT Survey:</strong> Trigger survey setelah ticket closed</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Escalation -->
+                <div class="sop-card" style="border-left-color: var(--cs);">
+                    <h4>&#128680; SOP-CS-002: Escalation Matrix</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: As Needed</span>
+                        <span>&#128100; Owner: CS Agent → CS Lead → CS Manager</span>
+                    </div>
+                    <table style="margin-top: 0.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Trigger</th>
+                                <th>Escalate To</th>
+                                <th>Response Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag" style="background:#E8F5E9;color:#2E7D32;">L1</span></td>
+                                <td>General inquiry, FAQ</td>
+                                <td>CS Agent</td>
+                                <td>4 jam</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag" style="background:#FFF3E0;color:#E65100;">L2</span></td>
+                                <td>Complex issue, SLA breach</td>
+                                <td>CS Lead</td>
+                                <td>2 jam</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag" style="background:#FFEBEE;color:#C62828;">L3</span></td>
+                                <td>Major complaint, VIP customer</td>
+                                <td>CS Manager</td>
+                                <td>1 jam</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag" style="background:#F3E5F5;color:#7B1FA2;">Executive</span></td>
+                                <td>Legal threat, media exposure</td>
+                                <td>Head of Operations</td>
+                                <td>30 menit</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- SOP: Multi-channel Response -->
+                <div class="sop-card" style="border-left-color: var(--cs);">
+                    <h4>&#128172; SOP-CS-003: Multi-Channel Response Guidelines</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Interaction</span>
+                        <span>&#128100; Owner: CS Agent</span>
+                    </div>
+                    <table style="margin-top: 0.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Channel</th>
+                                <th>First Response</th>
+                                <th>Operating Hours</th>
+                                <th>Tone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WhatsApp</td>
+                                <td>5 menit</td>
+                                <td>08:00 - 21:00</td>
+                                <td>Friendly, casual</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>4 jam</td>
+                                <td>24/7 (response next business day)</td>
+                                <td>Professional, formal</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>Immediate</td>
+                                <td>08:00 - 17:00</td>
+                                <td>Warm, helpful</td>
+                            </tr>
+                            <tr>
+                                <td>Social Media</td>
+                                <td>1 jam</td>
+                                <td>08:00 - 21:00</td>
+                                <td>Friendly, brand voice</td>
+                            </tr>
+                            <tr>
+                                <td>In-App Chat</td>
+                                <td>2 menit</td>
+                                <td>08:00 - 21:00</td>
+                                <td>Helpful, concise</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5.3 After Sales SOP -->
+        <section class="section" id="aftersales">
+            <div class="section-header aftersales">5.3 After Sales SOP</div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Scope:</strong> SOP untuk tim After Sales dalam menangani service mesin, warranty, dan spare parts.
+                </div>
+
+                <!-- SOP: Service Request -->
+                <div class="sop-card" style="border-left-color: var(--aftersales);">
+                    <h4>&#128295; SOP-AS-001: Service Request Handling</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Request</span>
+                        <span>&#128100; Owner: Service Coordinator</span>
+                        <span>&#9989; SLA: Based on Priority</span>
+                    </div>
+                    <ol>
+                        <li><strong>Request Receipt:</strong> Log service request ke system dengan detail masalah</li>
+                        <li><strong>Warranty Check:</strong> Verifikasi status warranty mesin</li>
+                        <li><strong>Priority Assignment:</strong> Tentukan priority (Critical/High/Medium/Low)</li>
+                        <li><strong>Technician Assignment:</strong> Assign teknisi berdasarkan skill dan availability</li>
+                        <li><strong>Schedule Confirmation:</strong> Konfirmasi jadwal service ke customer</li>
+                        <li><strong>Service Execution:</strong> Teknisi execute service dan update status real-time</li>
+                        <li><strong>Completion & Sign-off:</strong> Customer sign-off dan feedback collection</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Preventive Maintenance -->
+                <div class="sop-card" style="border-left-color: var(--aftersales);">
+                    <h4>&#128197; SOP-AS-002: Preventive Maintenance Schedule</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Monthly</span>
+                        <span>&#128100; Owner: Service Coordinator</span>
+                    </div>
+                    <ol>
+                        <li><strong>Generate Schedule:</strong> System auto-generate PM schedule berdasarkan machine data</li>
+                        <li><strong>Customer Notification:</strong> Kirim reminder H-7 dan H-1 sebelum jadwal PM</li>
+                        <li><strong>Confirmation:</strong> Confirm atau reschedule dengan customer</li>
+                        <li><strong>PM Execution:</strong> Teknisi lakukan PM checklist lengkap</li>
+                        <li><strong>Report & Recommendation:</strong> Submit PM report dengan rekomendasi jika ada</li>
+                        <li><strong>Next Schedule:</strong> System auto-set jadwal PM berikutnya</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Spare Parts -->
+                <div class="sop-card" style="border-left-color: var(--aftersales);">
+                    <h4>&#128230; SOP-AS-003: Spare Parts Management</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Request</span>
+                        <span>&#128100; Owner: Parts Coordinator</span>
+                    </div>
+                    <ol>
+                        <li><strong>Parts Request:</strong> Teknisi submit parts request via mobile app</li>
+                        <li><strong>Stock Check:</strong> System auto-check stock availability</li>
+                        <li><strong>Quotation:</strong> Generate quotation jika parts tidak dalam warranty</li>
+                        <li><strong>Customer Approval:</strong> Get approval untuk parts berbayar</li>
+                        <li><strong>Parts Issuance:</strong> Issue parts dari warehouse ke teknisi</li>
+                        <li><strong>Installation:</strong> Teknisi install dan update serial number jika applicable</li>
+                        <li><strong>Stock Update:</strong> System auto-update inventory</li>
+                    </ol>
+                </div>
+
+                <!-- Service Priority Matrix -->
+                <h4 style="font-size: 0.9rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Service Priority Matrix</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Condition</th>
+                            <th>Response Time</th>
+                            <th>Resolution Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tag" style="background:#FFEBEE;color:#C62828;">Critical</span></td>
+                            <td>Mesin tidak bisa operasi sama sekali</td>
+                            <td>2 jam</td>
+                            <td>24 jam</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background:#FFF3E0;color:#E65100;">High</span></td>
+                            <td>Mesin beroperasi tapi ada masalah signifikan</td>
+                            <td>4 jam</td>
+                            <td>48 jam</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background:#E3F2FD;color:#1565C0;">Medium</span></td>
+                            <td>Minor issue, tidak mengganggu operasi</td>
+                            <td>24 jam</td>
+                            <td>72 jam</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tag" style="background:#E8F5E9;color:#2E7D32;">Low</span></td>
+                            <td>Preventive maintenance, request info</td>
+                            <td>48 jam</td>
+                            <td>1 minggu</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5.4 Marketing SOP -->
+        <section class="section" id="marketing">
+            <div class="section-header marketing">5.4 Marketing SOP</div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Scope:</strong> SOP untuk tim Marketing dalam menjalankan campaign, automation, dan content management.
+                </div>
+
+                <!-- SOP: Campaign Creation -->
+                <div class="sop-card" style="border-left-color: var(--marketing);">
+                    <h4>&#128226; SOP-MKT-001: Campaign Creation & Execution</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Campaign</span>
+                        <span>&#128100; Owner: Marketing Executive</span>
+                        <span>&#9989; Approval: Marketing Manager</span>
+                    </div>
+                    <ol>
+                        <li><strong>Campaign Brief:</strong> Create campaign brief dengan objective, target, dan budget</li>
+                        <li><strong>Audience Selection:</strong> Define segment target menggunakan CDP segmentation</li>
+                        <li><strong>Content Creation:</strong> Prepare creative assets dan copy</li>
+                        <li><strong>Channel Setup:</strong> Setup campaign di masing-masing channel (Email, Push, WA, Ads)</li>
+                        <li><strong>Testing:</strong> A/B test untuk subject line, creative, atau timing</li>
+                        <li><strong>Approval:</strong> Submit untuk approval sebelum launch</li>
+                        <li><strong>Launch & Monitor:</strong> Launch campaign dan monitor real-time metrics</li>
+                        <li><strong>Post-Campaign Report:</strong> Generate report dalam 7 hari setelah campaign end</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Automation Setup -->
+                <div class="sop-card" style="border-left-color: var(--marketing);">
+                    <h4>&#9881; SOP-MKT-002: Automation Workflow Setup</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Workflow</span>
+                        <span>&#128100; Owner: Marketing Automation Specialist</span>
+                        <span>&#9989; Approval: Marketing Manager</span>
+                    </div>
+                    <ol>
+                        <li><strong>Workflow Design:</strong> Define trigger, conditions, dan actions</li>
+                        <li><strong>Content Preparation:</strong> Prepare semua content untuk setiap step</li>
+                        <li><strong>Build in System:</strong> Setup workflow di marketing automation platform</li>
+                        <li><strong>Test Run:</strong> Test dengan internal email/account</li>
+                        <li><strong>QA Review:</strong> Review oleh team member lain</li>
+                        <li><strong>Soft Launch:</strong> Launch ke small segment (5-10%) untuk validation</li>
+                        <li><strong>Full Launch:</strong> Activate untuk full audience setelah validation OK</li>
+                        <li><strong>Monitoring:</strong> Set up alerts untuk anomaly detection</li>
+                    </ol>
+                </div>
+
+                <!-- SOP: Voucher Management -->
+                <div class="sop-card" style="border-left-color: var(--marketing);">
+                    <h4>&#127873; SOP-MKT-003: Voucher & Promo Management</h4>
+                    <div class="sop-meta">
+                        <span>&#128197; Frequency: Per Promo</span>
+                        <span>&#128100; Owner: Promo Manager</span>
+                        <span>&#9989; Approval: Marketing Manager + Finance</span>
+                    </div>
+                    <ol>
+                        <li><strong>Promo Planning:</strong> Define promo mechanics, budget, dan target ROI</li>
+                        <li><strong>Budget Approval:</strong> Get approval dari Finance untuk budget allocation</li>
+                        <li><strong>Voucher Setup:</strong> Create voucher codes dengan rules dan limitations</li>
+                        <li><strong>Testing:</strong> Test voucher application di staging environment</li>
+                        <li><strong>Distribution:</strong> Distribute melalui channel yang ditentukan</li>
+                        <li><strong>Monitoring:</strong> Monitor redemption rate dan fraud detection</li>
+                        <li><strong>Reconciliation:</strong> Reconcile dengan Finance di akhir periode</li>
+                    </ol>
+                </div>
+
+                <!-- Campaign Approval Matrix -->
+                <h4 style="font-size: 0.9rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Campaign Approval Matrix</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Budget Range</th>
+                            <th>Approver</th>
+                            <th>Lead Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&lt; Rp 5 juta</td>
+                            <td>Marketing Manager</td>
+                            <td>1 hari</td>
+                        </tr>
+                        <tr>
+                            <td>Rp 5-25 juta</td>
+                            <td>Marketing Manager + Finance</td>
+                            <td>3 hari</td>
+                        </tr>
+                        <tr>
+                            <td>Rp 25-100 juta</td>
+                            <td>Head of Marketing + CFO</td>
+                            <td>5 hari</td>
+                        </tr>
+                        <tr>
+                            <td>&gt; Rp 100 juta</td>
+                            <td>CEO + Board</td>
+                            <td>2 minggu</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5.5 Checklist -->
+        <section class="section" id="checklist">
+            <div class="section-header checklist">5.5 Operational Checklist</div>
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Scope:</strong> Checklist operasional yang digunakan sehari-hari sesuai dengan SOP masing-masing divisi. Dapat di-print atau digunakan digital.
+                </div>
+
+                <!-- Sales: Lead Qualification Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--sales);">&#128188; Sales: Lead Qualification Checklist <small style="font-weight:normal;">(SOP-SALES-001)</small></h4>
+
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq1">
+                        <label for="lq1">Company name dan industry terisi lengkap</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq2">
+                        <label for="lq2">Contact person dengan phone/WA valid</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq3">
+                        <label for="lq3">Budget range sudah diidentifikasi</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq4">
+                        <label for="lq4">Authority/decision maker sudah diketahui</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq5">
+                        <label for="lq5">Need/pain point sudah diidentifikasi</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq6">
+                        <label for="lq6">Timeline pembelian sudah diketahui</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq7">
+                        <label for="lq7">Lead score sudah di-update di CRM</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lq8">
+                        <label for="lq8">Follow-up reminder sudah di-set</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                </div>
+
+                <!-- Sales: Visit Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--sales);">&#128205; Sales: Customer Visit Checklist <small style="font-weight:normal;">(SOP-SALES-002)</small></h4>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;"><strong>Pre-Visit:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv1">
+                        <label for="sv1">Review customer profile dan purchase history</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv2">
+                        <label for="sv2">Check outstanding issues/complaints</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv3">
+                        <label for="sv3">Prepare product samples/catalog jika diperlukan</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv4">
+                        <label for="sv4">Confirm appointment dengan customer</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.75rem 0;"><strong>During Visit:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv5">
+                        <label for="sv5">GPS check-in di lokasi customer</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv6">
+                        <label for="sv6">Foto lokasi/meeting sebagai dokumentasi</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv7">
+                        <label for="sv7">Diskusi kebutuhan dan feedback customer</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv8">
+                        <label for="sv8">Catat competitor info jika ada</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.75rem 0;"><strong>Post-Visit:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv9">
+                        <label for="sv9">Submit visit report dalam 2 jam</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv10">
+                        <label for="sv10">Update deal stage jika ada progress</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sv11">
+                        <label for="sv11">Create follow-up task/reminder</label>
+                        <span class="owner">Sales Rep</span>
+                    </div>
+                </div>
+
+                <!-- CS: Ticket Handling Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--cs);">&#127915; CS: Ticket Handling Checklist <small style="font-weight:normal;">(SOP-CS-001)</small></h4>
+
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs1">
+                        <label for="cs1">Ticket category sudah benar (Inquiry/Complaint/Request/Technical)</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs2">
+                        <label for="cs2">Priority sudah di-set sesuai urgency</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs3">
+                        <label for="cs3">Customer profile sudah di-link ke ticket</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs4">
+                        <label for="cs4">Order/transaction reference sudah dicatat (jika ada)</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs5">
+                        <label for="cs5">First response diberikan sesuai SLA</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs6">
+                        <label for="cs6">Solusi/jawaban sudah sesuai knowledge base</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs7">
+                        <label for="cs7">Escalate ke level yang tepat jika tidak bisa resolve</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs8">
+                        <label for="cs8">Konfirmasi resolution dengan customer sebelum close</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cs9">
+                        <label for="cs9">Internal notes lengkap untuk reference</label>
+                        <span class="owner">CS Agent</span>
+                    </div>
+                </div>
+
+                <!-- After Sales: Service Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--aftersales);">&#128295; After Sales: Service Request Checklist <small style="font-weight:normal;">(SOP-AS-001)</small></h4>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;"><strong>Request Intake:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as1">
+                        <label for="as1">Machine serial number dan model dicatat</label>
+                        <span class="owner">Service Coord</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as2">
+                        <label for="as2">Problem description lengkap dan jelas</label>
+                        <span class="owner">Service Coord</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as3">
+                        <label for="as3">Warranty status sudah di-check</label>
+                        <span class="owner">Service Coord</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as4">
+                        <label for="as4">Priority sudah di-assign (Critical/High/Medium/Low)</label>
+                        <span class="owner">Service Coord</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as5">
+                        <label for="as5">Teknisi sudah di-assign berdasarkan skill & availability</label>
+                        <span class="owner">Service Coord</span>
+                    </div>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.75rem 0;"><strong>Service Execution:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as6">
+                        <label for="as6">Jadwal service sudah dikonfirmasi ke customer</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as7">
+                        <label for="as7">Spare parts yang dibutuhkan sudah ready</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as8">
+                        <label for="as8">Check-in di lokasi customer</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as9">
+                        <label for="as9">Foto before-after service</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as10">
+                        <label for="as10">Service report diisi lengkap</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as11">
+                        <label for="as11">Customer sign-off didapatkan</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="as12">
+                        <label for="as12">Rekomendasi maintenance di-inform ke customer</label>
+                        <span class="owner">Teknisi</span>
+                    </div>
+                </div>
+
+                <!-- Marketing: Campaign Launch Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--marketing);">&#128226; Marketing: Campaign Launch Checklist <small style="font-weight:normal;">(SOP-MKT-001)</small></h4>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;"><strong>Pre-Launch:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk1">
+                        <label for="mk1">Campaign brief sudah di-approve</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk2">
+                        <label for="mk2">Target segment sudah di-define di CDP</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk3">
+                        <label for="mk3">Creative assets sudah final (no typo, correct branding)</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk4">
+                        <label for="mk4">Voucher/promo code sudah di-setup dan tested</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk5">
+                        <label for="mk5">Landing page sudah live dan tested</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk6">
+                        <label for="mk6">UTM/tracking sudah di-configure</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk7">
+                        <label for="mk7">Budget sudah di-approve Finance</label>
+                        <span class="owner">Marketing Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk8">
+                        <label for="mk8">CS team sudah di-brief tentang campaign</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.75rem 0;"><strong>Post-Launch:</strong></p>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk9">
+                        <label for="mk9">Campaign sudah live di semua channel</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk10">
+                        <label for="mk10">Monitor metrics dalam 24 jam pertama</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk11">
+                        <label for="mk11">Check for anomalies (bounce, unsubscribe spike)</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mk12">
+                        <label for="mk12">Post-campaign report dalam 7 hari</label>
+                        <span class="owner">Marketing Exec</span>
+                    </div>
+                </div>
+
+                <!-- Marketing: Voucher Setup Checklist -->
+                <div class="checklist-group">
+                    <h4 style="color: var(--marketing);">&#127873; Marketing: Voucher/Promo Setup Checklist <small style="font-weight:normal;">(SOP-MKT-003)</small></h4>
+
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc1">
+                        <label for="vc1">Voucher code unique dan tidak mudah ditebak</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc2">
+                        <label for="vc2">Discount type benar (% atau fixed amount)</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc3">
+                        <label for="vc3">Minimum purchase sudah di-set (jika ada)</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc4">
+                        <label for="vc4">Maximum discount cap sudah di-set (jika ada)</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc5">
+                        <label for="vc5">Valid period (start & end date) sudah benar</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc6">
+                        <label for="vc6">Usage limit per customer sudah di-set</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc7">
+                        <label for="vc7">Total quota voucher sudah di-set</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc8">
+                        <label for="vc8">Product/category exclusion sudah di-config (jika ada)</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc9">
+                        <label for="vc9">Stacking rules sudah di-define (bisa combine atau tidak)</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="vc10">
+                        <label for="vc10">Test voucher di staging environment</label>
+                        <span class="owner">Promo Mgr</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer Note -->
+        <div class="info-box success">
+            <strong>&#128161; Tips:</strong> Checklist ini dapat di-print untuk penggunaan di lapangan atau digunakan secara digital melalui mobile app. Setiap checklist aligned dengan SOP terkait untuk memastikan compliance.
+        </div>
+
+    </div>
+</body>
+</html>

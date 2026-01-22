@@ -620,19 +620,21 @@
                                 <div class="erd-section-label" style="background: #BBDEFB; color: #0D47A1;">Unified Customer Profile</div>
                                 <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
                                     <div class="erd-entity" style="border-color: #1565C0; border-width: 2px;">
-                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%); color: white;">customer</div>
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%); color: white;">profile</div>
                                         <div class="erd-entity-body">
-                                            <span class="pk">customer_id (unified)</span>
+                                            <span class="pk">profile_id (unified)</span>
+                                            <span class="fk" style="color: #78909C;">app_user_id (ext)</span>
+                                            <span class="fk" style="color: #78909C;">app_customer_id (ext)</span>
+                                            <span class="fk" style="color: #78909C;">otsar_customer_id (ext)</span>
                                             <span>customer_type (B2B/B2C)</span>
                                             <span>segment, scoring, ltv</span>
-                                            <span>lifecycle_stage</span>
                                         </div>
                                     </div>
                                     <div class="erd-entity" style="border-color: #1565C0;">
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">identity_mapping</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">mapping_id</span>
-                                            <span class="fk">customer_id (FK)</span>
+                                            <span class="fk">profile_id (FK)</span>
                                             <span>source_system</span>
                                             <span>source_id (app, otsar, etc)</span>
                                         </div>
@@ -641,7 +643,7 @@
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">consent</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">consent_id</span>
-                                            <span class="fk">customer_id (FK)</span>
+                                            <span class="fk">profile_id (FK)</span>
                                             <span>channel, purpose</span>
                                             <span>granted_at, revoked_at</span>
                                         </div>
@@ -657,7 +659,7 @@
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">legal_entity</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">legal_entity_id</span>
-                                            <span class="fk">customer_id (FK)</span>
+                                            <span class="fk">profile_id (FK)</span>
                                             <span>legal_name, tax_id</span>
                                             <span>payment_term, credit_limit</span>
                                         </div>
@@ -693,7 +695,7 @@
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%); color: white;">contact</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">contact_id</span>
-                                            <span class="fk">customer_id (FK)</span>
+                                            <span class="fk">profile_id (FK)</span>
                                             <span class="fk">location_id (FK)</span>
                                             <span>full_name, job_title</span>
                                             <span>email, phone, whatsapp</span>
@@ -719,9 +721,11 @@
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">deal</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">deal_id</span>
-                                            <span class="fk">customer_id (CDP)</span>
-                                            <span>pipeline_stage</span>
-                                            <span>deal_value, probability</span>
+                                            <span class="fk">profile_id (CDP)</span>
+                                            <span class="fk">brand_id (FK)</span>
+                                            <span class="fk">location_id (FK)</span>
+                                            <span class="fk">owner_id (FK)</span>
+                                            <span>pipeline_stage, deal_value</span>
                                         </div>
                                     </div>
                                     <div class="erd-arrow" style="color: #388E3C;">&rarr;</div>
@@ -745,7 +749,10 @@
                                         <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">activity</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">activity_id</span>
-                                            <span class="fk">customer_id (CDP)</span>
+                                            <span class="fk">profile_id (CDP)</span>
+                                            <span class="fk">contact_id (FK)</span>
+                                            <span class="fk">deal_id (FK)</span>
+                                            <span class="fk">location_id (FK)</span>
                                             <span>activity_type</span>
                                             <span>outcome, next_action</span>
                                         </div>
@@ -765,8 +772,10 @@
                                         <div class="erd-entity-body">
                                             <span class="pk">route_id</span>
                                             <span class="fk">visit_plan_id (FK)</span>
-                                            <span>destination_name</span>
-                                            <span>check_in_lat/long</span>
+                                            <span class="fk">profile_id (FK)</span>
+                                            <span class="fk">location_id (FK)</span>
+                                            <span class="fk">deal_id (FK)</span>
+                                            <span>sequence, status</span>
                                         </div>
                                     </div>
                                 </div>
@@ -777,10 +786,10 @@
                                 <div class="erd-section-label" style="background: #C8E6C9; color: #1B5E20;">Config & History</div>
                                 <div class="erd-row" style="justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
                                     <div class="erd-entity" style="border-color: #388E3C;">
-                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">customer_assignment_history</div>
+                                        <div class="erd-entity-header" style="background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%); color: white;">profile_assignment_history</div>
                                         <div class="erd-entity-body">
                                             <span class="pk">transfer_id</span>
-                                            <span class="fk">customer_id (CDP)</span>
+                                            <span class="fk">profile_id (CDP)</span>
                                             <span>from_staff, to_staff</span>
                                             <span>transfer_reason</span>
                                         </div>
@@ -816,7 +825,7 @@
                                     <div class="erd-entity-header" style="background: linear-gradient(135deg, #EEEEEE 0%, #E0E0E0 100%); color: #616161;">conversation *</div>
                                     <div class="erd-entity-body" style="color: #757575;">
                                         <span style="font-style: italic; font-size: 0.7rem;">Messaging Service</span>
-                                        <span class="fk">customer_id (CDP)</span>
+                                        <span class="fk">profile_id (CDP)</span>
                                     </div>
                                 </div>
                                 <div class="erd-entity" style="border-color: #9E9E9E; border-style: dashed;">
@@ -842,7 +851,7 @@
                     </div>
 
                     <div class="info-box" style="margin: 1rem 0;">
-                        <strong>Integrasi:</strong> CRM menggunakan <code>customer_id</code> dari CDP sebagai foreign key. Semua data profile, hierarchy, dan contact diakses via CDP API. CRM publish events (deal.won, activity.created) ke CDP untuk update scoring & segment.
+                        <strong>Integrasi:</strong> CRM menggunakan <code>profile_id</code> dari CDP sebagai foreign key. Semua data profile, hierarchy, dan contact diakses via CDP API. CRM publish events (deal.won, activity.created) ke CDP untuk update scoring & segment.
                     </div>
 
                     <div style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.75rem;">
@@ -875,7 +884,7 @@
                     <!-- Customer Entity (CDP) -->
                     <div id="entity-customer" class="tab-content active">
                         <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #1976D2;">
-                            <strong><span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CDP</span> Customer Data Platform:</strong> Tabel <code>customer</code> adalah source of truth di CDP. CRM mengakses data via API dan menyimpan <code>customer_id</code> sebagai FK untuk relasi ke deals, activities, dll.
+                            <strong><span style="background: #1976D2; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CDP</span> Customer Data Platform:</strong> Tabel <code>profile</code> adalah source of truth di CDP (unified customer profile). CRM mengakses data via API dan menyimpan <code>profile_id</code> sebagai FK untuk relasi ke deals, activities, dll.
                         </div>
                         <div class="entity-detail">
                             <div class="entity-detail-header" style="border-left-color: #1976D2;">
@@ -896,7 +905,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint pk">PK</span></td>
                                         <td>Unified ID (master identifier lintas sistem)</td>
@@ -1134,10 +1143,10 @@
                                         <td>Primary key</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span> <span class="constraint unique">UNIQUE</span></td>
-                                        <td>customer.customer_id (1:1 relation)</td>
+                                        <td>profile.profile_id (1:1 relation)</td>
                                     </tr>
                                     <tr>
                                         <td><code>legal_name</code></td>
@@ -1680,7 +1689,7 @@
                     <!-- Deal Entity (CRM) -->
                     <div id="entity-deal" class="tab-content">
                         <div class="info-box" style="margin-bottom: 1rem; background: #E8F5E9; border-left-color: #388E3C;">
-                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Sales Pipeline:</strong> Deal dan pipeline dikelola di CRM. Menggunakan <code>customer_id</code> dari CDP sebagai FK. Event <code>deal.won</code> dan <code>deal.lost</code> dipublish ke CDP untuk update scoring.
+                            <strong><span style="background: #388E3C; color: white; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem;">CRM</span> Sales Pipeline:</strong> Deal dan pipeline dikelola di CRM. Menggunakan <code>profile_id</code> dari CDP sebagai FK. Event <code>deal.won</code> dan <code>deal.lost</code> dipublish ke CDP untuk update scoring.
                         </div>
                         <div class="entity-detail">
                             <div class="entity-detail-header" style="border-left-color: #388E3C;">
@@ -1713,10 +1722,10 @@
                                         <td>Auto-generated deal code (DEAL-2026-0001)</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
-                                        <td>customer.customer_id</td>
+                                        <td>profile.profile_id</td>
                                     </tr>
                                     <tr>
                                         <td><code>brand_id</code></td>
@@ -2048,10 +2057,10 @@
                                         <td>Primary key</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
-                                        <td>customer.customer_id</td>
+                                        <td>profile.profile_id</td>
                                     </tr>
                                     <tr>
                                         <td><code>location_id</code></td>
@@ -2264,10 +2273,10 @@
                                         <td>Primary key</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
-                                        <td>customer.customer_id</td>
+                                        <td>profile.profile_id</td>
                                     </tr>
                                     <tr>
                                         <td><code>contact_id</code></td>
@@ -2655,10 +2664,10 @@
                                         <td>visit_plan.visit_plan_id</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span></td>
-                                        <td>customer.customer_id (jika existing customer)</td>
+                                        <td>profile.profile_id (jika existing customer)</td>
                                     </tr>
                                     <tr>
                                         <td><code>location_id</code></td>
@@ -2795,7 +2804,7 @@
                             <div class="entity-detail-header" style="border-left-color: #455A64;">
                                 <span class="entity-detail-icon">&#128257;</span>
                                 <div>
-                                    <h4>customer_assignment_history</h4>
+                                    <h4>profile_assignment_history</h4>
                                     <p>History transfer ownership customer antar sales rep</p>
                                 </div>
                             </div>
@@ -2816,10 +2825,10 @@
                                         <td>Primary key</td>
                                     </tr>
                                     <tr>
-                                        <td><code>customer_id</code></td>
+                                        <td><code>profile_id</code></td>
                                         <td>UUID</td>
                                         <td><span class="constraint fk">FK</span> <span class="constraint required">NOT NULL</span></td>
-                                        <td>customer.customer_id</td>
+                                        <td>profile.profile_id</td>
                                     </tr>
                                     <tr>
                                         <td><code>from_staff_id</code></td>
@@ -2884,7 +2893,7 @@
                     <!-- Messaging Entity -->
                     <div id="entity-messaging" class="tab-content">
                         <div class="info-box" style="margin-bottom: 1rem; background: #E3F2FD; border-left-color: #2196F3;">
-                            <strong>Messaging Service (Eksternal):</strong> Semua tabel messaging dikelola di service terpisah. CRM mengakses data via API dengan <code>customer_id</code> sebagai identifier. Template juga dikelola di Messaging Service untuk integrasi langsung dengan provider (WhatsApp Business, SMTP, FCM).
+                            <strong>Messaging Service (Eksternal):</strong> Semua tabel messaging dikelola di service terpisah. CRM mengakses data via API dengan <code>profile_id</code> sebagai identifier. Template juga dikelola di Messaging Service untuk integrasi langsung dengan provider (WhatsApp Business, SMTP, FCM).
                         </div>
 
                         <div class="card-grid" style="margin-bottom: 1rem;">
@@ -2892,7 +2901,7 @@
                                 <h4>&#128488; conversation</h4>
                                 <ul>
                                     <li>conversation_id (PK)</li>
-                                    <li>customer_id (FK ke CRM)</li>
+                                    <li>profile_id (FK ke CDP)</li>
                                     <li>channel (wa/email/telegram)</li>
                                     <li>status, assigned_to</li>
                                 </ul>
@@ -3145,22 +3154,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><code>/customers/{id}</code></td>
+                                <td><code>/profiles/{id}</code></td>
                                 <td><span class="tag info">GET</span></td>
                                 <td>Full profile + B2B hierarchy + contacts</td>
                             </tr>
                             <tr>
-                                <td><code>/customers/{id}/contacts</code></td>
+                                <td><code>/profiles/{id}/contacts</code></td>
                                 <td><span class="tag info">GET</span></td>
                                 <td>List contact persons</td>
                             </tr>
                             <tr>
-                                <td><code>/customers?segment={x}</code></td>
+                                <td><code>/profiles?segment={x}</code></td>
                                 <td><span class="tag info">GET</span></td>
-                                <td>List customers by segment</td>
+                                <td>List profiles by segment</td>
                             </tr>
                             <tr>
-                                <td><code>/customers/{id}/events</code></td>
+                                <td><code>/profiles/{id}/events</code></td>
                                 <td><span class="tag success">POST</span></td>
                                 <td>Publish event ke CDP (deal.won, activity.created)</td>
                             </tr>
@@ -3170,9 +3179,9 @@
                                 <td>Available segments</td>
                             </tr>
                             <tr>
-                                <td><code>/segments/{id}/customers</code></td>
+                                <td><code>/segments/{id}/profiles</code></td>
                                 <td><span class="tag info">GET</span></td>
-                                <td>Customers in segment (for targeting)</td>
+                                <td>Profiles in segment (for targeting)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -3183,7 +3192,7 @@
                         <div class="card" style="border-left-color: #1976D2;">
                             <h4>profile.updated</h4>
                             <ul>
-                                <li>Customer profile changed</li>
+                                <li>Profile data changed</li>
                                 <li>Invalidate local cache</li>
                             </ul>
                         </div>

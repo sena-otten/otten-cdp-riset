@@ -1120,6 +1120,325 @@
             </div>
         </section>
 
+        <!-- Retention Alert System -->
+        <section class="section">
+            <div class="section-header">&#128680; Retention Alert System</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Sistem alert proaktif untuk mencegah churn dengan notifikasi bertingkat ke individual reps dan bulk report ke manager.</p>
+
+                <!-- Individual Rep Alerts -->
+                <h4 style="font-size: 0.9rem; margin: 1rem 0 0.75rem;">&#128100; Alert ke Individual Sales Rep</h4>
+                <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">Real-time alert yang dikirim langsung ke masing-masing sales rep yang bertanggung jawab.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128201;</span>
+                            <h4>Health Score Drop</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>health_score turun > 20 poin dalam 7 hari</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] health score turun drastis: [X] → [Y]"</dd>
+                            <dt>Include:</dt>
+                            <dd>Alasan penurunan (no order, complaint, dll)</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128544;</span>
+                            <h4>NPS Detractor Alert</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>NPS score ≤ 6 dari survey response</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] memberikan NPS rendah: [Score]"</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-create "Recovery Call" task</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128680;</span>
+                            <h4>Complaint Escalation</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>open_complaint > 48 jam unresolved</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag wa">WA</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Complaint [Customer] belum resolved > 48 jam"</dd>
+                            <dt>Escalate:</dt>
+                            <dd>CC ke Manager jika > 72 jam</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128196;</span>
+                            <h4>Contract At-Risk</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>contract_renewal < 60 hari & health_score < 70</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"Contract [Customer] at-risk - renew dalam [X] hari"</dd>
+                            <dt>Include:</dt>
+                            <dd>Health score breakdown + suggested actions</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Downgrade Signal</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>order_frequency turun 2 bulan berturut-turut</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] frekuensi order menurun: [X] → [Y]"</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Schedule satisfaction check call</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128274;</span>
+                            <h4>Inactive Account Warning</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>no_activity > 45 hari (pre-churn warning)</dd>
+                            <dt>Channel:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span></dd>
+                            <dt>Content:</dt>
+                            <dd>"[Customer] tidak ada aktivitas [X] hari"</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-create "Proactive Outreach" task</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- Bulk Manager Reports -->
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">&#128202; Bulk Report ke Manager/Team Lead</h4>
+                <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">Laporan agregat yang dikirim berkala untuk visibility portfolio dan action planning.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Report Type</th>
+                            <th>Frekuensi</th>
+                            <th>Channel</th>
+                            <th>Konten</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>At-Risk Portfolio Summary</strong></td>
+                            <td>Weekly (Senin 08:00)</td>
+                            <td><span class="tag email">Email</span> <span class="tag telegram">Telegram</span></td>
+                            <td>List customers dengan health_score < 60, grouped by rep</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Churn Probability Report</strong></td>
+                            <td>Weekly (Senin 08:00)</td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>Top 20 customers dengan highest churn probability (ML-based)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Retention Scorecard</strong></td>
+                            <td>Monthly (Tanggal 1)</td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>Retention rate per rep, churn count, save rate, MRR impact</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Activity Gap Report</strong></td>
+                            <td>Daily (08:00)</td>
+                            <td><span class="tag telegram">Telegram</span></td>
+                            <td>Customers tanpa activity > 30 hari, grouped by rep</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Revenue at Risk</strong></td>
+                            <td>Weekly (Senin 08:00)</td>
+                            <td><span class="tag email">Email</span> <span class="tag telegram">Telegram</span></td>
+                            <td>Total MRR dari at-risk accounts + trending direction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NPS Detractor Summary</strong></td>
+                            <td>Weekly (Jumat 16:00)</td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>Semua detractor responses minggu ini + follow-up status</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contract Renewal Pipeline</strong></td>
+                            <td>Weekly (Senin 08:00)</td>
+                            <td><span class="tag email">Email</span></td>
+                            <td>Contracts expiring dalam 90 hari + health status</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#128202; Report Delivery Options:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Email:</strong> Full report dengan charts, exportable ke PDF/Excel</li>
+                        <li><strong>Telegram:</strong> Summary singkat dengan link ke dashboard</li>
+                        <li><strong>Dashboard:</strong> Real-time view di CRM dengan drill-down capability</li>
+                        <li>Manager dapat customize report frequency dan threshold di settings</li>
+                    </ul>
+                </div>
+
+                <!-- Escalation Flow -->
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">&#128200; Escalation Flow (Rep → Manager)</h4>
+                <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">Automatic escalation jika sales rep tidak mengambil action dalam timeframe yang ditentukan.</p>
+
+                <div class="journey-flow">
+                    <div class="journey-title">
+                        Retention Alert Escalation Timeline
+                        <span class="tag">AUTO-ESCALATE</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9888; Retention Alert Triggered</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">Health score drop / churn risk / consumption drop detected</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Alert ke Sales Rep</h4>
+                                    <span class="time">Immediately</span>
+                                </div>
+                                <div class="timeline-desc"><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> dengan detail customer + suggested action</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot wait"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9203; Waiting for Action</h4>
+                                    <span class="time">Day 1-7</span>
+                                </div>
+                                <div class="timeline-desc">System monitors apakah rep sudah log activity (call/visit/email)</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128276; Reminder ke Rep</h4>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc">Jika belum ada action: <span class="tag push">Push</span> <span class="tag telegram">Telegram</span> reminder dengan urgency flag</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128680; Auto-Escalate ke Manager</h4>
+                                    <span class="time">Day 14</span>
+                                </div>
+                                <div class="timeline-desc">Jika masih no action: <span class="tag email">Email</span> <span class="tag telegram">Telegram</span> ke Manager + CC Rep</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128274; Manager Review Required</h4>
+                                    <span class="time">Day 21</span>
+                                </div>
+                                <div class="timeline-desc">Block di dashboard - Manager wajib acknowledge + assign action atau reassign customer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escalation Rules Table -->
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Escalation Rules by Alert Priority</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Alert Priority</th>
+                            <th>First Reminder</th>
+                            <th>Auto-Escalate</th>
+                            <th>Manager Block</th>
+                            <th>Contoh Alert</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="priority high">Critical</span></td>
+                            <td>Day 3</td>
+                            <td>Day 7</td>
+                            <td>Day 14</td>
+                            <td>NPS Detractor, Contract At-Risk, Major Complaint</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority high">High</span></td>
+                            <td>Day 7</td>
+                            <td>Day 14</td>
+                            <td>Day 21</td>
+                            <td>Health Score Drop, Churn Risk Alert</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority medium">Medium</span></td>
+                            <td>Day 14</td>
+                            <td>Day 21</td>
+                            <td>Day 30</td>
+                            <td>Consumption Drop, Downgrade Signal</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority low">Low</span></td>
+                            <td>Day 21</td>
+                            <td>Day 30</td>
+                            <td>-</td>
+                            <td>Inactive Warning, Engagement Drop</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#9881; Escalation Settings:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>escalation_enabled:</strong> true/false - bisa di-disable per team</li>
+                        <li><strong>escalation_timeline:</strong> configurable days per priority level</li>
+                        <li><strong>manager_override:</strong> Manager bisa manually escalate kapan saja</li>
+                        <li><strong>auto_reassign:</strong> Option untuk auto-reassign customer jika rep tidak action > 30 hari</li>
+                        <li><strong>vacation_mode:</strong> Pause escalation saat rep cuti (dengan backup assigned)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- Upsell & Cross-sell -->
         <section class="section">
             <div class="section-header">&#128200; Upsell & Cross-sell Triggers</div>
@@ -1200,6 +1519,1317 @@
 
                 <div class="info-box">
                     <strong>&#128161; Smart Recommendations:</strong> AI akan menganalisis pola pembelian dan menyarankan produk yang relevan berdasarkan segment, lokasi, dan history pembelian customer.
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Health Score -->
+        <section class="section">
+            <div class="section-header">&#128200; Customer Health Score Definition</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Health Score adalah metrik komposit (0-100) yang mengukur kesehatan hubungan dengan customer B2B. Score ini digunakan untuk prioritas retention dan prediksi churn.</p>
+
+                <h4 style="font-size: 0.9rem; margin: 1rem 0 0.75rem;">Health Score Components</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Weight</th>
+                            <th>Score 100</th>
+                            <th>Score 70</th>
+                            <th>Score 40</th>
+                            <th>Score 0</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Order Recency</strong></td>
+                            <td>25%</td>
+                            <td>0-30 hari</td>
+                            <td>31-60 hari</td>
+                            <td>61-90 hari</td>
+                            <td>>90 hari</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Order Frequency</strong></td>
+                            <td>20%</td>
+                            <td>>100% vs avg</td>
+                            <td>75-100%</td>
+                            <td>50-75%</td>
+                            <td><50%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Order Value Trend</strong></td>
+                            <td>15%</td>
+                            <td>Growing >10%</td>
+                            <td>Stable ±10%</td>
+                            <td>Declining 10-30%</td>
+                            <td>Declining >30%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NPS/CSAT Score</strong></td>
+                            <td>15%</td>
+                            <td>Promoter (9-10)</td>
+                            <td>Passive (7-8)</td>
+                            <td>Detractor (5-6)</td>
+                            <td>Detractor (0-4)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Support Tickets</strong></td>
+                            <td>10%</td>
+                            <td>0 open tickets</td>
+                            <td>1-2 tickets</td>
+                            <td>3-4 tickets</td>
+                            <td>5+ atau unresolved >7d</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payment Behavior</strong></td>
+                            <td>15%</td>
+                            <td>Always on-time</td>
+                            <td>1-7 days late</td>
+                            <td>8-14 days late</td>
+                            <td>>14 days late</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Health Score Tiers & Actions</h4>
+                <div class="trigger-grid">
+                    <div class="trigger-card" style="border-left-color: #4CAF50;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128154;</span>
+                            <h4>Healthy (80-100)</h4>
+                            <span class="priority low">Low Risk</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Status:</dt>
+                            <dd>Customer dalam kondisi baik</dd>
+                            <dt>Action:</dt>
+                            <dd>Focus on upsell & referral program</dd>
+                            <dt>Contact:</dt>
+                            <dd>Monthly check-in, quarterly review</dd>
+                            <dt>Alert:</dt>
+                            <dd>None - business as usual</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #FF9800;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128992;</span>
+                            <h4>At Risk (60-79)</h4>
+                            <span class="priority medium">Medium Risk</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Status:</dt>
+                            <dd>Perlu perhatian, ada warning signs</dd>
+                            <dt>Action:</dt>
+                            <dd>Proactive outreach, satisfaction survey</dd>
+                            <dt>Contact:</dt>
+                            <dd>Bi-weekly check-in</dd>
+                            <dt>Alert:</dt>
+                            <dd><span class="tag push">Push</span> ke Sales PIC</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #FF5722;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128308;</span>
+                            <h4>Critical (40-59)</h4>
+                            <span class="priority high">High Risk</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Status:</dt>
+                            <dd>High churn risk, immediate attention</dd>
+                            <dt>Action:</dt>
+                            <dd>Manager involvement, rescue plan</dd>
+                            <dt>Contact:</dt>
+                            <dd>Weekly atau lebih sering</dd>
+                            <dt>Alert:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span> ke PIC + Manager</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card" style="border-left-color: #f44336;">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9760;</span>
+                            <h4>Churning (0-39)</h4>
+                            <span class="priority high">Critical</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Status:</dt>
+                            <dd>Likely to churn atau sudah churned</dd>
+                            <dt>Action:</dt>
+                            <dd>Executive escalation, win-back campaign</dd>
+                            <dt>Contact:</dt>
+                            <dd>Immediate intervention</dd>
+                            <dt>Alert:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span> <span class="tag telegram">Telegram</span> all stakeholders</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#129302; AI Health Score Enhancement:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Predictive Score:</strong> ML model prediksi health score 30 hari ke depan</li>
+                        <li><strong>Trend Detection:</strong> Alert jika trajectory menuju tier lebih rendah</li>
+                        <li><strong>Anomaly Detection:</strong> Detect unusual patterns (sudden drop, irregular orders)</li>
+                        <li><strong>Benchmark:</strong> Compare dengan customer sejenis (same segment, size)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Win-back Automation -->
+        <section class="section">
+            <div class="section-header">&#128260; Win-back Automation (Churned Customers)</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated journey untuk memenangkan kembali customer yang sudah churned atau inactive >90 hari.</p>
+
+                <div class="journey-flow">
+                    <div class="journey-title">
+                        Win-back Journey Flow
+                        <span class="tag">90+ DAYS INACTIVE</span>
+                    </div>
+                    <div class="timeline-flow">
+                        <div class="timeline-item">
+                            <div class="timeline-dot trigger"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#9888; Churn Detected</h4>
+                                    <span class="time">Day 0</span>
+                                </div>
+                                <div class="timeline-desc">Customer inactive >90 hari, status changed to "Churned"</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128231; We Miss You Email</h4>
+                                    <span class="time">Day 1</span>
+                                </div>
+                                <div class="timeline-desc">Personalized email: "Kami rindu Anda" + summary manfaat yang terlewat</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#127873; Special Comeback Offer</h4>
+                                    <span class="time">Day 7</span>
+                                </div>
+                                <div class="timeline-desc"><span class="tag wa">WA</span> dengan exclusive discount/free shipping untuk order pertama</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128222; Personal Call from Sales</h4>
+                                    <span class="time">Day 14</span>
+                                </div>
+                                <div class="timeline-desc">Task ke Sales PIC: call untuk feedback & win-back negotiation</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot action"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128188; Manager Outreach</h4>
+                                    <span class="time">Day 30</span>
+                                </div>
+                                <div class="timeline-desc">Jika high-value customer: Manager/Director personal outreach</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h4>&#128202; Final Survey</h4>
+                                    <span class="time">Day 60</span>
+                                </div>
+                                <div class="timeline-desc">Exit survey untuk understand churn reason + keep door open</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Win-back Offer Tiers (Based on Customer Value)</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer Tier</th>
+                            <th>Lifetime Value</th>
+                            <th>Win-back Offer</th>
+                            <th>Validity</th>
+                            <th>Escalation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Platinum</strong></td>
+                            <td>>Rp 500jt</td>
+                            <td>20% discount + free maintenance 3 bulan</td>
+                            <td>30 hari</td>
+                            <td>Director call</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gold</strong></td>
+                            <td>Rp 100-500jt</td>
+                            <td>15% discount + free delivery 3 bulan</td>
+                            <td>30 hari</td>
+                            <td>Manager call</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Silver</strong></td>
+                            <td>Rp 25-100jt</td>
+                            <td>10% discount + free sample new products</td>
+                            <td>14 hari</td>
+                            <td>Senior Sales call</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bronze</strong></td>
+                            <td><Rp 25jt</td>
+                            <td>Free delivery next order</td>
+                            <td>14 hari</td>
+                            <td>Sales PIC call</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#128202; Win-back Analytics:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Win-back Rate:</strong> % churned customers yang kembali order</li>
+                        <li><strong>Time to Win-back:</strong> Rata-rata hari dari churn ke first order</li>
+                        <li><strong>Offer Effectiveness:</strong> Which offer tier has best conversion</li>
+                        <li><strong>Churn Reason Analysis:</strong> Top reasons untuk improve retention</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Credit & Payment Automation -->
+        <section class="section">
+            <div class="section-header">&#128176; Credit & Payment Automation</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated alerts dan actions terkait credit management dan payment behavior untuk B2B customers.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Credit Limit Approaching</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>outstanding_balance >= credit_limit * 80%</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> reminder sisa credit</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> alert untuk follow-up payment</dd>
+                            <dt>Action:</dt>
+                            <dd>Suggest payment atau credit limit review</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128683;</span>
+                            <h4>Credit Limit Exceeded</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>outstanding_balance >= credit_limit * 100%</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-block new orders (configurable)</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag wa">WA</span> <span class="tag email">Email</span> payment required</dd>
+                            <dt>To Finance:</dt>
+                            <dd><span class="tag email">Email</span> alert for review</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128176;</span>
+                            <h4>Payment Due Reminder</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>invoice_due_date - 7 days</dd>
+                            <dt>Sequence:</dt>
+                            <dd>H-7: <span class="tag email">Email</span> reminder</dd>
+                            <dt></dt>
+                            <dd>H-3: <span class="tag wa">WA</span> reminder</dd>
+                            <dt></dt>
+                            <dd>H-1: <span class="tag wa">WA</span> + <span class="tag push">Push</span> to Sales</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9989;</span>
+                            <h4>Payment Received</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>payment_received = true</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> thank you + receipt</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> notification (optional)</dd>
+                            <dt>Action:</dt>
+                            <dd>Update credit available, unblock if blocked</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128202;</span>
+                            <h4>Payment Behavior Score Update</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Monthly recalculation</dd>
+                            <dt>Factors:</dt>
+                            <dd>On-time %, avg days late, dispute rate</dd>
+                            <dt>Action:</dt>
+                            <dd>Auto-adjust payment terms recommendation</dd>
+                            <dt>Alert:</dt>
+                            <dd>Notify Finance jika score drop significantly</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Credit Limit Review Trigger</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Quarterly atau customer request</dd>
+                            <dt>Auto-increase if:</dt>
+                            <dd>payment_score > 90 & order_growth > 20%</dd>
+                            <dt>Auto-decrease if:</dt>
+                            <dd>payment_score < 50 & late_payments > 3</dd>
+                            <dt>Alert:</dt>
+                            <dd><span class="tag email">Email</span> ke Finance + Sales untuk approval</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Payment Terms Auto-Adjustment Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Payment Score</th>
+                            <th>Current Terms</th>
+                            <th>Recommended Action</th>
+                            <th>Approval</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="priority low">90-100</span></td>
+                            <td>Any</td>
+                            <td>Eligible for NET 60, credit limit +20%</td>
+                            <td>Auto (with Finance notification)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority low">70-89</span></td>
+                            <td>Any</td>
+                            <td>Maintain current terms</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority medium">50-69</span></td>
+                            <td>NET 30+</td>
+                            <td>Reduce to NET 14, credit limit freeze</td>
+                            <td>Finance approval</td>
+                        </tr>
+                        <tr>
+                            <td><span class="priority high"><50</span></td>
+                            <td>Any</td>
+                            <td>COD only, credit suspended</td>
+                            <td>Finance + Manager approval</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Seasonal Campaign Triggers -->
+        <section class="section">
+            <div class="section-header">&#128197; Seasonal & Event Campaign Triggers</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated campaigns berdasarkan seasonal events dan industry moments yang relevan untuk B2B coffee customers.</p>
+
+                <h4 style="font-size: 0.9rem; margin: 1rem 0 0.75rem;">Annual Campaign Calendar</h4>
+
+                <!-- Islamic Holidays -->
+                <h5 style="font-size: 0.85rem; margin: 1rem 0 0.5rem; color: var(--text-muted);">&#9770; Hari Besar Islam</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127774; Ramadan Prep</strong></td>
+                            <td>H-30 Ramadan</td>
+                            <td>All B2B (esp. Restaurant, Hotel)</td>
+                            <td>Stock up reminder + Ramadan bundle</td>
+                            <td><span class="tag wa">WA</span> <span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127769; Idul Fitri / Lebaran</strong></td>
+                            <td>H-14 & H-7 Lebaran</td>
+                            <td>All B2B</td>
+                            <td>Last call order + THR gift pack untuk loyal customer</td>
+                            <td><span class="tag wa">WA</span> <span class="tag push">Push</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128016; Idul Adha</strong></td>
+                            <td>H-14 Idul Adha</td>
+                            <td>Restaurant, Hotel, Catering</td>
+                            <td>Stock up untuk gathering + promo catering package</td>
+                            <td><span class="tag wa">WA</span> <span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127775; Maulid Nabi</strong></td>
+                            <td>H-7 Maulid</td>
+                            <td>All B2B</td>
+                            <td>Greeting + special discount</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128124; Isra Mi'raj</strong></td>
+                            <td>H-7 Isra Mi'raj</td>
+                            <td>All B2B</td>
+                            <td>Greeting + reminder stock</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127752; Tahun Baru Islam</strong></td>
+                            <td>1 Muharram</td>
+                            <td>All B2B</td>
+                            <td>New year greeting + reflection promo</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Christian Holidays -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#10013; Hari Besar Kristen</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127876; Natal / Christmas</strong></td>
+                            <td>1-20 Desember</td>
+                            <td>All B2B (esp. Hotel, Restaurant)</td>
+                            <td>Christmas bundle + year-end stock up</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#10013; Jumat Agung / Good Friday</strong></td>
+                            <td>H-7 Easter</td>
+                            <td>Hotel, Restaurant</td>
+                            <td>Easter weekend prep + special menu support</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128035; Paskah / Easter</strong></td>
+                            <td>H-14 Easter</td>
+                            <td>Hotel, Cafe, Restaurant</td>
+                            <td>Easter brunch promo + family gathering package</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128330; Kenaikan Isa Almasih</strong></td>
+                            <td>H-7 Ascension</td>
+                            <td>All B2B</td>
+                            <td>Long weekend stock reminder</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Chinese/Confucian Holidays -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#127881; Hari Besar Tionghoa / Konghucu</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127886; Imlek / Chinese New Year</strong></td>
+                            <td>H-21 & H-7 Imlek</td>
+                            <td>All B2B (esp. Restaurant, Hotel)</td>
+                            <td>CNY bundle + angpao discount + reunion dinner support</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127982; Cap Go Meh</strong></td>
+                            <td>H-7 Cap Go Meh</td>
+                            <td>Restaurant, Cafe</td>
+                            <td>Festival celebration package + event catering</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127909; Qingming / Cheng Beng</strong></td>
+                            <td>H-7 Qingming (April)</td>
+                            <td>Restaurant</td>
+                            <td>Family gathering support</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127770; Mid-Autumn Festival</strong></td>
+                            <td>H-14 Mid-Autumn</td>
+                            <td>Restaurant, Hotel, Cafe</td>
+                            <td>Mooncake pairing + special coffee blend</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Hindu Holidays -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#128329; Hari Besar Hindu</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127774; Nyepi (Bali)</strong></td>
+                            <td>H-14 & H+1 Nyepi</td>
+                            <td>Hotel, Restaurant (Bali region)</td>
+                            <td>Pre-Nyepi stock up + post-Nyepi welcome back</td>
+                            <td><span class="tag wa">WA</span> <span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127804; Galungan</strong></td>
+                            <td>H-14 Galungan</td>
+                            <td>All B2B (Bali region)</td>
+                            <td>Celebration bundle + ceremony support</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127803; Kuningan</strong></td>
+                            <td>H-7 Kuningan</td>
+                            <td>All B2B (Bali region)</td>
+                            <td>Continuation celebration package</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128367; Saraswati</strong></td>
+                            <td>H-7 Saraswati</td>
+                            <td>Cafe, Office (Bali region)</td>
+                            <td>Knowledge day - training promo</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Buddhist Holidays -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#9784; Hari Besar Buddha</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127800; Waisak</strong></td>
+                            <td>H-7 Waisak</td>
+                            <td>All B2B</td>
+                            <td>Greeting + mindfulness coffee promo</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- National & Commercial Events -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#127470;&#127465; Hari Besar Nasional & Komersial</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#127879; Tahun Baru Masehi</strong></td>
+                            <td>1-15 Januari</td>
+                            <td>All B2B</td>
+                            <td>New year bundle + new product intro</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128151; Valentine's Day</strong></td>
+                            <td>1-14 Februari</td>
+                            <td>Cafe, Restaurant, Hotel</td>
+                            <td>Couple package + romantic coffee pairing</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128105; Hari Kartini</strong></td>
+                            <td>21 April</td>
+                            <td>Office, Cafe</td>
+                            <td>Women empowerment promo + female barista spotlight</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128119; Hari Buruh</strong></td>
+                            <td>1 Mei</td>
+                            <td>Office, Factory</td>
+                            <td>Worker appreciation + office coffee promo</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128118; Hari Anak Nasional</strong></td>
+                            <td>23 Juli</td>
+                            <td>Cafe, Restaurant</td>
+                            <td>Family-friendly menu support + kids drink promo</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127470;&#127465; HUT RI / Independence Day</strong></td>
+                            <td>1-17 Agustus</td>
+                            <td>All B2B</td>
+                            <td>Merdeka bundle + local coffee celebration + 17% discount</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128104; Hari Ayah / Father's Day</strong></td>
+                            <td>12 November</td>
+                            <td>Cafe, Restaurant</td>
+                            <td>Father's day special + gift set promo</td>
+                            <td><span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#128102; Hari Ibu / Mother's Day</strong></td>
+                            <td>22 Desember</td>
+                            <td>Cafe, Restaurant, Hotel</td>
+                            <td>Mother's day celebration + gift set promo</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Coffee Industry Events -->
+                <h5 style="font-size: 0.85rem; margin: 1.5rem 0 0.5rem; color: var(--text-muted);">&#9749; Coffee Industry & Seasonal Events</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Timing</th>
+                            <th>Target Segment</th>
+                            <th>Campaign Type</th>
+                            <th>Channel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>&#9749; National Coffee Day</strong></td>
+                            <td>1 Oktober</td>
+                            <td>All B2B</td>
+                            <td>Special discount + training offer</td>
+                            <td><span class="tag wa">WA</span> <span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#9749; International Coffee Day</strong></td>
+                            <td>29 September</td>
+                            <td>All B2B</td>
+                            <td>Global coffee celebration + origin highlight</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127891; SCAI / Coffee Expo</strong></td>
+                            <td>Event dates (varies)</td>
+                            <td>Cafe (specialty focus)</td>
+                            <td>Event invitation + meetup + exclusive booth discount</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127807; Harvest Season</strong></td>
+                            <td>Mei-September</td>
+                            <td>Cafe (specialty focus)</td>
+                            <td>New harvest announcement + cupping invitation</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127774; Summer Peak</strong></td>
+                            <td>Juni-Agustus</td>
+                            <td>Hotel, Cafe</td>
+                            <td>Cold brew & iced coffee promo + summer blend</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127783; Rainy Season</strong></td>
+                            <td>Oktober-Maret</td>
+                            <td>Cafe, Hotel</td>
+                            <td>Warm drinks promo + hot coffee bundle</td>
+                            <td><span class="tag email">Email</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>&#127879; Year-End Stock Up</strong></td>
+                            <td>1-15 Desember</td>
+                            <td>All B2B</td>
+                            <td>Bulk discount untuk stock akhir tahun + libur prep</td>
+                            <td><span class="tag email">Email</span> <span class="tag wa">WA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#128197; Campaign Calendar Settings:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Auto-detect religion:</strong> Target campaign berdasarkan customer profile (jika tersedia)</li>
+                        <li><strong>Regional targeting:</strong> Bali-specific untuk Hindu holidays, etc.</li>
+                        <li><strong>Opt-out option:</strong> Customer dapat opt-out dari religious campaign tertentu</li>
+                        <li><strong>Multi-religion aware:</strong> Untuk customer dengan diverse team, kirim semua relevant greetings</li>
+                        <li><strong>Timezone aware:</strong> Kirim di waktu yang tepat sesuai timezone customer</li>
+                    </ul>
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Segment-Specific Seasonal Triggers</h4>
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127968;</span>
+                            <h4>Hotel - High Season Prep</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>H-30 sebelum peak season (Jun-Aug, Dec)</dd>
+                            <dt>Condition:</dt>
+                            <dd>segment = hotel</dd>
+                            <dt>Content:</dt>
+                            <dd>Reminder stock up untuk occupancy tinggi</dd>
+                            <dt>Offer:</dt>
+                            <dd>Volume discount untuk bulk order</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127860;</span>
+                            <h4>Restaurant - Weekend Rush</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Every Rabu (reminder for weekend)</dd>
+                            <dt>Condition:</dt>
+                            <dd>segment = restaurant & low_stock_predicted</dd>
+                            <dt>Content:</dt>
+                            <dd>Weekend stock check reminder</dd>
+                            <dt>Action:</dt>
+                            <dd>Quick reorder link</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128188;</span>
+                            <h4>Office - Monday Stock</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Every Jumat (reminder for next week)</dd>
+                            <dt>Condition:</dt>
+                            <dd>segment = office</dd>
+                            <dt>Content:</dt>
+                            <dd>Weekly pantry stock reminder</dd>
+                            <dt>Include:</dt>
+                            <dd>Predicted consumption based on history</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#9749;</span>
+                            <h4>Cafe - New Harvest Alert</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>new_harvest_available = true</dd>
+                            <dt>Condition:</dt>
+                            <dd>segment = cafe & prefers_single_origin</dd>
+                            <dt>Content:</dt>
+                            <dd>New harvest announcement + tasting invite</dd>
+                            <dt>Priority:</dt>
+                            <dd>Early access untuk loyal customers</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-location Sync Alerts -->
+        <section class="section">
+            <div class="section-header">&#127970; Multi-location Management Alerts</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Untuk brand dengan multiple outlets - monitoring performa dan alert untuk consistency across locations.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128201;</span>
+                            <h4>Location Performance Gap</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>location_order < brand_avg_order * 0.5</dd>
+                            <dt>Compare:</dt>
+                            <dd>Each location vs brand average</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> alert underperforming location</dd>
+                            <dt>Include:</dt>
+                            <dd>Gap analysis + suggested actions</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127381;</span>
+                            <h4>New Location Opened</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>brand.location_count increased</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> opportunity alert</dd>
+                            <dt>Task:</dt>
+                            <dd>Auto-create "New outlet onboarding"</dd>
+                            <dt>Include:</dt>
+                            <dd>Brand purchase history, suggest package</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128683;</span>
+                            <h4>Location Inactive</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>location.last_order > 45 days (while brand active)</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> investigate alert</dd>
+                            <dt>Question:</dt>
+                            <dd>Closed? Changed supplier? Issue?</dd>
+                            <dt>Action:</dt>
+                            <dd>Schedule visit to location</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128200;</span>
+                            <h4>Brand-wide Order Sync</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Monthly brand performance review</dd>
+                            <dt>Report:</dt>
+                            <dd>All locations performance comparison</dd>
+                            <dt>To:</dt>
+                            <dd><span class="tag email">Email</span> ke Brand PIC + Sales</dd>
+                            <dt>Include:</dt>
+                            <dd>Best/worst performers, recommendations</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128230;</span>
+                            <h4>Consolidated Order Opportunity</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Multiple locations ordering separately</dd>
+                            <dt>Condition:</dt>
+                            <dd>brand.locations > 3 & no_consolidated_order</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Consolidated ordering untuk volume discount</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> upsell opportunity</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128736;</span>
+                            <h4>Machine Maintenance Sync</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Multiple machines due for service</dd>
+                            <dt>Condition:</dt>
+                            <dd>Same brand, different locations</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Consolidated service visit untuk efficiency</dd>
+                            <dt>To:</dt>
+                            <dd><span class="tag email">Email</span> ke After-sales + Brand PIC</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#128202; Multi-location Dashboard Metrics:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Location Health Map:</strong> Visual map semua locations dengan health score color</li>
+                        <li><strong>Order Distribution:</strong> Pie chart order per location</li>
+                        <li><strong>Growth Comparison:</strong> YoY growth per location</li>
+                        <li><strong>Consistency Score:</strong> How consistent orders across locations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Milestone Celebrations -->
+        <section class="section">
+            <div class="section-header">&#127881; Customer Milestone Celebrations</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Automated celebrations untuk membangun hubungan dan loyalty dengan customer B2B.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127874;</span>
+                            <h4>Customer Anniversary</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>first_order_date anniversary (1, 2, 3, 5, 10 years)</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> <span class="tag wa">WA</span> thank you message</dd>
+                            <dt>Include:</dt>
+                            <dd>Journey recap, total orders, special discount</dd>
+                            <dt>Gift:</dt>
+                            <dd>Anniversary discount (5-15% based on years)</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127942;</span>
+                            <h4>Order Milestone</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>total_orders = 10, 25, 50, 100, 250, 500</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag wa">WA</span> congratulations + badge</dd>
+                            <dt>Include:</dt>
+                            <dd>Digital badge, share on social media</dd>
+                            <dt>Reward:</dt>
+                            <dd>Free product atau merchandise</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128176;</span>
+                            <h4>Volume Milestone</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>total_coffee_kg = 100, 500, 1000, 5000, 10000</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> <span class="tag wa">WA</span> celebration</dd>
+                            <dt>Include:</dt>
+                            <dd>"You've brewed [X] cups of coffee!"</dd>
+                            <dt>Reward:</dt>
+                            <dd>Tier upgrade, exclusive pricing</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127775;</span>
+                            <h4>Tier Upgrade</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>customer_tier upgraded (Bronze→Silver→Gold→Platinum)</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> <span class="tag wa">WA</span> welcome to new tier</dd>
+                            <dt>Include:</dt>
+                            <dd>New benefits unlocked, exclusive perks</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> congratulate customer</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128198;</span>
+                            <h4>PIC Birthday</h4>
+                            <span class="priority low">Low</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>pic_birthday = today</dd>
+                            <dt>To Customer PIC:</dt>
+                            <dd><span class="tag wa">WA</span> personal birthday greeting</dd>
+                            <dt>Include:</dt>
+                            <dd>Special birthday voucher (optional)</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> reminder to call/visit</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#127970;</span>
+                            <h4>Business Anniversary</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>business_established_date anniversary</dd>
+                            <dt>To Customer:</dt>
+                            <dd><span class="tag email">Email</span> <span class="tag wa">WA</span> congratulations</dd>
+                            <dt>Include:</dt>
+                            <dd>"Selamat ulang tahun [Business Name]!"</dd>
+                            <dt>Offer:</dt>
+                            <dd>Special celebration package/discount</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#127873; Milestone Rewards Program:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Digital Badges:</strong> Collectible badges untuk setiap milestone</li>
+                        <li><strong>Physical Rewards:</strong> Merchandise, sample products, equipment accessories</li>
+                        <li><strong>Exclusive Access:</strong> Early access ke new products, invitation ke events</li>
+                        <li><strong>Recognition:</strong> Feature di social media, customer spotlight</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Competitor Intelligence -->
+        <section class="section">
+            <div class="section-header">&#128373; Competitor Intelligence Signals</div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Early warning system untuk mendeteksi sinyal bahwa customer mungkin sedang mengevaluasi atau menggunakan competitor.</p>
+
+                <div class="trigger-grid">
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128172;</span>
+                            <h4>Competitor Mention in Chat</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Customer menyebut nama competitor di WA/chat</dd>
+                            <dt>Detection:</dt>
+                            <dd>Keyword matching: [competitor names list]</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag telegram">Telegram</span> immediate alert</dd>
+                            <dt>Action:</dt>
+                            <dd>Schedule competitive review call</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128202;</span>
+                            <h4>Order Pattern: Evaluation Mode</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Sudden order reduction 50%+ (but not zero)</dd>
+                            <dt>Pattern:</dt>
+                            <dd>Partial orders = mungkin split dengan competitor</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> investigate alert</dd>
+                            <dt>Task:</dt>
+                            <dd>Create "Competitive Review" meeting</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128269;</span>
+                            <h4>Price Inquiry Pattern</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Multiple price inquiries tanpa order</dd>
+                            <dt>Pattern:</dt>
+                            <dd>>3 price checks dalam 1 minggu = comparing</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> proactive outreach alert</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Offer price match atau value discussion</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128100;</span>
+                            <h4>New Decision Maker</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>PIC/contact person changed</dd>
+                            <dt>Risk:</dt>
+                            <dd>New person may have existing relationships</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span> relationship building alert</dd>
+                            <dt>Action:</dt>
+                            <dd>Schedule introduction meeting ASAP</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128196;</span>
+                            <h4>Contract Renegotiation Request</h4>
+                            <span class="priority high">High</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Customer requests pricing review mid-contract</dd>
+                            <dt>Signal:</dt>
+                            <dd>Likely received competitive offer</dd>
+                            <dt>To Sales + Manager:</dt>
+                            <dd><span class="tag push">Push</span> <span class="tag email">Email</span> urgent review</dd>
+                            <dt>Action:</dt>
+                            <dd>Prepare competitive response package</dd>
+                        </dl>
+                    </div>
+
+                    <div class="trigger-card">
+                        <div class="trigger-card-header">
+                            <span class="icon">&#128736;</span>
+                            <h4>Equipment from Competitor Detected</h4>
+                            <span class="priority medium">Medium</span>
+                        </div>
+                        <dl class="trigger-detail">
+                            <dt>Trigger:</dt>
+                            <dd>Visit report mentions competitor equipment</dd>
+                            <dt>Detection:</dt>
+                            <dd>Sales logs "saw [competitor] machine"</dd>
+                            <dt>To Sales:</dt>
+                            <dd><span class="tag push">Push</span> competitive displacement opportunity</dd>
+                            <dt>Suggest:</dt>
+                            <dd>Machine trade-in program offer</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <h4 style="font-size: 0.9rem; margin: 1.5rem 0 0.75rem;">Competitive Response Playbook</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Signal Detected</th>
+                            <th>Risk Level</th>
+                            <th>Immediate Action</th>
+                            <th>Response Timeline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Competitor mention + price inquiry</td>
+                            <td><span class="priority high">Critical</span></td>
+                            <td>Manager call + competitive package</td>
+                            <td>24 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Order split pattern detected</td>
+                            <td><span class="priority high">High</span></td>
+                            <td>Sales visit + value proposition review</td>
+                            <td>48 hours</td>
+                        </tr>
+                        <tr>
+                            <td>New decision maker</td>
+                            <td><span class="priority medium">Medium</span></td>
+                            <td>Introduction meeting + relationship building</td>
+                            <td>1 week</td>
+                        </tr>
+                        <tr>
+                            <td>Contract renegotiation request</td>
+                            <td><span class="priority high">High</span></td>
+                            <td>Prepare retention offer + manager involvement</td>
+                            <td>24-48 hours</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>&#129302; AI Competitive Intelligence:</strong>
+                    <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.85rem;">
+                        <li><strong>Sentiment Analysis:</strong> Detect negative sentiment dalam komunikasi</li>
+                        <li><strong>Pattern Recognition:</strong> Identify "evaluation behavior" patterns</li>
+                        <li><strong>Churn Prediction:</strong> Factor competitive signals into churn model</li>
+                        <li><strong>Win/Loss Analysis:</strong> Track competitive wins/losses untuk improve strategy</li>
+                    </ul>
                 </div>
             </div>
         </section>

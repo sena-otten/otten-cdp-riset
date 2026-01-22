@@ -528,11 +528,16 @@
                         <div style="text-align: center; font-size: 0.65rem; color: #78909C; margin-bottom: 0.25rem;">Data Sources (Internal Systems)</div>
                         <div class="arch-arrow">&#8595;</div>
 
-                        <div class="arch-label">Customer Data Platform (Core)</div>
-                        <div class="arch-row">
-                            <div class="arch-box cdp" style="min-width: 250px;">
+                        <div class="arch-label">Foundation Layer (Synchronized)</div>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin: 0.5rem 0;">
+                            <div class="arch-box cdp" style="min-width: 200px;">
                                 <strong>CDP</strong><br>
-                                Identity Resolution | Customer 360° | Segmentation | AI/ML
+                                <small>Identity | Customer 360° | Segmentation | AI/ML</small>
+                            </div>
+                            <div style="font-size: 1.25rem; color: #78909C;">&#8644;</div>
+                            <div class="arch-box" style="min-width: 200px; background: #ECEFF1; color: #546E7A; border: 2px solid #90A4AE;">
+                                <strong>Microservice</strong><br>
+                                <small>OTSAR (Orders) | ECOM (Commerce)</small>
                             </div>
                         </div>
 
@@ -628,23 +633,62 @@
                 <div class="subsection" id="pillars">
                     <h3 class="subsection-title"><span class="num">1.3</span> Platform Structure: CDP + 4 Fitur Utama</h3>
 
-                    <div class="pillars">
-                        <div class="pillar">
-                            <div class="pillar-header cdp">
-                                <span>&#128202;</span> CDP (Foundation)
+                    <!-- Foundation Layer: CDP <-> Microservice (Synchronized) -->
+                    <div style="background: linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 100%); border: 2px solid #90A4AE; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem;">
+                        <div style="text-align: center; font-size: 0.75rem; color: #546E7A; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem; font-weight: 600;">&#128279; Foundation Layer (Synchronized)</div>
+
+                        <div style="display: flex; align-items: stretch; gap: 0.75rem;">
+                            <!-- CDP Box -->
+                            <div style="flex: 1; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="background: var(--cdp); color: white; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>&#128202;</span> CDP
+                                </div>
+                                <div style="padding: 1rem;">
+                                    <ul style="list-style: none; font-size: 0.8rem; margin: 0; padding: 0;">
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> Identity Resolution</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> Customer 360° Profile</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> Real-time Event Streaming</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> Dynamic Segmentation</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> AI/ML Predictions</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: var(--cdp);">›</span> Consent Management</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="pillar-body">
-                                <ul>
-                                    <li>Identity Resolution</li>
-                                    <li>Customer 360° Profile</li>
-                                    <li>Real-time Event Streaming</li>
-                                    <li>Dynamic Segmentation</li>
-                                    <li>AI/ML Predictions</li>
-                                    <li>Consent Management</li>
-                                </ul>
+
+                            <!-- Sync Arrow -->
+                            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 60px;">
+                                <div style="font-size: 2rem; color: #546E7A;">&#8644;</div>
+                                <div style="font-size: 0.7rem; color: #546E7A; font-weight: 600; margin-top: 0.25rem;">SYNC</div>
+                            </div>
+
+                            <!-- Microservice Box -->
+                            <div style="flex: 1; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <div style="background: #546E7A; color: white; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>&#9881;</span> Microservice
+                                </div>
+                                <div style="padding: 1rem;">
+                                    <p style="font-size: 0.75rem; color: #37474F; font-weight: 700; margin-bottom: 0.35rem; border-bottom: 1px solid #ECEFF1; padding-bottom: 0.25rem;">OTSAR</p>
+                                    <ul style="list-style: none; font-size: 0.8rem; margin: 0 0 0.75rem 0; padding: 0;">
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> Order Management</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> Marketplace Sync</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> POS & B2B Offline</li>
+                                    </ul>
+                                    <p style="font-size: 0.75rem; color: #37474F; font-weight: 700; margin-bottom: 0.35rem; border-bottom: 1px solid #ECEFF1; padding-bottom: 0.25rem;">ECOM</p>
+                                    <ul style="list-style: none; font-size: 0.8rem; margin: 0; padding: 0;">
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> Product Catalog</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> Cart & Checkout</li>
+                                        <li style="padding: 0.2rem 0; padding-left: 1rem; position: relative; color: #5D4037;"><span style="position: absolute; left: 0; color: #546E7A;">›</span> Payment & Inventory</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
+                    <!-- Arrow to 4 Fitur Utama -->
+                    <div style="text-align: center; color: #78909C; font-size: 1.5rem; margin: 0.75rem 0;">&#8595;</div>
+                    <div style="text-align: center; font-size: 0.7rem; color: #78909C; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; font-weight: 600;">4 Fitur Utama</div>
+
+                    <div class="pillars" style="grid-template-columns: repeat(4, 1fr);">
                         <div class="pillar">
                             <div class="pillar-header sales">
                                 <span>&#128188;</span> Sales CRM
@@ -715,7 +759,7 @@
                     </div>
 
                     <div class="info-box">
-                        <strong>Key Point:</strong> CDP berfungsi sebagai <strong>single source of customer data</strong> yang digunakan oleh keempat fitur utama. Sales CRM, Customer Service, After Sales, dan Marketing tidak perlu membangun data customer masing-masing - semua mengakses Customer 360° dari CDP.
+                        <strong>Key Point:</strong> CDP berfungsi sebagai <strong>single source of customer data</strong> yang digunakan oleh keempat fitur utama. <strong>Microservice (OTSAR & ECOM)</strong> menyediakan data operasional (orders, products, inventory) yang di-ingest ke CDP. Sales CRM, Customer Service, After Sales, dan Marketing mengakses Customer 360° dari CDP.
                     </div>
                 </div>
 
